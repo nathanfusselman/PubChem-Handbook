@@ -6,8 +6,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
-import com.example.pubchem_chemistry_handbook.data.Student;
-import com.squareup.picasso.Picasso;
+import com.example.pubchem_chemistry_handbook.data.Compound;
 
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -24,9 +23,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         iso_TextView = (TextView) itemView.findViewById(R.id.compound_formula);
     }
 
-    public void bind(Student student) {
-        name_TextView.setText(student.getName());
-        iso_TextView.setText(student.getAdd() );
+    public void bind(Compound compound) {
+        name_TextView.setText(compound.getName());
+        iso_TextView.setText(compound.getFormula());
     }
 
 }

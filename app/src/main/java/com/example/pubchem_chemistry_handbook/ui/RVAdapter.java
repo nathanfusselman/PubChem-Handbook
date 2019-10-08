@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
-import com.example.pubchem_chemistry_handbook.data.Student;
+import com.example.pubchem_chemistry_handbook.data.Compound;
 
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     Context mcContext;
-    List<Student> studentList;
+    List<Compound> CompoundList;
 
-    public RVAdapter(Context mcContext, List<Student> studentList) {
+    public RVAdapter(Context mcContext, List<Compound> compoundList) {
         this.mcContext = mcContext;
-        this.studentList = studentList;
+        this.CompoundList = compoundList;
     }
 
 
@@ -30,12 +30,12 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Student student = studentList.get(position);
+        Compound student = CompoundList.get(position);
         holder.bind(student);
     }
 
     @Override
     public int getItemCount() {
-        return studentList.size();
+        return CompoundList.size();
     }
 }
