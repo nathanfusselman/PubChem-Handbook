@@ -4,7 +4,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 
@@ -24,6 +25,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Compound compound) {
+        Glide.with(image_ImageView)
+                .load("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + compound.getEID() +"&t=s")
+                .placeholder(R.drawable.ic_cloud_queue_black_24dp)
+                .error(R.drawable.ic_error_black_24dp)
+                .skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(image_ImageView);
         name_TextView.setText(compound.getName());
         iso_TextView.setText(compound.getFormula());
     }

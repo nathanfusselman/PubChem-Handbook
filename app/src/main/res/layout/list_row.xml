@@ -8,9 +8,8 @@
 
     <ImageView
         android:id="@+id/compound_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@android:drawable/presence_offline" />
+        android:layout_width="75dp"
+        android:layout_height="75dp"/>
 
 
     <TextView
@@ -18,9 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/compound_image"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="100dp"
         android:text="Name"
-        android:textSize="20dp" />
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/compound_formula"
@@ -28,9 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/compound_image"
         android:layout_alignTop="@id/compound_name"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="51dp"
         android:text="ISO"
-        android:textSize="16dp" />
+        android:textSize="24dp" />
 
 </RelativeLayout>

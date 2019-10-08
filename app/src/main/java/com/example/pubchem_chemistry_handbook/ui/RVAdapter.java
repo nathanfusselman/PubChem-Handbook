@@ -1,24 +1,31 @@
 package com.example.pubchem_chemistry_handbook.ui;
 
 import android.content.Context;
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> {
+public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements Filterable {
     Context mcContext;
     List<Compound> CompoundList;
+    List<Compound> CompoundListFull;
 
     public RVAdapter(Context mcContext, List<Compound> compoundList) {
         this.mcContext = mcContext;
         this.CompoundList = compoundList;
+        CompoundListFull = new ArrayList<>(compoundList);
     }
 
 
@@ -37,5 +44,66 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     @Override
     public int getItemCount() {
         return CompoundList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return compoundFilter;
+    }
+
+    private Filter compoundFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Compound> filteredList = new ArrayList<>();
+
+            if (charSequence != null && charSequence.length() != 0) {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (Compound item : CompoundListFull) {
+                    if (filterPattern.toLowerCase().trim().contentEquals("*")) {
+                        filteredList.addAll(CompoundListFull);
+                    } else {
+                        if (isNumeric(filterPattern)) {
+                            if (Integer.parseInt(filterPattern) == item.getEID()) {
+                                filteredList.add(item);
+                            }
+                        } else {
+                            if (item.getName().toLowerCase().contains(filterPattern)) {
+                                filteredList.add(item);
+                            }
+                            if (item.getFormula().toLowerCase().contains(filterPattern)) {
+                                filteredList.add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            CompoundList.clear();
+            CompoundList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public static boolean isNumeric(final String str) {
+
+        // null or empty
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 }
