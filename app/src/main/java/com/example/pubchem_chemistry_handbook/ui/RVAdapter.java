@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.global;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,12 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
     Context mcContext;
     List<Compound> CompoundList;
     List<Compound> CompoundListFull;
+    global global;
 
-    public RVAdapter(Context mcContext, List<Compound> compoundList) {
+    public RVAdapter(Context mcContext, List<Compound> compoundList, global global) {
         this.mcContext = mcContext;
         this.CompoundList = compoundList;
+        this.global = global;
         CompoundListFull = new ArrayList<>(compoundList);
     }
 
@@ -67,11 +70,21 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                                 filteredList.add(item);
                             }
                         } else {
-                            if (item.getName().toLowerCase().contains(filterPattern)) {
-                                filteredList.add(item);
+                            if (global.getSearch_type() == 0) {
+                                if (item.getName().toLowerCase().contains(filterPattern)) {
+                                    filteredList.add(item);
+                                }
+                                if (item.getFormula().toLowerCase().contains(filterPattern)) {
+                                    filteredList.add(item);
+                                }
                             }
-                            if (item.getFormula().toLowerCase().contains(filterPattern)) {
-                                filteredList.add(item);
+                            if (global.getSearch_type() == 1) {
+                                if (item.getName().toLowerCase().startsWith(filterPattern)) {
+                                    filteredList.add(item);
+                                }
+                                if (item.getFormula().toLowerCase().startsWith(filterPattern)) {
+                                    filteredList.add(item);
+                                }
                             }
                         }
                     }

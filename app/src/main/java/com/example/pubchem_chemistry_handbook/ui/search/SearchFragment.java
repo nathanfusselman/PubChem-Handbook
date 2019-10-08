@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +29,8 @@ public class SearchFragment extends Fragment {
     RecyclerView compound_rview;
     List<Compound> list_compound;
     RVAdapter rvAdapter;
+    com.example.pubchem_chemistry_handbook.data.global global = new global(0);
+    String lastsearch = "";
 
     @Nullable
     @Override
@@ -34,12 +40,26 @@ public class SearchFragment extends Fragment {
         loadCompound();
         compound_rview = (RecyclerView) view.findViewById(R.id.recyclerview);
 
-        rvAdapter = new RVAdapter(getActivity(), list_compound);
+        rvAdapter = new RVAdapter(getActivity(), list_compound, global);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
         rvAdapter.getFilter().filter("");
+        CheckBox search_type = view.findViewById(R.id.search_type);
         SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        search_type.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                if (isChecked) {
+                    global.setSearch_type(1);
+                } else {
+                    global.setSearch_type(0);
+                }
+                rvAdapter.getFilter().filter(lastsearch);
+            }
+        }
+        );
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -48,6 +68,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                lastsearch = s;
                 rvAdapter.getFilter().filter(s);
                 return false;
             }
@@ -63,8 +84,8 @@ public class SearchFragment extends Fragment {
 
         try {
             while (((line = reader.readLine()) != null)) {
-                String[] tokens = line.split(",");
-                list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1], tokens[2]));
+                String[] tokens = line.split(";");
+                list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length()-1), tokens[2].substring(1, tokens[2].length()-1)));
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
