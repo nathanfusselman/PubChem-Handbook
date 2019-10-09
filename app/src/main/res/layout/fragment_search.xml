@@ -13,14 +13,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_type" />
+        app:layout_constraintTop_toBottomOf="@+id/search_type_exact" />
 
     <CheckBox
-        android:id="@+id/search_type"
+        android:id="@+id/search_type_exact"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exact"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Exact Search"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <CheckBox
+        android:id="@+id/search_type_starts"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Starts With"
+        app:layout_constraintStart_toEndOf="@+id/search_type_exact"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <SearchView
@@ -30,4 +42,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/resultsNumb"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Results: NULL"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

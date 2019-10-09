@@ -1,14 +1,16 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,8 +31,10 @@ public class SearchFragment extends Fragment {
     RecyclerView compound_rview;
     List<Compound> list_compound;
     RVAdapter rvAdapter;
-    com.example.pubchem_chemistry_handbook.data.global global = new global(0);
-    String lastsearch = "";
+    TextView resutlsNumb;
+    com.example.pubchem_chemistry_handbook.data.global global = new global(0,0);
+    String search = "";
+
 
     @Nullable
     @Override
@@ -45,18 +49,28 @@ public class SearchFragment extends Fragment {
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
         rvAdapter.getFilter().filter("");
-        CheckBox search_type = view.findViewById(R.id.search_type);
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
-        search_type.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        resutlsNumb = view.findViewById(R.id.resultsNumb);
+        CheckBox search_type_exact = view.findViewById(R.id.search_type_exact);
+        SearchView searchView = view.findViewById(R.id.searchView);
+        resutlsNumb.setText("Results: " + global.getResults());
+        search_type_exact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
-                    global.setSearch_type(1);
+                    global.setSearch_type_exact(1);
                 } else {
-                    global.setSearch_type(0);
+                    global.setSearch_type_exact(0);
                 }
-                rvAdapter.getFilter().filter(lastsearch);
+                rvAdapter.getFilter().filter(search);
+                resutlsNumb.setText("Results: " + "...");
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        resutlsNumb.setText("Results: " + global.getResults());
+                    }
+                }, 500);
             }
         }
         );
@@ -68,8 +82,16 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                lastsearch = s;
-                rvAdapter.getFilter().filter(s);
+                search = s;
+                rvAdapter.getFilter().filter(search);
+                resutlsNumb.setText("Results: " + "...");
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        resutlsNumb.setText("Results: " + global.getResults());
+                    }
+                }, 500);
                 return false;
             }
         });

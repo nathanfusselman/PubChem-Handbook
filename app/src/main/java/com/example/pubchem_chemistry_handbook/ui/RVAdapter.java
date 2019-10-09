@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.global;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements Filterable {
@@ -63,14 +66,16 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                 String filterPattern = charSequence.toString().toLowerCase().trim();
                 for (Compound item : CompoundListFull) {
                     if (filterPattern.toLowerCase().trim().contentEquals("*")) {
-                        filteredList.addAll(CompoundListFull);
+                        for (int i = 0; i < 1000; i++) {
+                            filteredList.add(CompoundListFull.get(i));
+                        }
                     } else {
                         if (isNumeric(filterPattern)) {
                             if (Integer.parseInt(filterPattern) == item.getEID()) {
                                 filteredList.add(item);
                             }
                         } else {
-                            if (global.getSearch_type() == 0) {
+                            if (global.getSearch_type_exact() == 0) {
                                 if (item.getName().toLowerCase().contains(filterPattern)) {
                                     filteredList.add(item);
                                 }
@@ -78,7 +83,7 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                                     filteredList.add(item);
                                 }
                             }
-                            if (global.getSearch_type() == 1) {
+                            if (global.getSearch_type_exact() == 1) {
                                 if (item.getName().toLowerCase().startsWith(filterPattern)) {
                                     filteredList.add(item);
                                 }
@@ -90,6 +95,24 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                     }
                 }
             }
+            Collections.sort(filteredList, new Comparator() {
+
+                public int compare(Object o1, Object o2) {
+                    Compound p1 = (Compound) o1;
+                    Compound p2 = (Compound) o2;
+                    int ret = -1;
+                    //business logic here
+                    if (p1.getFormula().length() == p2.getFormula().length()) {
+                        ret = 0;
+                    } else if (p1.getFormula().length() > p2.getFormula().length()) {
+                        ret = 1;
+                    } else if (p1.getFormula().length() < p2.getFormula().length()) {
+                        ret = -1;
+                    }//end business logic
+                    return ret;
+                }
+            });
+            global.setResults(filteredList.size());
             FilterResults results = new FilterResults();
             results.values = filteredList;
             return results;
