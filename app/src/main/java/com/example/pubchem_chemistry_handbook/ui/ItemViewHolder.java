@@ -17,12 +17,24 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public ImageView image_ImageView;
 
 
-    public ItemViewHolder(View itemView) {
+    public ItemViewHolder(View itemView, final RVAdapter.OnItemClickListener listener) {
         super(itemView);
         itemView.setClickable(true);
         image_ImageView = (ImageView) itemView.findViewById(R.id.compound_image);
         name_TextView = (TextView) itemView.findViewById(R.id.compound_name);
         iso_TextView = (TextView) itemView.findViewById(R.id.compound_formula);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(pos);
+                    }
+                }
+            }
+        });
     }
 
     public void bind(Compound compound) {

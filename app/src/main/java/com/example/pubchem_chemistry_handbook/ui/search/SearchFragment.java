@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -40,7 +41,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
         loadCompound();
         compound_rview = (RecyclerView) view.findViewById(R.id.recyclerview);
 
@@ -50,17 +51,17 @@ public class SearchFragment extends Fragment {
         compound_rview.setAdapter(rvAdapter);
         rvAdapter.getFilter().filter("");
         resutlsNumb = view.findViewById(R.id.resultsNumb);
-        CheckBox search_type_exact = view.findViewById(R.id.search_type_exact);
+        CheckBox search_type_startsWith = view.findViewById(R.id.search_type_startsWith);
         SearchView searchView = view.findViewById(R.id.searchView);
         resutlsNumb.setText("Results: " + global.getResults());
-        search_type_exact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
-                    global.setSearch_type_exact(1);
+                    global.setSearch_type_startsWith(1);
                 } else {
-                    global.setSearch_type_exact(0);
+                    global.setSearch_type_startsWith(0);
                 }
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
@@ -95,6 +96,12 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+        rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(getActivity(),"Item: " + list_compound.get(position).getEID(), Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -107,7 +114,9 @@ public class SearchFragment extends Fragment {
         try {
             while (((line = reader.readLine()) != null)) {
                 String[] tokens = line.split(";");
-                list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length()-1), tokens[2].substring(1, tokens[2].length()-1)));
+                if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
+                    list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
+                }
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);

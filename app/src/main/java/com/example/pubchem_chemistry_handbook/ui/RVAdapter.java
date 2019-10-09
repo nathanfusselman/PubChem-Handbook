@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +24,19 @@ import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements Filterable {
     Context mcContext;
-    List<Compound> CompoundList;
+    public List<Compound> CompoundList;
     List<Compound> CompoundListFull;
     global global;
+    private OnItemClickListener mListener;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public RVAdapter(Context mcContext, List<Compound> compoundList, global global) {
         this.mcContext = mcContext;
@@ -36,9 +47,9 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
 
 
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        return new ItemViewHolder(view);
+        return new ItemViewHolder(view, mListener);
     }
 
     @Override
@@ -64,30 +75,38 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
 
             if (charSequence != null && charSequence.length() != 0) {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Compound item : CompoundListFull) {
-                    if (filterPattern.toLowerCase().trim().contentEquals("*")) {
-                        for (int i = 0; i < 1000; i++) {
-                            filteredList.add(CompoundListFull.get(i));
-                        }
-                    } else {
+                if (filterPattern.toLowerCase().trim().contentEquals("*")) {
+                    filteredList.addAll(CompoundListFull);
+                } else {
+                    for (Compound item : CompoundListFull) {
                         if (isNumeric(filterPattern)) {
                             if (Integer.parseInt(filterPattern) == item.getEID()) {
                                 filteredList.add(item);
                             }
                         } else {
-                            if (global.getSearch_type_exact() == 0) {
-                                if (item.getName().toLowerCase().contains(filterPattern)) {
-                                    filteredList.add(item);
-                                }
-                                if (item.getFormula().toLowerCase().contains(filterPattern)) {
-                                    filteredList.add(item);
-                                }
-                            }
-                            if (global.getSearch_type_exact() == 1) {
+                            if (global.getSearch_type_startsWith() == 1) {
                                 if (item.getName().toLowerCase().startsWith(filterPattern)) {
                                     filteredList.add(item);
                                 }
                                 if (item.getFormula().toLowerCase().startsWith(filterPattern)) {
+                                    filteredList.add(item);
+                                }
+                            } else {
+                                boolean good_name = true;
+                                boolean good_formula = true;
+                                String[] tokens = filterPattern.split(" ");
+                                for (String token : tokens) {
+                                    if (global.getSearch_type_startsWith() == 0) {
+                                        if (!item.getName().toLowerCase().contains(token)) {
+                                            good_name = false;
+                                        }
+                                        if (!item.getFormula().toLowerCase().contains(token)) {
+                                            good_formula = false;
+                                        }
+                                    }
+
+                                }
+                                if (good_formula || good_name) {
                                     filteredList.add(item);
                                 }
                             }
