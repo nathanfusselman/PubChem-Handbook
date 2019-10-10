@@ -1,7 +1,12 @@
 package com.example.pubchem_chemistry_handbook;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.downloader.PRDownloader;
+import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.global;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,11 +15,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        PRDownloader.initialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
