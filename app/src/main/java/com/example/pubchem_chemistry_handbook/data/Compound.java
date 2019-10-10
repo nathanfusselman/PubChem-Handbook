@@ -1,8 +1,12 @@
 package com.example.pubchem_chemistry_handbook.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Compound {
     int eid;
     String name,formula;
+    List<SafetyItem> safetyItems = new ArrayList<>();
 
     public Compound(int eid, String name, String formula) {
         this.eid = eid;
@@ -28,5 +32,13 @@ public class Compound {
 
     public void setFormula(String formula) {
         this.formula = formula;
+    }
+
+    public void addSafetyItem(String name, String url) {
+        this.safetyItems.add(new SafetyItem(name, url));
+    }
+
+    public SafetyItem getSafetyItem(int pos) {
+        return safetyItems.get(pos);
     }
 }

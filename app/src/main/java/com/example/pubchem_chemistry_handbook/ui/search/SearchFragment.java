@@ -1,6 +1,7 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,9 +38,14 @@ import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -159,9 +166,55 @@ public class SearchFragment extends Fragment {
                             }
                         })
                         .start(new OnDownloadListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onDownloadComplete() {
+                                JSONParser jsonParser = new JSONParser();
 
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + list_compound.get(position).getEID() + ".json"))
+                                {
+                                    //Read JSON file
+                                    JSONObject obj = (JSONObject) jsonParser.parse(reader);
+                                    JSONObject record = (JSONObject) obj.get("Record");
+                                    String RecordTitle = (String) record.get("RecordTitle");
+                                    list_compound.get(position).setName(RecordTitle);
+                                    //Toast.makeText(getActivity(), "RecordTitle: " + RecordTitle, Toast.LENGTH_LONG).show();
+                                    long RecordNumber = (Long) record.get("RecordNumber");
+                                    list_compound.get(position).setEID((int) RecordNumber);
+                                    //Toast.makeText(getActivity(), "RecordNumber: " + RecordNumber, Toast.LENGTH_LONG).show();
+                                    JSONArray section = (JSONArray) record.get("Section");
+                                    JSONObject section_2 = (JSONObject) section.get(2);
+                                    JSONArray sub_section_2 = (JSONArray) section_2.get("Section");
+                                    JSONObject sub_section_2_2 = (JSONObject) sub_section_2.get(2);
+                                    JSONArray Information = (JSONArray) sub_section_2_2.get("Information");
+                                    JSONObject sub_Information = (JSONObject) Information.get(0);
+                                    JSONObject Value = (JSONObject) sub_Information.get("Value");
+                                    JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
+                                    JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
+                                    String RecordFormula = (String) sub_StringWithMarkup.get("String");
+                                    list_compound.get(position).setName(RecordFormula);
+                                    //Toast.makeText(getActivity(), "RecordFormula: " + RecordFormula, Toast.LENGTH_LONG).show();
+                                    JSONObject section_1 = (JSONObject) section.get(1);
+                                    JSONArray Information_1 = (JSONArray) section_1.get("Information");
+                                    JSONObject sub_Information_1 = (JSONObject) Information_1.get(0);
+                                    JSONObject Value_1 = (JSONObject) sub_Information_1.get("Value");
+                                    JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
+                                    JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
+                                    JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
+                                    for (int i = 0; i < Markup.size(); i++) {
+                                        JSONObject sub_Markup = (JSONObject) Markup.get(i);
+                                        String url = (String) sub_Markup.get("URL");
+                                        String name = (String) sub_Markup.get("Extra");
+                                        list_compound.get(position).addSafetyItem(name, url);
+                                        //System.out.println("Added Safety: " + name + ", " + url);
+                                    }
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                             @Override
