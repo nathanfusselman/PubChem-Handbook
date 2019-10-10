@@ -36,9 +36,6 @@ import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -164,20 +161,7 @@ public class SearchFragment extends Fragment {
                         .start(new OnDownloadListener() {
                             @Override
                             public void onDownloadComplete() {
-                                Toast.makeText(getActivity(), "Download OK", Toast.LENGTH_LONG).show();
-                                Log.d("PRDownloader", "onDownloadComplete: " + getActivity().getFilesDir().toString());
 
-                                try {
-                                    JSONArray jArray = new JSONArray(readJSONFromAsset(position));
-                                    for (int i = 0; i < jArray.length(); ++i) {
-                                        String name = jArray.getJSONObject(i).getString("RecordTitle");// name of the country
-                                        String dial_code = jArray.getJSONObject(i).getString("dial_code"); // dial code of the country
-                                        String code = jArray.getJSONObject(i).getString("code"); // code of the country
-                                        list_compound.get(position).setName(name);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
                             }
 
                             @Override
@@ -215,22 +199,5 @@ public class SearchFragment extends Fragment {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
-    }
-
-    public String readJSONFromAsset(int pos) {
-        String json = null;
-        try {
-            File isFile = new File(getActivity().getFilesDir().toString() + "/" +  "compound-" + list_compound.get(pos).getEID() + ".json");
-            InputStream is = new FileInputStream(isFile);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 }
