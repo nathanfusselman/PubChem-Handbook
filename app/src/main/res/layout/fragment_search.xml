@@ -133,6 +133,62 @@
                     android:gravity="center"/>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/Safety_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Chemical Safety:"
+                android:textSize="24dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:id="@+id/SafetyItems_raw">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/SafetyItems_grid"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/SafetyItems_Images"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:id="@+id/SafetyItems_Images_i1"
+                            android:background="@drawable/image_background"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/SafetyItems_Text"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/SafetyItems_Text_t1"
+                            android:textSize="16dp"
+                            android:text="TEXT"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

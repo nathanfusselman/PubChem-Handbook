@@ -38,7 +38,7 @@ public class Compound {
         this.safetyItems.add(new SafetyItem(name, url));
     }
 
-    public SafetyItem getSafetyItem(int pos) {
-        return safetyItems.get(pos);
+    public List<SafetyItem> getSafetyItems() {
+        return safetyItems;
     }
 }

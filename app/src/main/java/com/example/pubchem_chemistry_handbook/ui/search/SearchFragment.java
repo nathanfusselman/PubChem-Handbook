@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.downloader.PRDownloader;
 import com.downloader.Progress;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.SafetyItem;
 import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
@@ -82,9 +84,10 @@ public class SearchFragment extends Fragment {
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
-        //final ImageView compoundView_CrystalImage = view.findViewById(R.id.compoundView_CrystalImage);
         final Button compoundView_backButton = view.findViewById(R.id.closeButton);
         CheckBox search_type_startsWith = view.findViewById(R.id.search_type_startsWith);
+        //final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
+        //final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
         final SearchView searchView = view.findViewById(R.id.searchView);
         resutlsNumb.setText("Results: " + global.getResults());
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +195,7 @@ public class SearchFragment extends Fragment {
                                     JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
                                     JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
                                     String RecordFormula = (String) sub_StringWithMarkup.get("String");
-                                    list_compound.get(position).setName(RecordFormula);
+                                    list_compound.get(position).setFormula(RecordFormula);
                                     //Toast.makeText(getActivity(), "RecordFormula: " + RecordFormula, Toast.LENGTH_LONG).show();
                                     JSONObject section_1 = (JSONObject) section.get(1);
                                     JSONArray Information_1 = (JSONArray) section_1.get("Information");
@@ -229,6 +232,19 @@ public class SearchFragment extends Fragment {
                 image_Loader_2d.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + list_compound.get(position).getEID() + "&t=s");
                 AsyncTaskLoadImage image_Loader_3d = new AsyncTaskLoadImage(compoundView_3dImage);
                 image_Loader_3d.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?&cid=" + list_compound.get(position).getEID() + "&t=s");
+                /*
+                int counter = 0;
+                for (SafetyItem item : list_compound.get(position).getSafetyItems()) {
+                    TextView tempTextView = new TextView(SafetyItems_Text.getContext());
+                    tempTextView.setId(counter);
+                    counter++;
+                    tempTextView.setText(item.getName());
+                    tempTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+                    SafetyItems_Text.addView(tempTextView);
+                }
+
+                 */
                 compoundView.setVisibility(View.VISIBLE);
             }
         });
