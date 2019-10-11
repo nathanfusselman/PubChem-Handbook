@@ -1,14 +1,16 @@
 package com.example.pubchem_chemistry_handbook.ui.news;
 
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.util.Xml;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Event;
@@ -30,13 +33,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsViewModel newsViewModel;
-    static List<Event> events = new ArrayList<>();
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         newsViewModel =
                 ViewModelProviders.of(this).get(NewsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_news, container, false);
@@ -59,15 +62,23 @@ public class NewsFragment extends Fragment {
         });
 
         new getXML(root).execute("https://rss.sciencedaily.com/matter_energy/chemistry.xml");
-
+        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         return root;
 
 
     }
+    @Override
+    public void onRefresh() {
+        new getXML(mSwipeRefreshLayout.getRootView()).execute("https://rss.sciencedaily.com/matter_energy/chemistry.xml");
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
 
-    //////
-//////
-//////
+    }
+//section to parse the rss feed and update recycler view
     static final String PUB_DATE = "pubDate";
     static final String DESCRIPTION = "description";
     static final String CHANNEL = "channel";
@@ -75,6 +86,8 @@ public class NewsFragment extends Fragment {
     static final String TITLE = "title";
     static final String ITEM = "item";
 
+
+    //parse it
     static private class getXML extends AsyncTask<String, String, List<Event>> {
         View view;
         public getXML(View view){
@@ -87,7 +100,6 @@ public class NewsFragment extends Fragment {
             XmlPullParser parser = Xml.newPullParser();
             InputStream stream = null;
             try {
-                // auto-detect the encoding from the stream
                 stream = new URL(rssFeed).openConnection().getInputStream();
                 parser.setInput(stream, null);
                 int eventType = parser.getEventType();
@@ -101,29 +113,22 @@ public class NewsFragment extends Fragment {
                         case XmlPullParser.START_TAG:
                             name = parser.getName();
                             if (name.equalsIgnoreCase(ITEM)) {
-                                Log.i("new item", "Create new item");
                                 item = new Event();
                             } else if (item != null) {
                                 if (name.equalsIgnoreCase(LINK)) {
-                                    Log.i("Attribute", "setLink");
                                     item.setLink(parser.nextText());
                                 } else if (name.equalsIgnoreCase(DESCRIPTION)) {
-                                    Log.i("Attribute", "description");
                                     item.setDescription(parser.nextText().trim());
                                 } else if (name.equalsIgnoreCase(PUB_DATE)) {
-                                    Log.i("Attribute", "date");
                                     item.setDate(parser.nextText());
                                 } else if (name.equalsIgnoreCase(TITLE)) {
-                                    Log.i("Attribute", "title");
                                     item.setTitle(parser.nextText().trim());
                                 }
                             }
                             break;
                         case XmlPullParser.END_TAG:
                             name = parser.getName();
-                            Log.i("End tag", name);
                             if (name.equalsIgnoreCase(ITEM) && item != null) {
-                                Log.i("Added", item.toString());
                                 list.add(item);
                             } else if (name.equalsIgnoreCase(CHANNEL)) {
                                 done = true;
@@ -145,15 +150,17 @@ public class NewsFragment extends Fragment {
             }
             return list;
         }
-
+//update recycler view
         @Override
         protected void onPostExecute(List<Event> res) {
-            events=res;
             RecyclerView RSS_Feed = view.findViewById(R.id.RSS_recycler_view);
             RSS_Feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
-            RSS_Adapter mAdapter = new RSS_Adapter(events);
-            RSS_Feed.setAdapter(mAdapter);
+            RSS_Adapter rssAdapter = new RSS_Adapter(res);
+            RSS_Feed.setAdapter(rssAdapter);
             RSS_Feed.setItemAnimator(new DefaultItemAnimator());
+
+            String eventsLoaded = (rssAdapter.getItemCount())+" events loaded.";
+            ((TextView)view.findViewById(R.id.itemsLoaded)).setText(eventsLoaded);
         }
     }
 }
