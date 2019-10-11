@@ -1,6 +1,7 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -86,8 +87,8 @@ public class SearchFragment extends Fragment {
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         final Button compoundView_backButton = view.findViewById(R.id.closeButton);
         CheckBox search_type_startsWith = view.findViewById(R.id.search_type_startsWith);
-        //final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
-        //final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
+        final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
+        final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
         final SearchView searchView = view.findViewById(R.id.searchView);
         resutlsNumb.setText("Results: " + global.getResults());
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
@@ -204,12 +205,30 @@ public class SearchFragment extends Fragment {
                                     JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
                                     JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
                                     JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
+                                    boolean[] safety = new boolean[9];
+                                    for (int i = 0; i < 9; i++) {
+                                        safety[i] = false;
+                                    }
                                     for (int i = 0; i < Markup.size(); i++) {
                                         JSONObject sub_Markup = (JSONObject) Markup.get(i);
                                         String url = (String) sub_Markup.get("URL");
                                         String name = (String) sub_Markup.get("Extra");
                                         list_compound.get(position).addSafetyItem(name, url);
                                         //System.out.println("Added Safety: " + name + ", " + url);
+                                    }
+                                    for (SafetyItem item : list_compound.get(position).getSafetyItems()) {
+                                        int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
+                                        safety[n] = true;
+                                    }
+                                    for (int i = 8; i >= 0; i--) {
+                                        if (!safety[i]) {
+                                            //System.out.println("Number of Items: " + SafetyItems_Images.getChildCount());
+                                            //System.out.println("Removing Item: " + i);
+                                            if (i <= SafetyItems_Images.getChildCount()) {
+                                                SafetyItems_Images.removeViewAt(i);
+                                                SafetyItems_Text.removeViewAt(i);
+                                            }
+                                        }
                                     }
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
@@ -232,19 +251,6 @@ public class SearchFragment extends Fragment {
                 image_Loader_2d.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + list_compound.get(position).getEID() + "&t=s");
                 AsyncTaskLoadImage image_Loader_3d = new AsyncTaskLoadImage(compoundView_3dImage);
                 image_Loader_3d.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?&cid=" + list_compound.get(position).getEID() + "&t=s");
-                /*
-                int counter = 0;
-                for (SafetyItem item : list_compound.get(position).getSafetyItems()) {
-                    TextView tempTextView = new TextView(SafetyItems_Text.getContext());
-                    tempTextView.setId(counter);
-                    counter++;
-                    tempTextView.setText(item.getName());
-                    tempTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-                    SafetyItems_Text.addView(tempTextView);
-                }
-
-                 */
                 compoundView.setVisibility(View.VISIBLE);
             }
         });
