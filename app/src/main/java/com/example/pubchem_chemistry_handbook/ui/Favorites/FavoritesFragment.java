@@ -1,28 +1,23 @@
-package com.example.pubchem_chemistry_handbook.ui.search;
+package com.example.pubchem_chemistry_handbook.ui.Favorites;
 
-import android.content.Context;
-import android.media.Image;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,41 +52,39 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class FavoritesFragment extends Fragment {
+
+    private FavoritesViewModel favoritesViewModel;
     RecyclerView compound_rview;
-    List<Compound> list_compound;
     RVAdapter rvAdapter;
-    TextView resutlsNumb;
-    com.example.pubchem_chemistry_handbook.data.global global = new global(0,0);
-    String search = "";
+    List<Compound> list_compound;
 
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        final View view = inflater.inflate(R.layout.fragment_search, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        favoritesViewModel =
+                ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
         loadCompound();
-        compound_rview = view.findViewById(R.id.recyclerview);
         rvAdapter = new RVAdapter(getActivity(), list_compound, ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
-        rvAdapter.getFilter().filter("");
-        resutlsNumb = view.findViewById(R.id.resultsNumb);
         final ScrollView compoundView = view.findViewById(R.id.compound_scrollView);
         compoundView.setBackgroundColor(0xFFFFFFFF);
         compoundView.setVisibility(View.INVISIBLE);
+        final Button favorites_button = view.findViewById(R.id.favorite);
+        final Button recents_button = view.findViewById(R.id.recent);
+        favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
         final Button compoundView_backButton = view.findViewById(R.id.closeButton);
-        CheckBox search_type_startsWith = view.findViewById(R.id.search_type_startsWith);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
-        final SearchView searchView = view.findViewById(R.id.searchView);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
         HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
@@ -112,7 +105,6 @@ public class SearchFragment extends Fragment {
         HazardTexts[7] = view.findViewById(R.id.SafetyItems_Text_GHS08);
         HazardImages[8] = view.findViewById(R.id.SafetyItems_Images_GHS09);
         HazardTexts[8] = view.findViewById(R.id.SafetyItems_Text_GHS09);
-
         final LinearLayout StructureImageLayout = view.findViewById(R.id.compoundView_images);
         final LinearLayout StructureTextLayout = view.findViewById(R.id.compoundView_images_names);
         final ImageView[] StructureImages = new ImageView[3];
@@ -123,59 +115,31 @@ public class SearchFragment extends Fragment {
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
-        resutlsNumb.setText("Results: " + global.getResults());
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
+                favorites_button.setVisibility(View.VISIBLE);
+                recents_button.setVisibility(View.VISIBLE);
             }
         });
-        search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {
-                    global.setSearch_type_startsWith(1);
-                } else {
-                    global.setSearch_type_startsWith(0);
-                }
-                rvAdapter.getFilter().filter(search);
-                resutlsNumb.setText("Results: " + "...");
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resutlsNumb.setText("Results: " + global.getResults());
-                    }
-                }, 500);
-            }
-        }
-        );
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                search = s;
-                rvAdapter.getFilter().filter(search);
-                resutlsNumb.setText("Results: " + "...");
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resutlsNumb.setText("Results: " + global.getResults());
-                    }
-                }, 500);
-                return false;
+        favorites_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
         });
+
+        recents_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            }
+        });
+
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
-                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + list_compound.get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + list_compound.get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + list_compound.get(position).getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
@@ -357,6 +321,8 @@ public class SearchFragment extends Fragment {
                         });
                 compoundView_name.setText(" " + list_compound.get(position).getName());
                 compoundView_formula.setText("  " + list_compound.get(position).getFormula());
+                favorites_button.setVisibility(View.INVISIBLE);
+                recents_button.setVisibility(View.INVISIBLE);
                 compoundView.setVisibility(View.VISIBLE);
             }
         });

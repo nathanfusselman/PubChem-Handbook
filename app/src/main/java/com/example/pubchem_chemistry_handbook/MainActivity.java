@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    global global = new global(0,0);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PRDownloader.initialize(getApplicationContext());
@@ -33,11 +35,14 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_news, R.id.navigation_search, R.id.navigation_notifications)
+                R.id.navigation_news, R.id.navigation_search, R.id.navigation_favorites)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    public global getGlobal() {
+        return global;
+    }
 }
