@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
     <TextView
         android:id="@+id/titleText"
         android:layout_width="match_parent"
@@ -20,9 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="all"
-        android:clickable="true"/>
+        android:clickable="true" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorAccent" />
+
 </LinearLayout>
