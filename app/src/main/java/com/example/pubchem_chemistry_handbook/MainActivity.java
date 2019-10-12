@@ -29,10 +29,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,30 +56,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        File yourFile = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
-        try {
-            yourFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            FileOutputStream oFile = new FileOutputStream(yourFile, false);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        File yourFile2 = new File(getApplication().getFilesDir().toString() + "/recents.txt");
-        try {
-            yourFile2.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            FileOutputStream oFile = new FileOutputStream(yourFile2, false);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         loadCompound();
+        loadFav();
+        loadRecents();
     }
 
     public global getGlobal() {
@@ -103,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addRecent(Compound EID) {
         try {
-            Files.write(Paths.get(getApplication().getFilesDir().toString() + "/recents.txt"), Integer.toString(EID.getEID()).getBytes(), StandardOpenOption.APPEND);
-        }catch (IOException e) {
-            e.printStackTrace();
-            //exception handling left as an exercise for the reader
+            File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
+            FileWriter fr = new FileWriter(file, true);
+            fr.write("\n" + Integer.toString(EID.getEID()));
+            fr.close();
+        } catch (IOException e) {
         }
         global.getRecents().add(0, EID);
     }
@@ -114,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addFav(Compound EID) {
         try {
-            Files.write(Paths.get(getApplication().getFilesDir().toString() + "/favorites.txt"), Integer.toString(EID.getEID()).getBytes(), StandardOpenOption.APPEND);
-        }catch (IOException e) {
-            e.printStackTrace();
-            //exception handling left as an exercise for the reader
+            File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
+            FileWriter fr = new FileWriter(file, true);
+            fr.write("\n" + Integer.toString(EID.getEID()));
+            fr.close();
+        } catch (IOException e) {
+
         }
         global.getFav().add(0, EID);
         System.out.println("ADDED TO FAV EID: " + EID.getEID());
@@ -142,6 +128,46 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+        
+    }
+
+    public void loadFav() {
+        File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
+        try {
+            Scanner sc = new Scanner(file);
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            while (sc.hasNextLine()) {
+                global.getFav().add(findCompound(Integer.parseInt(sc.nextLine())));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadRecents() {
+        File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
+        try {
+            Scanner sc = new Scanner(file);
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            while (sc.hasNextLine()) {
+                global.getRecents().add(findCompound(Integer.parseInt(sc.nextLine())));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Compound findCompound(int EID) {
+        for (Compound item : global.getCompounds()) {
+            if (item.getEID() == EID) {
+                return item;
+            }
+        }
+        return null;
     }
 
     void loadCompound() {
