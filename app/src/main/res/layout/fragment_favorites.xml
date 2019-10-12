@@ -36,9 +36,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favorite">
+        app:layout_constraintTop_toBottomOf="@+id/favorite"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_recent_recyclerview2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favorite"/>
 
     <ScrollView
         android:id="@+id/compound_scrollView"
@@ -52,11 +60,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/closeButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_close_black_24dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/top_controlls"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/closeButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_close_black_24dp" />
+
+                <Button
+                    android:id="@+id/favButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="325dp"
+                    android:background="@drawable/ic_favorite_border_black_24dp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/compoundView_name"

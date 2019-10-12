@@ -1,6 +1,7 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,11 +60,10 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
     RecyclerView compound_rview;
-    List<Compound> list_compound;
     RVAdapter rvAdapter;
     TextView resutlsNumb;
-    com.example.pubchem_chemistry_handbook.data.global global = new global(0,0);
     String search = "";
+    int current_pos = 0;
 
 
     @Nullable
@@ -71,9 +71,8 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
-        loadCompound();
         compound_rview = view.findViewById(R.id.recyclerview);
-        rvAdapter = new RVAdapter(getActivity(), list_compound, ((MainActivity)getActivity()).getGlobal());
+        rvAdapter = new RVAdapter(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
@@ -94,6 +93,8 @@ public class SearchFragment extends Fragment {
         final SearchView searchView = view.findViewById(R.id.searchView);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
+        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+        final Button favButton = view.findViewById(R.id.favButton);
         HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
         HazardTexts[0] = view.findViewById(R.id.SafetyItems_Text_GHS01);
         HazardImages[1] = view.findViewById(R.id.SafetyItems_Images_GHS02);
@@ -123,10 +124,22 @@ public class SearchFragment extends Fragment {
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
-        resutlsNumb.setText("Results: " + global.getResults());
+        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
+            }
+        });
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public void onClick(View v) {
+                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
+                    ((MainActivity)getActivity()).removeFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID());
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                } else {
+                    ((MainActivity)getActivity()).addFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos));
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                }
             }
         });
         search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -134,9 +147,9 @@ public class SearchFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
-                    global.setSearch_type_startsWith(1);
+                    ((MainActivity)getActivity()).getGlobal().setSearch_type_startsWith(1);
                 } else {
-                    global.setSearch_type_startsWith(0);
+                    ((MainActivity)getActivity()).getGlobal().setSearch_type_startsWith(0);
                 }
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
@@ -144,7 +157,7 @@ public class SearchFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        resutlsNumb.setText("Results: " + global.getResults());
+                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
                     }
                 }, 500);
             }
@@ -165,18 +178,22 @@ public class SearchFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        resutlsNumb.setText("Results: " + global.getResults());
+                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
                     }
                 }, 500);
                 return false;
             }
         });
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
+                favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                current_pos = position;
+                ((MainActivity)getActivity()).addRecent(((MainActivity)getActivity()).getGlobal().getCompounds().get(position));
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + list_compound.get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + list_compound.get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + list_compound.get(position).getEID() + ".json")
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                             @Override
@@ -208,17 +225,25 @@ public class SearchFragment extends Fragment {
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
 
-                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + list_compound.get(position).getEID() + ".json"))
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json"))
                                 {
                                     //Read JSON file
+                                    /*
                                     JSONObject obj = (JSONObject) jsonParser.parse(reader);
                                     JSONObject record = (JSONObject) obj.get("Record");
                                     String RecordTitle = (String) record.get("RecordTitle");
-                                    list_compound.get(position).setName(RecordTitle);
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).setName(RecordTitle);
                                     //Toast.makeText(getActivity(), "RecordTitle: " + RecordTitle, Toast.LENGTH_LONG).show();
                                     long RecordNumber = (Long) record.get("RecordNumber");
-                                    list_compound.get(position).setEID((int) RecordNumber);
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).setEID((int) RecordNumber);
                                     //Toast.makeText(getActivity(), "RecordNumber: " + RecordNumber, Toast.LENGTH_LONG).show();
+                                    JSONArray section = (JSONArray) record.get("Section");
+                                    JSONObject section_0 = (JSONObject) section.get(0);
+                                    JSONArray structure_section = (JSONArray) section_0.get("Section");
+                                     */
+
+                                    JSONObject obj = (JSONObject) jsonParser.parse(reader);
+                                    JSONObject record = (JSONObject) obj.get("Record");
                                     JSONArray section = (JSONArray) record.get("Section");
                                     JSONObject section_0 = (JSONObject) section.get(0);
                                     JSONArray structure_section = (JSONArray) section_0.get("Section");
@@ -277,13 +302,13 @@ public class SearchFragment extends Fragment {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + list_compound.get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + list_compound.get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
                                                     JSONArray temp = (JSONArray) struct_1.get("Section");
@@ -321,10 +346,10 @@ public class SearchFragment extends Fragment {
                                             JSONObject sub_Markup = (JSONObject) Markup.get(i);
                                             String url = (String) sub_Markup.get("URL");
                                             String name = (String) sub_Markup.get("Extra");
-                                            list_compound.get(position).addSafetyItem(name, url);
+                                            ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).addSafetyItem(name, url);
                                             //System.out.println("Added Safety: " + name + ", " + url);
                                         }
-                                        for (SafetyItem item : list_compound.get(position).getSafetyItems()) {
+                                        for (SafetyItem item : ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getSafetyItems()) {
                                             int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
                                             safety[n-1] = true;
                                         }
@@ -355,30 +380,16 @@ public class SearchFragment extends Fragment {
                                 Log.d("PRDownloader", "onError: " + error.toString());
                             }
                         });
-                compoundView_name.setText(" " + list_compound.get(position).getName());
-                compoundView_formula.setText("  " + list_compound.get(position).getFormula());
+                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                } else {
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                }
+                compoundView_name.setText(" " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getName());
+                compoundView_formula.setText("  " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getFormula());
                 compoundView.setVisibility(View.VISIBLE);
             }
         });
         return view;
-    }
-
-    void loadCompound() {
-        list_compound = new ArrayList<>();
-        InputStream is = getResources().openRawResource(R.raw.compound);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-        String line = "";
-
-        try {
-            while (((line = reader.readLine()) != null)) {
-                String[] tokens = line.split(";");
-                if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
-                    list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
-                }
-            }
-        } catch (IOException e) {
-            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-            e.printStackTrace();
-        }
     }
 }

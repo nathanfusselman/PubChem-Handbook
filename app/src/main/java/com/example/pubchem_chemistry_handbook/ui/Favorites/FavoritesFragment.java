@@ -1,12 +1,15 @@
 package com.example.pubchem_chemistry_handbook.ui.Favorites;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,16 +60,21 @@ public class FavoritesFragment extends Fragment {
     private FavoritesViewModel favoritesViewModel;
     RecyclerView compound_rview;
     RVAdapter rvAdapter;
-    List<Compound> list_compound;
+    List<Compound> currentList;
+    int current_pos = 0;
+    Compound current_Compound;
+    int current_state = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        currentList = new ArrayList<Compound>(((MainActivity)getActivity()).getGlobal().getFav());
+        current_state = 1;
         favoritesViewModel =
                 ViewModelProviders.of(this).get(FavoritesViewModel.class);
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
-        loadCompound();
-        rvAdapter = new RVAdapter(getActivity(), list_compound, ((MainActivity)getActivity()).getGlobal());
+        rvAdapter = new RVAdapter(getActivity(), currentList, ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
@@ -115,11 +123,42 @@ public class FavoritesFragment extends Fragment {
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
+        final Button favButton = view.findViewById(R.id.favButton);
+        rvAdapter.notifyDataSetChanged();
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
                 favorites_button.setVisibility(View.VISIBLE);
                 recents_button.setVisibility(View.VISIBLE);
+                if (current_state == 2) {
+                    favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                    recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                    currentList.clear();
+                    currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
+                    rvAdapter.notifyDataSetChanged();
+                }
+                if (current_state == 1) {
+                    favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                    recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                    currentList.clear();
+                    currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
+                    rvAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public void onClick(View v) {
+                System.out.println("WORKING ON POS: " + current_pos);
+                System.out.println("POS EID: " + currentList.get(current_pos).getEID());
+                if (((MainActivity)getActivity()).checkFav(current_Compound.getEID())) {
+                    ((MainActivity)getActivity()).removeFav(current_Compound.getEID());
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                } else {
+                    ((MainActivity)getActivity()).addFav(current_Compound);
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                }
+                rvAdapter.notifyDataSetChanged();
             }
         });
 
@@ -127,6 +166,9 @@ public class FavoritesFragment extends Fragment {
             public void onClick(View v) {
                 favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                currentList.clear();
+                currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
+                rvAdapter.notifyDataSetChanged();
             }
         });
 
@@ -134,13 +176,27 @@ public class FavoritesFragment extends Fragment {
             public void onClick(View v) {
                 favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                 recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                currentList.clear();
+                currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
+                rvAdapter.notifyDataSetChanged();
             }
         });
 
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + list_compound.get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + list_compound.get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + list_compound.get(position).getEID() + ".json")
+                System.out.println("Clicked on item: " + position);
+                final int new_pos = rvAdapter.getItemCount() - (position+1);
+                favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                favorites_button.setVisibility(View.INVISIBLE);
+                recents_button.setVisibility(View.INVISIBLE);
+                current_pos = position;
+                final int itemEID = currentList.get(position).getEID();
+                final Compound currentCompound = currentList.get(position);
+                current_Compound = currentCompound;
+                ((MainActivity)getActivity()).addRecent(currentCompound);
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + itemEID + "/JSON/?response_type=save&response_basename=compound_CID_" + itemEID, getActivity().getFilesDir().toString(), "compound-" + itemEID + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                             @Override
@@ -172,64 +228,13 @@ public class FavoritesFragment extends Fragment {
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
 
-                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + list_compound.get(position).getEID() + ".json"))
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + itemEID + ".json"))
                                 {
-                                    //Read JSON file
                                     JSONObject obj = (JSONObject) jsonParser.parse(reader);
                                     JSONObject record = (JSONObject) obj.get("Record");
-                                    String RecordTitle = (String) record.get("RecordTitle");
-                                    list_compound.get(position).setName(RecordTitle);
-                                    //Toast.makeText(getActivity(), "RecordTitle: " + RecordTitle, Toast.LENGTH_LONG).show();
-                                    long RecordNumber = (Long) record.get("RecordNumber");
-                                    list_compound.get(position).setEID((int) RecordNumber);
-                                    //Toast.makeText(getActivity(), "RecordNumber: " + RecordNumber, Toast.LENGTH_LONG).show();
                                     JSONArray section = (JSONArray) record.get("Section");
                                     JSONObject section_0 = (JSONObject) section.get(0);
                                     JSONArray structure_section = (JSONArray) section_0.get("Section");
-                                    /*
-                                    String RecordFormula = "";
-                                    try {
-                                        structure_section = (JSONArray) section_0.get("Section");
-                                        JSONObject section_2 = (JSONObject) section.get(2);
-                                        JSONArray sub_section_2 = (JSONArray) section_2.get("Section");
-                                        JSONObject sub_section_2_2 = (JSONObject) sub_section_2.get(2);
-                                        JSONArray Information = (JSONArray) sub_section_2_2.get("Information");
-                                        JSONObject sub_Information = (JSONObject) Information.get(0);
-                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
-                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
-                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
-                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
-                                    } catch (ArrayIndexOutOfBoundsException a) {
-                                        section = (JSONArray) record.get("Section");
-                                        JSONObject section_0 = (JSONObject) section.get(0);
-                                        structure_section = (JSONArray) section_0.get("Section");
-                                        JSONObject section_1 = (JSONObject) section.get(1);
-                                        JSONArray sub_section_1 = (JSONArray) section_1.get("Section");
-                                        JSONObject sub_section_1_1 = (JSONObject) sub_section_1.get(1);
-                                        JSONArray Information = (JSONArray) sub_section_1_1.get("Information");
-                                        JSONObject sub_Information = (JSONObject) Information.get(0);
-                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
-                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
-                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
-                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
-                                    } catch (IndexOutOfBoundsException i) {
-                                        section = (JSONArray) record.get("Section");
-                                        JSONObject section_0 = (JSONObject) section.get(0);
-                                        structure_section = (JSONArray) section_0.get("Section");
-                                        JSONObject section_1 = (JSONObject) section.get(1);
-                                        JSONArray sub_section_1 = (JSONArray) section_1.get("Section");
-                                        JSONObject sub_section_1_1 = (JSONObject) sub_section_1.get(1);
-                                        JSONArray Information = (JSONArray) sub_section_1_1.get("Information");
-                                        JSONObject sub_Information = (JSONObject) Information.get(0);
-                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
-                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
-                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
-                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
-                                    }
-                                    list_compound.get(position).setFormula(RecordFormula);
-                                    //Toast.makeText(getActivity(), "RecordFormula: " + RecordFormula, Toast.LENGTH_LONG).show();
-
-                                     */
                                     StructureImageLayout.removeAllViews();
                                     StructureTextLayout.removeAllViews();
                                     try {
@@ -241,13 +246,13 @@ public class FavoritesFragment extends Fragment {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + list_compound.get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + itemEID + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + list_compound.get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + itemEID + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
                                                     JSONArray temp = (JSONArray) struct_1.get("Section");
@@ -285,10 +290,10 @@ public class FavoritesFragment extends Fragment {
                                             JSONObject sub_Markup = (JSONObject) Markup.get(i);
                                             String url = (String) sub_Markup.get("URL");
                                             String name = (String) sub_Markup.get("Extra");
-                                            list_compound.get(position).addSafetyItem(name, url);
+                                            currentCompound.addSafetyItem(name, url);
                                             //System.out.println("Added Safety: " + name + ", " + url);
                                         }
-                                        for (SafetyItem item : list_compound.get(position).getSafetyItems()) {
+                                        for (SafetyItem item : currentCompound.getSafetyItems()) {
                                             int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
                                             safety[n-1] = true;
                                         }
@@ -319,32 +324,17 @@ public class FavoritesFragment extends Fragment {
                                 Log.d("PRDownloader", "onError: " + error.toString());
                             }
                         });
-                compoundView_name.setText(" " + list_compound.get(position).getName());
-                compoundView_formula.setText("  " + list_compound.get(position).getFormula());
-                favorites_button.setVisibility(View.INVISIBLE);
-                recents_button.setVisibility(View.INVISIBLE);
+                if (((MainActivity)getActivity()).checkFav(currentCompound.getEID())) {
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+                } else {
+                    favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                }
+                compoundView_name.setText(" " + currentCompound.getName());
+                compoundView_formula.setText("  " + currentCompound.getFormula());
                 compoundView.setVisibility(View.VISIBLE);
+                rvAdapter.notifyDataSetChanged();
             }
         });
         return view;
-    }
-
-    void loadCompound() {
-        list_compound = new ArrayList<>();
-        InputStream is = getResources().openRawResource(R.raw.compound);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-        String line = "";
-
-        try {
-            while (((line = reader.readLine()) != null)) {
-                String[] tokens = line.split(";");
-                if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
-                    list_compound.add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
-                }
-            }
-        } catch (IOException e) {
-            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-            e.printStackTrace();
-        }
     }
 }
