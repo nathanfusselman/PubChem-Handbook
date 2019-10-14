@@ -1,7 +1,9 @@
 package com.example.pubchem_chemistry_handbook.ui.Favorites;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -130,6 +132,15 @@ public class FavoritesFragment extends Fragment {
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         final Button favButton = view.findViewById(R.id.favButton);
         rvAdapter.notifyDataSetChanged();
+        final Button shareButton = view.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + current_Compound.getEID();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);

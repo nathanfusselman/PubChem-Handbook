@@ -1,8 +1,10 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,6 +68,7 @@ public class SearchFragment extends Fragment {
     TextView resutlsNumb;
     String search = "";
     int current_pos = 0;
+    Compound currentCompound = null;
 
 
     @Nullable
@@ -132,6 +135,15 @@ public class SearchFragment extends Fragment {
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+        final Button shareButton = view.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getEID();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
@@ -198,10 +210,11 @@ public class SearchFragment extends Fragment {
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 current_pos = position;
-                ((MainActivity)getActivity()).addRecent(((MainActivity)getActivity()).getGlobal().getCompounds().get(position));
+                currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(position);
+                ((MainActivity)getActivity()).addRecent(currentCompound);
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json")
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                             @Override
@@ -233,7 +246,7 @@ public class SearchFragment extends Fragment {
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
 
-                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json"))
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getEID() + ".json"))
                                 {
                                     //Read JSON file
                                     /*
@@ -342,13 +355,13 @@ public class SearchFragment extends Fragment {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
                                                     JSONArray temp = (JSONArray) struct_1.get("Section");
@@ -388,10 +401,10 @@ public class SearchFragment extends Fragment {
                                             JSONObject sub_Markup = (JSONObject) Markup.get(i);
                                             String url = (String) sub_Markup.get("URL");
                                             String name = (String) sub_Markup.get("Extra");
-                                            ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).addSafetyItem(name, url);
+                                            currentCompound.addSafetyItem(name, url);
                                             //System.out.println("Added Safety: " + name + ", " + url);
                                         }
-                                        for (SafetyItem item : ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getSafetyItems()) {
+                                        for (SafetyItem item : currentCompound.getSafetyItems()) {
                                             int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
                                             safety[n-1] = true;
                                             ((MainActivity)getActivity()).getGlobal().setSafetyItems(1);
@@ -426,13 +439,13 @@ public class SearchFragment extends Fragment {
                                 Log.d("PRDownloader", "onError: " + error.toString());
                             }
                         });
-                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
+                if (((MainActivity)getActivity()).checkFav(currentCompound.getEID())) {
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
                 } else {
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 }
-                compoundView_name.setText(" " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getName());
-                compoundView_formula.setText("  " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getFormula());
+                compoundView_name.setText(" " + currentCompound.getName());
+                compoundView_formula.setText("  " + currentCompound.getFormula());
                 compoundView.setVisibility(View.VISIBLE);
             }
         });
