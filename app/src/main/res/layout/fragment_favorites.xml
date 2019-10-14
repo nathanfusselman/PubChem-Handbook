@@ -367,6 +367,21 @@
                 </LinearLayout>
 
             </HorizontalScrollView>
+            <TextView
+                android:id="@+id/Summary_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Physical Description:"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textSize="15sp"
+                android:id="@+id/Summary"/>
         </LinearLayout>
     </ScrollView>
 
