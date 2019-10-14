@@ -7,6 +7,7 @@ import java.util.List;
 public class global {
     int search_type_startsWith;
     int results;
+    int safetyItems;
     List<Compound> fav, recents, compounds, compoundListFull;
 
     public  global(int search_type_startsWith, int results) {
@@ -16,6 +17,7 @@ public class global {
         recents = new ArrayList<>();
         compounds = new ArrayList<>();
         compoundListFull = new ArrayList<>();
+        safetyItems = 0;
     }
 
     public int getSearch_type_startsWith() {
@@ -32,6 +34,14 @@ public class global {
 
     public void setResults(int results) {
         this.results = results;
+    }
+
+    public int getSafetyItems() {
+        return safetyItems;
+    }
+
+    public void setSafetyItems(int value) {
+        safetyItems = value;
     }
 
     public List<Compound> getFav() {

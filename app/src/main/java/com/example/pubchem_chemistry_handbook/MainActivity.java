@@ -185,7 +185,11 @@ public class MainActivity extends AppCompatActivity {
                 sc.nextLine();
             }
             while (sc.hasNextLine()) {
-                global.getFav().add(findCompound(Integer.parseInt(sc.nextLine())));
+                try {
+                    global.getFav().add(findCompound(Integer.parseInt(sc.nextLine())));
+                } catch (Exception e) {
+
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -200,7 +204,11 @@ public class MainActivity extends AppCompatActivity {
                 sc.nextLine();
             }
             while (sc.hasNextLine()) {
-                global.getRecents().add(findCompound(Integer.parseInt(sc.nextLine())));
+                try {
+                    global.getRecents().add(findCompound(Integer.parseInt(sc.nextLine())));
+                } catch (Exception e) {
+
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

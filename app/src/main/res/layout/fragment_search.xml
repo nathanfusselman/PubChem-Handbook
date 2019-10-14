@@ -98,6 +98,14 @@
                 android:text=" Compound Name"
                 android:textSize="16dp"/>
 
+            <TextView
+                android:id="@+id/Structures_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Structure:"
+                android:textSize="24dp"/>
+
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="175dp"
@@ -185,6 +193,14 @@
                 android:text=" Chemical Safety:"
                 android:textSize="24dp"/>
 
+            <TextView
+                android:id="@+id/Safety_NULL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="   [No Safety Items]"
+                android:textSize="18dp"/>
+
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
@@ -199,71 +215,71 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="35dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
                         android:id="@+id/SafetyItems_Images"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS01"
                             android:background="@drawable/ic_ghs01"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS02"
                             android:background="@drawable/ic_ghs02"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS03"
                             android:background="@drawable/ic_ghs03"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS04"
                             android:background="@drawable/ic_ghs04"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS05"
                             android:background="@drawable/ic_ghs05"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS06"
                             android:background="@drawable/ic_ghs06"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS07"
                             android:background="@drawable/ic_ghs07"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS08"
                             android:background="@drawable/ic_ghs08"/>
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS09"
                             android:background="@drawable/ic_ghs09"/>
 
@@ -273,8 +289,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="35dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="5dp"
                         android:id="@+id/SafetyItems_Text"
                         android:orientation="horizontal">
@@ -285,7 +301,7 @@
                             android:id="@+id/SafetyItems_Text_GHS01"
                             android:textSize="16dp"
                             android:text="Explosive"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -294,7 +310,7 @@
                             android:id="@+id/SafetyItems_Text_GHS02"
                             android:textSize="16dp"
                             android:text="Flammable"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -303,7 +319,7 @@
                             android:id="@+id/SafetyItems_Text_GHS03"
                             android:textSize="16dp"
                             android:text="Oxidizer"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -312,7 +328,7 @@
                             android:id="@+id/SafetyItems_Text_GHS04"
                             android:textSize="16dp"
                             android:text="Compressed Gas"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -321,7 +337,7 @@
                             android:id="@+id/SafetyItems_Text_GHS05"
                             android:textSize="16dp"
                             android:text="Corrosive"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -330,7 +346,7 @@
                             android:id="@+id/SafetyItems_Text_GHS06"
                             android:textSize="16dp"
                             android:text="Acute Toxic"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -339,7 +355,7 @@
                             android:id="@+id/SafetyItems_Text_GHS07"
                             android:textSize="16dp"
                             android:text="Irritant"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -348,7 +364,7 @@
                             android:id="@+id/SafetyItems_Text_GHS08"
                             android:textSize="16dp"
                             android:text="Health Hazard"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
 
                         <TextView
@@ -357,13 +373,27 @@
                             android:id="@+id/SafetyItems_Text_GHS09"
                             android:textSize="16dp"
                             android:text="Environmental Hazard"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"/>
-
                     </LinearLayout>
                 </LinearLayout>
 
             </HorizontalScrollView>
+            <TextView
+                android:id="@+id/Summary_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Physical Description:"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textSize="15sp"
+                android:id="@+id/Summary"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

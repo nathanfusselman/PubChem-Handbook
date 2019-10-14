@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -98,6 +99,7 @@ public class SearchFragment extends Fragment {
         final TextView[] HazardTexts = new TextView[9];
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
         final Button favButton = view.findViewById(R.id.favButton);
+        final TextView Summary = view.findViewById(R.id.Summary);
         HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
         HazardTexts[0] = view.findViewById(R.id.SafetyItems_Text_GHS01);
         HazardImages[1] = view.findViewById(R.id.SafetyItems_Images_GHS02);
@@ -116,11 +118,13 @@ public class SearchFragment extends Fragment {
         HazardTexts[7] = view.findViewById(R.id.SafetyItems_Text_GHS08);
         HazardImages[8] = view.findViewById(R.id.SafetyItems_Images_GHS09);
         HazardTexts[8] = view.findViewById(R.id.SafetyItems_Text_GHS09);
-
+        final TextView nullSafetyItems = view.findViewById(R.id.Safety_NULL);
         final LinearLayout StructureImageLayout = view.findViewById(R.id.compoundView_images);
         final LinearLayout StructureTextLayout = view.findViewById(R.id.compoundView_images_names);
         final ImageView[] StructureImages = new ImageView[3];
         final TextView[] StructureTexts = new TextView[3];
+        final HorizontalScrollView SafetyItems = view.findViewById(R.id.SafetyItems_raw);
+        final TextView SafetyHeader = view.findViewById(R.id.Safety_Header);
         StructureImages[0] = view.findViewById(R.id.compoundView_2dImage);
         StructureTexts[0] = view.findViewById(R.id.compoundView_images_names_2d);
         StructureImages[1] = view.findViewById(R.id.compoundView_3dImage);
@@ -191,6 +195,7 @@ public class SearchFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
+                ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 current_pos = position;
                 ((MainActivity)getActivity()).addRecent(((MainActivity)getActivity()).getGlobal().getCompounds().get(position));
@@ -250,6 +255,38 @@ public class SearchFragment extends Fragment {
                                     JSONArray section = (JSONArray) record.get("Section");
                                     JSONObject section_0 = (JSONObject) section.get(0);
                                     JSONArray structure_section = (JSONArray) section_0.get("Section");
+                                    try {
+                                        JSONObject section_2 = (JSONObject) section.get(2);
+                                        JSONArray section2 = (JSONArray) section_2.get("Section");
+                                        JSONObject section2_0 = (JSONObject) section2.get(0);
+                                        JSONArray Information = (JSONArray) section2_0.get("Information");
+                                        JSONObject Information0 = (JSONObject) Information.get(0);
+                                        JSONObject Value = (JSONObject) Information0.get("Value");
+                                        JSONArray ValueString = (JSONArray) Value.get("StringWithMarkup");
+                                        JSONObject ValueString2 = (JSONObject) ValueString.get(0);
+                                        String Summary_text = (String) ValueString2.get("String");
+                                        Summary.setText(Summary_text);
+                                    } catch (Exception e) {
+                                        try {
+                                            JSONArray Section = section;
+                                            JSONObject Section2 = (JSONObject) Section.get(2);
+                                            JSONArray Section2_ = (JSONArray) Section2.get("Section");
+                                            JSONObject Section2_1 = (JSONObject) Section2_.get(1);
+                                            JSONArray Section2_1_ = (JSONArray) Section2_1.get("Section");
+                                            JSONObject Section2_1_0 = (JSONObject) Section2_1_.get(0);
+                                            JSONArray Information = (JSONArray) Section2_1_0.get("Information");
+                                            JSONObject Information0 = (JSONObject) Information.get(0);
+                                            JSONObject Value = (JSONObject) Information0.get("Value");
+                                            JSONArray SWM = (JSONArray) Value.get("StringWithMarkup");
+                                            JSONObject SWM0 = (JSONObject) SWM.get(0);
+                                            String pDescription = (String) SWM0.get("String");
+                                            Summary.setText(pDescription);
+                                        } catch (Exception e2) {
+                                            Summary.setText("No Description");
+                                            System.out.println("No Physical Description");
+                                        }
+                                    }
+
                                     /*
                                     String RecordFormula = "";
                                     try {
@@ -279,7 +316,7 @@ public class SearchFragment extends Fragment {
                                     } catch (IndexOutOfBoundsException i) {
                                         section = (JSONArray) record.get("Section");
                                         JSONObject section_0 = (JSONObject) section.get(0);
-                                        structure_section = (JSONArray) section_0.get("Section");
+                                        structure_section  = (JSONArray) section_0.get("Section");
                                         JSONObject section_1 = (JSONObject) section.get(1);
                                         JSONArray sub_section_1 = (JSONArray) section_1.get("Section");
                                         JSONObject sub_section_1_1 = (JSONObject) sub_section_1.get(1);
@@ -333,7 +370,10 @@ public class SearchFragment extends Fragment {
                                     }
                                     SafetyItems_Images.removeAllViews();
                                     SafetyItems_Text.removeAllViews();
+                                    SafetyItems.setVisibility(View.GONE);
+                                    nullSafetyItems.setVisibility(View.VISIBLE);
                                     try {
+                                        boolean[] safety = new boolean[9];
                                         JSONObject section_1 = (JSONObject) section.get(1);
                                         JSONArray Information_1 = (JSONArray) section_1.get("Information");
                                         JSONObject sub_Information_1 = (JSONObject) Information_1.get(0);
@@ -341,7 +381,6 @@ public class SearchFragment extends Fragment {
                                         JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
                                         JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
                                         JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
-                                        boolean[] safety = new boolean[9];
                                         for (int i = 0; i < 9; i++) {
                                             safety[i] = false;
                                         }
@@ -355,11 +394,15 @@ public class SearchFragment extends Fragment {
                                         for (SafetyItem item : ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getSafetyItems()) {
                                             int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
                                             safety[n-1] = true;
+                                            ((MainActivity)getActivity()).getGlobal().setSafetyItems(1);
                                         }
                                         for (int i = 0; i < 9; i++) {
                                             if (safety[i]) {
                                                 SafetyItems_Images.addView(HazardImages[i]);
                                                 SafetyItems_Text.addView(HazardTexts[i]);
+                                                SafetyHeader.setVisibility(View.VISIBLE);
+                                                SafetyItems.setVisibility(View.VISIBLE);
+                                                nullSafetyItems.setVisibility(View.GONE);
                                             }
                                         }
                                     } catch (NullPointerException e) {

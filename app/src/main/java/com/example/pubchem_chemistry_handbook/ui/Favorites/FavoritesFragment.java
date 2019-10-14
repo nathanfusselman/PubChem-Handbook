@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -113,10 +114,14 @@ public class FavoritesFragment extends Fragment {
         HazardTexts[7] = view.findViewById(R.id.SafetyItems_Text_GHS08);
         HazardImages[8] = view.findViewById(R.id.SafetyItems_Images_GHS09);
         HazardTexts[8] = view.findViewById(R.id.SafetyItems_Text_GHS09);
+        final TextView Summary = view.findViewById(R.id.Summary);
         final LinearLayout StructureImageLayout = view.findViewById(R.id.compoundView_images);
         final LinearLayout StructureTextLayout = view.findViewById(R.id.compoundView_images_names);
         final ImageView[] StructureImages = new ImageView[3];
         final TextView[] StructureTexts = new TextView[3];
+        final HorizontalScrollView SafetyItems = view.findViewById(R.id.SafetyItems_raw);
+        final TextView SafetyHeader = view.findViewById(R.id.Safety_Header);
+        final TextView nullSafetyItems = view.findViewById(R.id.Safety_NULL);
         StructureImages[0] = view.findViewById(R.id.compoundView_2dImage);
         StructureTexts[0] = view.findViewById(R.id.compoundView_images_names_2d);
         StructureImages[1] = view.findViewById(R.id.compoundView_3dImage);
@@ -189,7 +194,6 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onItemClick(final int position) {
                 System.out.println("Clicked on item: " + position);
-                final int new_pos = rvAdapter.getItemCount() - (position+1);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 favorites_button.setVisibility(View.INVISIBLE);
                 recents_button.setVisibility(View.INVISIBLE);
@@ -198,7 +202,11 @@ public class FavoritesFragment extends Fragment {
                 final Compound currentCompound = currentList.get(position);
                 current_Compound = currentCompound;
                 ((MainActivity)getActivity()).addRecent(currentCompound);
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + itemEID + "/JSON/?response_type=save&response_basename=compound_CID_" + itemEID, getActivity().getFilesDir().toString(), "compound-" + itemEID + ".json")
+                ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
+                favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                current_pos = position;
+                ((MainActivity)getActivity()).addRecent(((MainActivity)getActivity()).getGlobal().getCompounds().get(position));
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID(), getActivity().getFilesDir().toString(), "compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                             @Override
@@ -230,13 +238,104 @@ public class FavoritesFragment extends Fragment {
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
 
-                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + itemEID + ".json"))
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + ".json"))
                                 {
+                                    //Read JSON file
+                                    /*
+                                    JSONObject obj = (JSONObject) jsonParser.parse(reader);
+                                    JSONObject record = (JSONObject) obj.get("Record");
+                                    String RecordTitle = (String) record.get("RecordTitle");
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).setName(RecordTitle);
+                                    //Toast.makeText(getActivity(), "RecordTitle: " + RecordTitle, Toast.LENGTH_LONG).show();
+                                    long RecordNumber = (Long) record.get("RecordNumber");
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).setEID((int) RecordNumber);
+                                    //Toast.makeText(getActivity(), "RecordNumber: " + RecordNumber, Toast.LENGTH_LONG).show();
+                                    JSONArray section = (JSONArray) record.get("Section");
+                                    JSONObject section_0 = (JSONObject) section.get(0);
+                                    JSONArray structure_section = (JSONArray) section_0.get("Section");
+                                     */
+
                                     JSONObject obj = (JSONObject) jsonParser.parse(reader);
                                     JSONObject record = (JSONObject) obj.get("Record");
                                     JSONArray section = (JSONArray) record.get("Section");
                                     JSONObject section_0 = (JSONObject) section.get(0);
                                     JSONArray structure_section = (JSONArray) section_0.get("Section");
+                                    try {
+                                        JSONObject section_2 = (JSONObject) section.get(2);
+                                        JSONArray section2 = (JSONArray) section_2.get("Section");
+                                        JSONObject section2_0 = (JSONObject) section2.get(0);
+                                        JSONArray Information = (JSONArray) section2_0.get("Information");
+                                        JSONObject Information0 = (JSONObject) Information.get(0);
+                                        JSONObject Value = (JSONObject) Information0.get("Value");
+                                        JSONArray ValueString = (JSONArray) Value.get("StringWithMarkup");
+                                        JSONObject ValueString2 = (JSONObject) ValueString.get(0);
+                                        String Summary_text = (String) ValueString2.get("String");
+                                        Summary.setText(Summary_text);
+                                    } catch (Exception e) {
+                                        try {
+                                            JSONArray Section = section;
+                                            JSONObject Section2 = (JSONObject) Section.get(2);
+                                            JSONArray Section2_ = (JSONArray) Section2.get("Section");
+                                            JSONObject Section2_1 = (JSONObject) Section2_.get(1);
+                                            JSONArray Section2_1_ = (JSONArray) Section2_1.get("Section");
+                                            JSONObject Section2_1_0 = (JSONObject) Section2_1_.get(0);
+                                            JSONArray Information = (JSONArray) Section2_1_0.get("Information");
+                                            JSONObject Information0 = (JSONObject) Information.get(0);
+                                            JSONObject Value = (JSONObject) Information0.get("Value");
+                                            JSONArray SWM = (JSONArray) Value.get("StringWithMarkup");
+                                            JSONObject SWM0 = (JSONObject) SWM.get(0);
+                                            String pDescription = (String) SWM0.get("String");
+                                            Summary.setText(pDescription);
+                                        } catch (Exception e2) {
+                                            Summary.setText("No Description");
+                                            System.out.println("No Physical Description");
+                                        }
+                                    }
+
+                                    /*
+                                    String RecordFormula = "";
+                                    try {
+                                        structure_section = (JSONArray) section_0.get("Section");
+                                        JSONObject section_2 = (JSONObject) section.get(2);
+                                        JSONArray sub_section_2 = (JSONArray) section_2.get("Section");
+                                        JSONObject sub_section_2_2 = (JSONObject) sub_section_2.get(2);
+                                        JSONArray Information = (JSONArray) sub_section_2_2.get("Information");
+                                        JSONObject sub_Information = (JSONObject) Information.get(0);
+                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
+                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
+                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
+                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
+                                    } catch (ArrayIndexOutOfBoundsException a) {
+                                        section = (JSONArray) record.get("Section");
+                                        JSONObject section_0 = (JSONObject) section.get(0);
+                                        structure_section = (JSONArray) section_0.get("Section");
+                                        JSONObject section_1 = (JSONObject) section.get(1);
+                                        JSONArray sub_section_1 = (JSONArray) section_1.get("Section");
+                                        JSONObject sub_section_1_1 = (JSONObject) sub_section_1.get(1);
+                                        JSONArray Information = (JSONArray) sub_section_1_1.get("Information");
+                                        JSONObject sub_Information = (JSONObject) Information.get(0);
+                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
+                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
+                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
+                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
+                                    } catch (IndexOutOfBoundsException i) {
+                                        section = (JSONArray) record.get("Section");
+                                        JSONObject section_0 = (JSONObject) section.get(0);
+                                        structure_section  = (JSONArray) section_0.get("Section");
+                                        JSONObject section_1 = (JSONObject) section.get(1);
+                                        JSONArray sub_section_1 = (JSONArray) section_1.get("Section");
+                                        JSONObject sub_section_1_1 = (JSONObject) sub_section_1.get(1);
+                                        JSONArray Information = (JSONArray) sub_section_1_1.get("Information");
+                                        JSONObject sub_Information = (JSONObject) Information.get(0);
+                                        JSONObject Value = (JSONObject) sub_Information.get("Value");
+                                        JSONArray StringWithMarkup = (JSONArray) Value.get("StringWithMarkup");
+                                        JSONObject sub_StringWithMarkup = (JSONObject) StringWithMarkup.get(0);
+                                        RecordFormula = (String) sub_StringWithMarkup.get("String");
+                                    }
+                                    list_compound.get(position).setFormula(RecordFormula);
+                                    //Toast.makeText(getActivity(), "RecordFormula: " + RecordFormula, Toast.LENGTH_LONG).show();
+
+                                     */
                                     StructureImageLayout.removeAllViews();
                                     StructureTextLayout.removeAllViews();
                                     try {
@@ -248,13 +347,13 @@ public class FavoritesFragment extends Fragment {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + itemEID + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
                                                     AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
-                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + itemEID + "&t=s");
+                                                    image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
                                                     JSONArray temp = (JSONArray) struct_1.get("Section");
@@ -276,7 +375,10 @@ public class FavoritesFragment extends Fragment {
                                     }
                                     SafetyItems_Images.removeAllViews();
                                     SafetyItems_Text.removeAllViews();
+                                    SafetyItems.setVisibility(View.GONE);
+                                    nullSafetyItems.setVisibility(View.VISIBLE);
                                     try {
+                                        boolean[] safety = new boolean[9];
                                         JSONObject section_1 = (JSONObject) section.get(1);
                                         JSONArray Information_1 = (JSONArray) section_1.get("Information");
                                         JSONObject sub_Information_1 = (JSONObject) Information_1.get(0);
@@ -284,7 +386,6 @@ public class FavoritesFragment extends Fragment {
                                         JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
                                         JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
                                         JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
-                                        boolean[] safety = new boolean[9];
                                         for (int i = 0; i < 9; i++) {
                                             safety[i] = false;
                                         }
@@ -292,17 +393,21 @@ public class FavoritesFragment extends Fragment {
                                             JSONObject sub_Markup = (JSONObject) Markup.get(i);
                                             String url = (String) sub_Markup.get("URL");
                                             String name = (String) sub_Markup.get("Extra");
-                                            currentCompound.addSafetyItem(name, url);
+                                            ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).addSafetyItem(name, url);
                                             //System.out.println("Added Safety: " + name + ", " + url);
                                         }
-                                        for (SafetyItem item : currentCompound.getSafetyItems()) {
+                                        for (SafetyItem item : ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getSafetyItems()) {
                                             int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
                                             safety[n-1] = true;
+                                            ((MainActivity)getActivity()).getGlobal().setSafetyItems(1);
                                         }
                                         for (int i = 0; i < 9; i++) {
                                             if (safety[i]) {
                                                 SafetyItems_Images.addView(HazardImages[i]);
                                                 SafetyItems_Text.addView(HazardTexts[i]);
+                                                SafetyHeader.setVisibility(View.VISIBLE);
+                                                SafetyItems.setVisibility(View.VISIBLE);
+                                                nullSafetyItems.setVisibility(View.GONE);
                                             }
                                         }
                                     } catch (NullPointerException e) {
@@ -326,13 +431,13 @@ public class FavoritesFragment extends Fragment {
                                 Log.d("PRDownloader", "onError: " + error.toString());
                             }
                         });
-                if (((MainActivity)getActivity()).checkFav(currentCompound.getEID())) {
+                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
                 } else {
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 }
-                compoundView_name.setText(" " + currentCompound.getName());
-                compoundView_formula.setText("  " + currentCompound.getFormula());
+                compoundView_name.setText(" " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getName());
+                compoundView_formula.setText("  " + ((MainActivity)getActivity()).getGlobal().getCompounds().get(position).getFormula());
                 compoundView.setVisibility(View.VISIBLE);
                 rvAdapter.notifyDataSetChanged();
             }
