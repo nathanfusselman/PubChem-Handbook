@@ -130,14 +130,14 @@ public class FavoritesFragment extends Fragment {
                 compoundView.setVisibility(View.INVISIBLE);
                 favorites_button.setVisibility(View.VISIBLE);
                 recents_button.setVisibility(View.VISIBLE);
-                if (current_state == 2) {
+                if (current_state == 1) {
                     favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                     recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     currentList.clear();
                     currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
                     rvAdapter.notifyDataSetChanged();
                 }
-                if (current_state == 1) {
+                if (current_state == 2) {
                     favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                     recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                     currentList.clear();
@@ -169,6 +169,7 @@ public class FavoritesFragment extends Fragment {
                 currentList.clear();
                 currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
                 rvAdapter.notifyDataSetChanged();
+                current_state = 1;
             }
         });
 
@@ -179,6 +180,7 @@ public class FavoritesFragment extends Fragment {
                 currentList.clear();
                 currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
                 rvAdapter.notifyDataSetChanged();
+                current_state = 2;
             }
         });
 

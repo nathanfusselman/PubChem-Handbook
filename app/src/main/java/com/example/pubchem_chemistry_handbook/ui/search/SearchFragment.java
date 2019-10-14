@@ -6,6 +6,7 @@ import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,8 @@ public class SearchFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         compound_rview = view.findViewById(R.id.recyclerview);
+        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+        ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
         rvAdapter = new RVAdapter(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);

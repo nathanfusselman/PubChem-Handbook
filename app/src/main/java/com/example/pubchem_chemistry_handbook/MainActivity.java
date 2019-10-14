@@ -28,12 +28,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -111,6 +114,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void removeRecent(int EID) {
+        try {
+            File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
+            File temp = File.createTempFile("temp-recents", ".txt", file.getParentFile());
+            String charset = "UTF-8";
+            String delete = Integer.toString(EID) + "\n";
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
+
+            for (String line; (line = reader.readLine()) != null;) {
+                if (!line.startsWith(delete)) {
+                    writer.println(line);
+                }
+            }
+
+            reader.close();
+            writer.close();
+
+            file.delete();
+            temp.renameTo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (Compound one : global.getRecents()) {
             if (one.getEID() == EID) {
                 global.getRecents().remove(one);
@@ -120,6 +145,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void removeFav(int EID) {
+        try {
+            File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
+            File temp = File.createTempFile("temp-fav", ".txt", file.getParentFile());
+            String charset = "UTF-8";
+            String delete = Integer.toString(EID);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
+
+            for (String line; (line = reader.readLine()) != null;) {
+                if (!line.startsWith(delete)) {
+                    writer.println(line);
+                }
+            }
+
+            reader.close();
+            writer.close();
+
+            file.delete();
+            temp.renameTo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("REMOVE TO FAV EID: " + EID);
         for (Compound one : global.getFav()) {
             if (one.getEID() == EID) {
@@ -128,9 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        
-    }
 
+    }
     public void loadFav() {
         File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
         try {
@@ -170,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    void loadCompound() {
+    public void loadCompound() {
         InputStream is = getResources().openRawResource(R.raw.compound);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
@@ -179,7 +225,9 @@ public class MainActivity extends AppCompatActivity {
             while (((line = reader.readLine()) != null)) {
                 String[] tokens = line.split(";");
                 if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
+                    global.getCompoundListFull().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
                     global.getCompounds().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
+
                 }
             }
         } catch (IOException e) {
