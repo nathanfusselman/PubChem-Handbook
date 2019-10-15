@@ -212,6 +212,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(final int position) {
                 PhysicalProperties.setVisibility(View.VISIBLE);
+                PhysicalProperties.removeAllViews();
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 current_pos = position;

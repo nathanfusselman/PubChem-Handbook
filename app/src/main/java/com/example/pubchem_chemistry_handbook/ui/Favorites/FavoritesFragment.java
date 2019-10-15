@@ -209,6 +209,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onItemClick(final int position) {
                 PhysicalProperties.setVisibility(View.VISIBLE);
+                PhysicalProperties.removeAllViews();
                 System.out.println("Clicked on item: " + position);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 favorites_button.setVisibility(View.INVISIBLE);
