@@ -1,5 +1,6 @@
 package com.example.pubchem_chemistry_handbook.data;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,9 @@ public class Compound {
     int eid;
     String name,formula;
     List<SafetyItem> safetyItems = new ArrayList<>();
+    List<String> nProperties = new ArrayList<>();
+    List<String> vProperties = new ArrayList<>();
+    List<String> uProperties = new ArrayList<>();
 
     public Compound(int eid, String name, String formula) {
         this.eid = eid;
@@ -41,4 +45,17 @@ public class Compound {
     public List<SafetyItem> getSafetyItems() {
         return safetyItems;
     }
+
+    public  List<String> getnProperties() {
+        return nProperties;
+    }
+
+    public  List<String> getvProperties() {
+        return vProperties;
+    }
+
+    public  List<String> getuProperties() {
+        return uProperties;
+    }
+
 }

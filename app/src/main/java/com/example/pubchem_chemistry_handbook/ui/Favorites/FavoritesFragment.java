@@ -17,6 +17,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +101,7 @@ public class FavoritesFragment extends Fragment {
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
+        final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
         HazardTexts[0] = view.findViewById(R.id.SafetyItems_Text_GHS01);
         HazardImages[1] = view.findViewById(R.id.SafetyItems_Images_GHS02);
@@ -204,6 +208,7 @@ public class FavoritesFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
+                PhysicalProperties.setVisibility(View.VISIBLE);
                 System.out.println("Clicked on item: " + position);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 favorites_button.setVisibility(View.INVISIBLE);
@@ -299,6 +304,68 @@ public class FavoritesFragment extends Fragment {
                                             Summary.setText("No Description");
                                             System.out.println("No Physical Description");
                                         }
+                                    }
+
+                                    try{
+                                        JSONObject section_3 = (JSONObject) section.get(3);
+                                        JSONArray section_3_ = (JSONArray) section_3.get("Section");
+                                        JSONObject section_3_0 = (JSONObject) section_3_.get(0);
+                                        JSONArray list = (JSONArray) section_3_0.get("Section");
+                                        for (int i = 0; i < list.size(); i++) {
+                                            JSONObject item = (JSONObject) list.get(i);
+                                            String name = (String) item.get("TOCHeading");
+                                            currentCompound.getnProperties().add(name);
+                                            JSONArray InformationArray = (JSONArray) item.get("Information");
+                                            JSONObject Information = (JSONObject) InformationArray.get(0);
+                                            JSONObject Value = (JSONObject) Information.get("Value");
+                                            String num_string = "";
+                                            try {
+                                                JSONArray numArray = (JSONArray) Value.get("Number");
+                                                try {
+                                                    Long num = (Long) numArray.get(0);
+                                                    num_string = num.toString();
+                                                } catch (Exception ea) {
+                                                    try {
+                                                        Double num = (Double) numArray.get(0);
+                                                        num_string = num.toString();
+                                                    } catch (Exception eb) {
+                                                        System.out.println(Value);
+                                                        JSONArray num_stringwithmarkup = (JSONArray) Value.get("StringWithMarkup");
+                                                        JSONObject num_zone = (JSONObject) num_stringwithmarkup.get(0);
+                                                        num_string = (String) num_zone.get("String");
+                                                    }
+                                                }
+                                            } catch (Exception ex) {
+                                                ex.printStackTrace();
+                                            }
+                                            currentCompound.getvProperties().add(num_string);
+                                            String unit = "";
+                                            try {
+                                                unit = (String) Value.get("Unit");
+                                            } catch (Exception ex) {
+                                                ex.printStackTrace();
+                                            }
+                                            currentCompound.getuProperties().add(unit);
+                                        }
+                                        PhysicalProperties.setStretchAllColumns(true);
+                                        PhysicalProperties.bringToFront();
+                                        for(int i = 0; i < currentCompound.getnProperties().size(); i++) {
+                                            TableRow tr =  new TableRow(getContext());
+                                            TextView c1 = new TextView(getContext());
+                                            c1.setText(currentCompound.getnProperties().get(i));
+                                            TextView c2 = new TextView(getContext());
+                                            if (currentCompound.getuProperties().get(i) != null) {
+                                                c2.setText(currentCompound.getvProperties().get(i) + " " + currentCompound.getuProperties().get(i));
+                                            } else {
+                                                c2.setText(currentCompound.getvProperties().get(i));
+                                            }
+                                            tr.addView(c1);
+                                            tr.addView(c2);
+                                            PhysicalProperties.addView(tr);
+                                        }
+                                    } catch (Exception e) {
+                                        PhysicalProperties.setVisibility(View.GONE);
+                                        e.printStackTrace();
                                     }
 
                                     /*
