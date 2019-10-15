@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -67,8 +69,8 @@ public class pTableFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        pTableViewModel =
-                ViewModelProviders.of(this).get(pTableViewModel.class);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        pTableViewModel = ViewModelProviders.of(this).get(pTableViewModel.class);
         View view = inflater.inflate(R.layout.fragment_ptable, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         recyclerView = view.findViewById(R.id.pTable_Recycler);

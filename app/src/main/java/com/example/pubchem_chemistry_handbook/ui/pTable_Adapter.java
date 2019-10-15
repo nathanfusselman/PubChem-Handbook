@@ -74,7 +74,6 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
             ((TextView)holder.pTableView.findViewById(R.id.element_atomic_number)).setText(Integer.toString(elementSet.get(position).getAtomicNumber()));
             ((TextView)holder.pTableView.findViewById(R.id.element_symbol)).setText(elementSet.get(position).getSymbol());
             ((TextView)holder.pTableView.findViewById(R.id.element_name)).setText(elementSet.get(position).getName());
-            ((TextView)holder.pTableView.findViewById(R.id.element_misc)).setText(elementSet.get(position).getChemicalGroupBlock());
         } else {
             if (elementSet.get(position).getAtomicNumber() == -1) {
                 (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
