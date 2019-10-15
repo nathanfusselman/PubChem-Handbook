@@ -2,6 +2,7 @@ package com.example.pubchem_chemistry_handbook.ui.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
@@ -83,6 +84,7 @@ public class SearchFragment extends Fragment {
         ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
         ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
         rvAdapter = new RVAdapter(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);

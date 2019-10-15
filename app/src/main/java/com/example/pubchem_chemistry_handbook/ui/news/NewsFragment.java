@@ -1,6 +1,7 @@
 package com.example.pubchem_chemistry_handbook.ui.news;
 
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         newsViewModel =
                 ViewModelProviders.of(this).get(NewsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_news, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         final TextView textDate = root.findViewById(R.id.news_date);
         final TextView textDay = root.findViewById(R.id.news_day);

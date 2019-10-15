@@ -8,6 +8,7 @@ public class global {
     int search_type_startsWith;
     int results;
     int safetyItems;
+    List<Element> elements;
     List<Compound> fav, recents, compounds, compoundListFull;
 
     public  global(int search_type_startsWith, int results) {
@@ -17,6 +18,7 @@ public class global {
         recents = new ArrayList<>();
         compounds = new ArrayList<>();
         compoundListFull = new ArrayList<>();
+        elements = new ArrayList<>();
         safetyItems = 0;
     }
 
@@ -74,5 +76,9 @@ public class global {
 
     public void removeRecent(int id) {
         this.recents.remove(id);
+    }
+
+    public List<Element> getElements() {
+        return elements;
     }
 }

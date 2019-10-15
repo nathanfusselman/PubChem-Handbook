@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
-import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.RequiresApi;
@@ -18,12 +18,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,15 +29,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import java.security.spec.ECField;
 import java.util.Scanner;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_news, R.id.navigation_search, R.id.navigation_favorites)
+                R.id.navigation_news, R.id.navigation_search, R.id.navigation_favorites, R.id.navigation_ptable)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -62,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         loadCompound();
         loadFav();
         loadRecents();
+        loadElements();
     }
 
     public global getGlobal() {
@@ -191,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -210,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -237,6 +229,22 @@ public class MainActivity extends AppCompatActivity {
                     global.getCompounds().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
 
                 }
+            }
+        } catch (IOException e) {
+            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+            e.printStackTrace();
+        }
+    }
+
+    public void loadElements() {
+        InputStream is = getResources().openRawResource(R.raw.elements);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        String line = "";
+
+        try {
+            while (((line = reader.readLine()) != null)) {
+                String[] tokens = line.split(",");
+                global.getElements().add(new Element(Integer.parseInt(tokens[0]), tokens[1], tokens[2], tokens[3]));
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);

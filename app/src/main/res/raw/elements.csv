@@ -1,0 +1,126 @@
+1,H,Hydrogen,Nonmetal
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+2,He,Helium,Noble gas
+3,Li,Lithium,Alkali metal
+4,Be,Beryllium,Alkaline earth metal
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+5,B,Boron,Metalloid
+6,C,Carbon,Nonmetal
+7,N,Nitrogen,Nonmetal
+8,O,Oxygen,Nonmetal
+9,F,Fluorine,Halogen
+10,Ne,Neon,Noble gas
+11,Na,Sodium,Alkali metal
+12,Mg,Magnesium,Alkaline earth metal
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+0,null,null,null
+13,Al,Aluminum,Post-Transition metal
+14,Si,Silicon,Metalloid
+15,P,Phosphorus,Nonmetal
+16,S,Sulfur,Nonmetal
+17,Cl,Chlorine,Halogen
+18,Ar,Argon,Noble gas
+19,K,Potassium,Alkali metal
+20,Ca,Calcium,Alkaline earth metal
+21,Sc,Scandium,Transition metal
+22,Ti,Titanium,Transition metal
+23,V,Vanadium,Transition metal
+24,Cr,Chromium,Transition metal
+25,Mn,Manganese,Transition metal
+26,Fe,Iron,Transition metal
+27,Co,Cobalt,Transition metal
+28,Ni,Nickel,Transition metal
+29,Cu,Copper,Transition metal
+30,Zn,Zinc,Transition metal
+31,Ga,Gallium,Post-Transition metal
+32,Ge,Germanium,Metalloid
+33,As,Arsenic,Metalloid
+34,Se,Selenium,Nonmetal
+35,Br,Bromine,Halogen
+36,Kr,Krypton,Noble gas
+37,Rb,Rubidium,Alkali metal
+38,Sr,Strontium,Alkaline earth metal
+39,Y,Yttrium,Transition metal
+40,Zr,Zirconium,Transition metal
+41,Nb,Niobium,Transition metal
+42,Mo,Molybdenum,Transition metal
+43,Tc,Technetium,Transition metal
+44,Ru,Ruthenium,Transition metal
+45,Rh,Rhodium,Transition metal
+46,Pd,Palladium,Transition metal
+47,Ag,Silver,Transition metal
+48,Cd,Cadmium,Transition metal
+49,In,Indium,Post-Transition metal
+50,Sn,Tin,Post-Transition metal
+51,Sb,Antimony,Metalloid
+52,Te,Tellurium,Metalloid
+53,I,Iodine,Halogen
+54,Xe,Xenon,Noble gas
+55,Cs,Cesium,Alkali metal
+56,Ba,Barium,Alkaline earth metal
+-1,*,null,null
+72,Hf,Hafnium,Transition metal
+73,Ta,Tantalum,Transition metal
+74,W,Tungsten,Transition metal
+75,Re,Rhenium,Transition metal
+76,Os,Osmium,Transition metal
+77,Ir,Iridium,Transition metal
+78,Pt,Platinum,Transition metal
+79,Au,Gold,Transition metal
+80,Hg,Mercury,Transition metal
+81,Tl,Thallium,Post-Transition metal
+82,Pb,Lead,Post-Transition metal
+83,Bi,Bismuth,Post-Transition metal
+84,Po,Polonium,Metalloid
+85,At,Astatine,Halogen
+86,Rn,Radon,Noble gas
+87,Fr,Francium,Alkali metal
+88,Ra,Radium,Alkaline earth metal
+-1,**,null,null
+104,Rf,Rutherfordium,Transition metal
+105,Db,Dubnium,Transition metal
+106,Sg,Seaborgium,Transition metal
+107,Bh,Bohrium,Transition metal
+108,Hs,Hassium,Transition metal
+109,Mt,Meitnerium,Transition metal
+110,Ds,Darmstadtium,Transition metal
+111,Rg,Roentgenium,Transition metal
+112,Cn,Copernicium,Transition metal
+113,Nh,Nihonium,Post-Transition metal
+114,Fl,Flerovium,Post-Transition metal
+115,Mc,Moscovium,Post-Transition metal
+116,Lv,Livermorium,Post-Transition metal
+117,Ts,Tennessine,Halogen
+118,Og,Oganesson,Noble gas

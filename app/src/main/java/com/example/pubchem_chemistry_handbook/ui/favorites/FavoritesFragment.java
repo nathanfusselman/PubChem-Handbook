@@ -1,17 +1,15 @@
-package com.example.pubchem_chemistry_handbook.ui.Favorites;
+package com.example.pubchem_chemistry_handbook.ui.favorites;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -41,7 +39,6 @@ import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.SafetyItem;
-import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 
@@ -50,14 +47,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +68,9 @@ public class FavoritesFragment extends Fragment {
 
         currentList = new ArrayList<Compound>(((MainActivity)getActivity()).getGlobal().getFav());
         current_state = 1;
-        favoritesViewModel =
-                ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        //favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
         rvAdapter = new RVAdapter(getActivity(), currentList, ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

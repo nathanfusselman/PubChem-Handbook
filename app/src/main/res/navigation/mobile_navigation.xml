@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_news" />
 
     <fragment
+        android:id="@+id/navigation_ptable"
+        android:name="com.example.pubchem_chemistry_handbook.ui.pTable.pTableFragment"
+        android:label="@string/title_ptable"
+        tools:layout="@layout/fragment_ptable" />
+
+    <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.pubchem_chemistry_handbook.ui.search.SearchFragment"
         android:label="@string/title_search"
@@ -19,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="com.example.pubchem_chemistry_handbook.ui.Favorites.FavoritesFragment"
+        android:name="com.example.pubchem_chemistry_handbook.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
         tools:layout="@layout/fragment_favorites" />
 </navigation>
