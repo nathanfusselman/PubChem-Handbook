@@ -79,7 +79,7 @@ public class SearchFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         compound_rview = view.findViewById(R.id.recyclerview);

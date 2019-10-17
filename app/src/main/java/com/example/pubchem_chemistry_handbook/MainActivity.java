@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
                     global.getCompoundListFull().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
                     global.getCompounds().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
-
                 }
             }
         } catch (IOException e) {
@@ -243,12 +242,28 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             while (((line = reader.readLine()) != null)) {
-                String[] tokens = line.split(",");
-                global.getElements().add(new Element(Integer.parseInt(tokens[0]), tokens[1], tokens[2], tokens[3]));
+                String[] tokens = line.split(";");
+                global.getElements().add(new Element(getInt(tokens[0]), tokens[1], tokens[2], tokens[3], getDouble(tokens[4]), tokens[5], getDouble(tokens[6]), getInt(tokens[7]), getDouble(tokens[8]), getDouble(tokens[9]), tokens[10], tokens[11], getDouble(tokens[12]), getDouble(tokens[13]), getDouble(tokens[14]), tokens[15], tokens[16]));
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
+        }
+    }
+
+    public double getDouble(String in) {
+        if (in.compareTo("null") != 0) {
+            return Double.parseDouble(in);
+        } else {
+            return -10;
+        }
+    }
+
+    public int getInt(String in) {
+        if (in.compareTo("null") != 0) {
+            return Integer.parseInt(in);
+        } else {
+            return -10;
         }
     }
 }
