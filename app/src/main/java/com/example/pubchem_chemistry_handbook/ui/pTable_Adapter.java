@@ -87,7 +87,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
             } else {
                 if (elementSet.get(position).getAtomicNumber() == -2) {
                     (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams((int)(20), (int)(20));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams((int)(25), (int)(25));
                     (holder.pTableView.findViewById(R.id.element_background)).setLayoutParams(lp);
                 } else {
                     (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
