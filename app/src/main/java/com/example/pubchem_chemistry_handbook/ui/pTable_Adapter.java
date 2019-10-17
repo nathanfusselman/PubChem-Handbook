@@ -64,11 +64,17 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                 case "Metalloid":
                     (holder.pTableView.findViewById(R.id.element_background)).setBackgroundColor(Color.parseColor("#E2EDC9"));
                     break;
-                case "Post-Transition metal":
+                case "Post-transition metal":
                     (holder.pTableView.findViewById(R.id.element_background)).setBackgroundColor(Color.parseColor("#DBFDD1"));
                     break;
                 case "Transition metal":
                     (holder.pTableView.findViewById(R.id.element_background)).setBackgroundColor(Color.parseColor("#CADDFD"));
+                    break;
+                case "Lanthanide":
+                    (holder.pTableView.findViewById(R.id.element_background)).setBackgroundColor(Color.parseColor("#D4FEFF"));
+                    break;
+                case "Actinide":
+                    (holder.pTableView.findViewById(R.id.element_background)).setBackgroundColor(Color.parseColor("#D7FEED"));
                     break;
             }
             ((TextView)holder.pTableView.findViewById(R.id.element_atomic_number)).setText(Integer.toString(elementSet.get(position).getAtomicNumber()));
@@ -79,7 +85,13 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                 (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
                 ((TextView)holder.pTableView.findViewById(R.id.element_symbol)).setText(elementSet.get(position).getSymbol());
             } else {
-                (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
+                if (elementSet.get(position).getAtomicNumber() == -2) {
+                    (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams((int)(20), (int)(20));
+                    (holder.pTableView.findViewById(R.id.element_background)).setLayoutParams(lp);
+                } else {
+                    (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
+                }
             }
         }
     }
