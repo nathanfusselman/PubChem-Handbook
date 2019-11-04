@@ -1,13 +1,17 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
+import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TableLayout;
@@ -46,6 +51,7 @@ import com.downloader.Progress;
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.SafetyItem;
 import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
@@ -56,13 +62,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,13 +203,104 @@ public class SearchFragment extends Fragment {
         }
         );
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(getActivity(), "LOADING RESULTS", Toast.LENGTH_SHORT).show();
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + s + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
+                        .build()
+                        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                            @Override
+                            public void onStartOrResume() {
+
+                            }
+                        })
+                        .setOnPauseListener(new OnPauseListener() {
+                            @Override
+                            public void onPause() {
+
+                            }
+                        })
+                        .setOnCancelListener(new OnCancelListener() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        })
+                        .setOnProgressListener(new OnProgressListener() {
+                            @Override
+                            public void onProgress(Progress progress) {
+
+                            }
+                        })
+                        .start(new OnDownloadListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onDownloadComplete() {
+                                List<Compound> searchList = new ArrayList<>();
+                                int on = 0;
+                                File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
+                                InputStream is = null;
+                                try {
+                                    is = new FileInputStream(file);
+                                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                                    String line = "";
+
+                                    try {
+                                        reader.readLine();
+                                        while (((line = reader.readLine()) != null)) {
+                                            //System.out.println(line);
+                                            List<String> tokens = split(line);
+                                            try {
+                                                searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
+                                                if (tokens.get(1).startsWith("\"")) {
+                                                    searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
+                                                }
+                                                if (tokens.get(4).startsWith("\"")) {
+                                                    searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
+                                                }
+                                                on++;
+                                            } catch (IndexOutOfBoundsException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+                                        e.printStackTrace();
+                                    }
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                                    ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    is.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                rvAdapter.notifyDataSetChanged();
+                                resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
+                                Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(Error error) {
+                                Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                Log.d("PRDownloader", "onError: " + error.toString());
+                            }
+                        });
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
+                rvAdapter.notifyDataSetChanged();
                 search = s;
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
@@ -222,6 +325,7 @@ public class SearchFragment extends Fragment {
                 current_pos = position;
                 currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(position);
                 ((MainActivity)getActivity()).addRecent(currentCompound);
+                Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
@@ -522,5 +626,31 @@ public class SearchFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public List<String> split(String input) {
+        boolean inP = false;
+        int last = -1;
+        List<String> out = new ArrayList<>();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '\"') {
+                if (inP == true) {
+                    inP = false;
+                } else {
+                    if (inP == false) {
+                        inP = true;
+                    }
+                }
+
+            }
+            if (input.charAt(i) == ',' && inP == false) {
+                //System.out.println(input.substring(last + 1, i));
+                out.add(input.substring(last + 1, i));
+                last = i;
+            }
+        }
+        //System.out.println(input.substring(last + 1, input.length() - 1));
+        out.add(input.substring(last + 1, input.length()-1));
+        return out;
     }
 }
