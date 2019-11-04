@@ -325,7 +325,7 @@ public class SearchFragment extends Fragment {
                 current_pos = position;
                 currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(position);
                 ((MainActivity)getActivity()).addRecent(currentCompound);
-                Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
