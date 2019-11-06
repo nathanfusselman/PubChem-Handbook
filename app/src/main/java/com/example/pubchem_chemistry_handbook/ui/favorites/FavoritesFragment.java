@@ -1,5 +1,6 @@
 package com.example.pubchem_chemistry_handbook.ui.favorites;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,7 +65,7 @@ public class FavoritesFragment extends Fragment {
     RVAdapter rvAdapter;
     List<Compound> currentList;
     int current_pos = 0;
-    Compound current_Compound;
+    Compound current_Compound = null;
     int current_state = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -132,12 +135,34 @@ public class FavoritesFragment extends Fragment {
         final Button favButton = view.findViewById(R.id.favButton);
         rvAdapter.notifyDataSetChanged();
         final Button shareButton = view.findViewById(R.id.shareButton);
+        final EditText notes = view.findViewById(R.id.notes);
+        final Button notescheck = view.findViewById(R.id.check);
+        final Button notesx = view.findViewById(R.id.x);
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + current_Compound.getEID();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+        notescheck.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ((MainActivity)getActivity()).setNote(current_Compound, String.valueOf(notes.getText()));
+                }
+                notes.setText(current_Compound.getNotes());
+            }
+        });
+        notesx.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
+                notes.setText(current_Compound.getNotes());
             }
         });
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +241,7 @@ public class FavoritesFragment extends Fragment {
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 current_pos = position;
+                notes.setText(currentCompound.getNotes());
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
@@ -303,6 +329,7 @@ public class FavoritesFragment extends Fragment {
                                     }
 
                                     try{
+                                        currentCompound.getnProperties().clear();
                                         JSONObject section_3 = (JSONObject) section.get(3);
                                         JSONArray section_3_ = (JSONArray) section_3.get("Section");
                                         JSONObject section_3_0 = (JSONObject) section_3_.get(0);
@@ -345,6 +372,7 @@ public class FavoritesFragment extends Fragment {
                                         }
                                         PhysicalProperties.setStretchAllColumns(true);
                                         PhysicalProperties.bringToFront();
+                                        PhysicalProperties.removeAllViews();
                                         for(int i = 0; i < currentCompound.getnProperties().size(); i++) {
                                             TableRow tr =  new TableRow(getContext());
                                             TextView c1 = new TextView(getContext());

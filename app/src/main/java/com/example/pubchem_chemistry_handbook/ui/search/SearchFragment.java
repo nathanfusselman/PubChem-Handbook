@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -156,12 +157,34 @@ public class SearchFragment extends Fragment {
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
         final Button shareButton = view.findViewById(R.id.shareButton);
+        final EditText notes = view.findViewById(R.id.notes);
+        final Button notescheck = view.findViewById(R.id.check);
+        final Button notesx = view.findViewById(R.id.x);
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getEID();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+        notescheck.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ((MainActivity)getActivity()).setNote(currentCompound, String.valueOf(notes.getText()));
+                }
+                notes.setText(currentCompound.getNotes());
+            }
+        });
+        notesx.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                notes.setText(currentCompound.getNotes());
             }
         });
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
@@ -328,6 +351,7 @@ public class SearchFragment extends Fragment {
                 //Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                notes.setText(currentCompound.getNotes());
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
@@ -415,6 +439,7 @@ public class SearchFragment extends Fragment {
                                     }
 
                                     try{
+                                        currentCompound.getnProperties().clear();
                                         JSONObject section_3 = (JSONObject) section.get(3);
                                         JSONArray section_3_ = (JSONArray) section_3.get("Section");
                                         JSONObject section_3_0 = (JSONObject) section_3_.get(0);
@@ -457,6 +482,7 @@ public class SearchFragment extends Fragment {
                                         }
                                         PhysicalProperties.setStretchAllColumns(true);
                                         PhysicalProperties.bringToFront();
+                                        PhysicalProperties.removeAllViews();
                                         for(int i = 0; i < currentCompound.getnProperties().size(); i++) {
                                             TableRow tr =  new TableRow(getContext());
                                             TextView c1 = new TextView(getContext());
@@ -625,6 +651,7 @@ public class SearchFragment extends Fragment {
                 compoundView.setVisibility(View.VISIBLE);
             }
         });
+
         return view;
     }
 

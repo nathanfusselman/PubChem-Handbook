@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         loadFav();
         loadRecents();
         loadElements();
-        //loadNotes();
+        loadNotes();
+        global.getCompoundListFull().clear();
+        global.getCompoundListFull().addAll(global.getCompounds());
     }
 
     public global getGlobal() {
@@ -252,8 +254,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-
     public void loadNotes() {
         File file = new File(getApplication().getFilesDir().toString() + "/notes.txt");
         try {
@@ -263,7 +263,10 @@ public class MainActivity extends AppCompatActivity {
             }
             while (sc.hasNextLine()) {
                 try {
-                    findCompound(Integer.parseInt(sc.nextLine())).setNotes(sc.nextLine());
+                    int EID = Integer.parseInt(sc.nextLine());
+                    String note = sc.nextLine();
+                    findCompound(EID).setNotes(note);
+                    System.out.println("Added Note '" + findCompound(EID).getNotes() + "' to: " + findCompound(EID).getName());
                 } catch (Exception e) {
 
                 }
@@ -280,13 +283,11 @@ public class MainActivity extends AppCompatActivity {
             FileWriter fr = new FileWriter(file, true);
             fr.write("\n" + EID.getEID() + "\n" + note);
             fr.close();
+            EID.setNotes(note);
         } catch (IOException e) {
 
         }
-        EID.setNotes(note);
     }
-
-     */
 
     public double getDouble(String in) {
         if (in.compareTo("null") != 0) {
