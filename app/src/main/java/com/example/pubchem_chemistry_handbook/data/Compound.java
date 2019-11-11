@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Compound {
     int eid;
-    String name,formula;
+    String name,formula, notes;
     List<SafetyItem> safetyItems = new ArrayList<>();
     List<String> nProperties = new ArrayList<>();
     List<String> vProperties = new ArrayList<>();
@@ -16,6 +16,15 @@ public class Compound {
         this.eid = eid;
         this.name = name;
         this.formula = formula;
+        this.notes = "";
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public String getName() {

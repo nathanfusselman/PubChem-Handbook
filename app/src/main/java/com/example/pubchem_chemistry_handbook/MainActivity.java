@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         loadFav();
         loadRecents();
         loadElements();
+        //loadNotes();
     }
 
     public global getGlobal() {
@@ -250,6 +251,42 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /*
+
+    public void loadNotes() {
+        File file = new File(getApplication().getFilesDir().toString() + "/notes.txt");
+        try {
+            Scanner sc = new Scanner(file);
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            while (sc.hasNextLine()) {
+                try {
+                    findCompound(Integer.parseInt(sc.nextLine())).setNotes(sc.nextLine());
+                } catch (Exception e) {
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setNote(Compound EID, String note) {
+        try {
+            File file = new File(getApplication().getFilesDir().toString() + "/notes.txt");
+            FileWriter fr = new FileWriter(file, true);
+            fr.write("\n" + EID.getEID() + "\n" + note);
+            fr.close();
+        } catch (IOException e) {
+
+        }
+        EID.setNotes(note);
+    }
+
+     */
 
     public double getDouble(String in) {
         if (in.compareTo("null") != 0) {
