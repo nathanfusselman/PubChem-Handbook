@@ -1,43 +1,34 @@
-package com.example.pubchem_chemistry_handbook.ui.search;
+package com.example.pubchem_chemistry_handbook.ui.favorites;
 
-import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
+import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,9 +43,7 @@ import com.downloader.Progress;
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
-import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.SafetyItem;
-import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 
@@ -63,67 +52,54 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class FavoritesFragment extends Fragment {
+
+    private FavoritesViewModel favoritesViewModel;
     RecyclerView compound_rview;
     RVAdapter rvAdapter;
-    TextView resutlsNumb;
-    String search = "";
+    List<Compound> currentList;
     int current_pos = 0;
-    Compound currentCompound = null;
+    Compound current_Compound = null;
+    int current_state = 0;
 
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        final View view = inflater.inflate(R.layout.fragment_search, container, false);
-        compound_rview = view.findViewById(R.id.recyclerview);
-        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-        ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
-        rvAdapter = new RVAdapter(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
+        currentList = new ArrayList<Compound>(((MainActivity)getActivity()).getGlobal().getFav());
+        current_state = 1;
+        //favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
+        rvAdapter = new RVAdapter(getActivity(), currentList, ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);
-        rvAdapter.getFilter().filter("");
-        resutlsNumb = view.findViewById(R.id.resultsNumb);
         final ScrollView compoundView = view.findViewById(R.id.compound_scrollView);
         compoundView.setBackgroundColor(0xFFFFFFFF);
         compoundView.setVisibility(View.INVISIBLE);
+        final Button favorites_button = view.findViewById(R.id.favorite);
+        final Button recents_button = view.findViewById(R.id.recent);
+        favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
-        final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final Button compoundView_backButton = view.findViewById(R.id.closeButton);
-        CheckBox search_type_startsWith = view.findViewById(R.id.search_type_startsWith);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
-        final SearchView searchView = view.findViewById(R.id.searchView);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
-        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-        final Button favButton = view.findViewById(R.id.favButton);
-        final TextView Summary = view.findViewById(R.id.Summary);
+        final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
         HazardTexts[0] = view.findViewById(R.id.SafetyItems_Text_GHS01);
         HazardImages[1] = view.findViewById(R.id.SafetyItems_Images_GHS02);
@@ -142,27 +118,29 @@ public class SearchFragment extends Fragment {
         HazardTexts[7] = view.findViewById(R.id.SafetyItems_Text_GHS08);
         HazardImages[8] = view.findViewById(R.id.SafetyItems_Images_GHS09);
         HazardTexts[8] = view.findViewById(R.id.SafetyItems_Text_GHS09);
-        final TextView nullSafetyItems = view.findViewById(R.id.Safety_NULL);
+        final TextView Summary = view.findViewById(R.id.Summary);
         final LinearLayout StructureImageLayout = view.findViewById(R.id.compoundView_images);
         final LinearLayout StructureTextLayout = view.findViewById(R.id.compoundView_images_names);
         final ImageView[] StructureImages = new ImageView[3];
         final TextView[] StructureTexts = new TextView[3];
         final HorizontalScrollView SafetyItems = view.findViewById(R.id.SafetyItems_raw);
         final TextView SafetyHeader = view.findViewById(R.id.Safety_Header);
+        final TextView nullSafetyItems = view.findViewById(R.id.Safety_NULL);
         StructureImages[0] = view.findViewById(R.id.compoundView_2dImage);
         StructureTexts[0] = view.findViewById(R.id.compoundView_images_names_2d);
         StructureImages[1] = view.findViewById(R.id.compoundView_3dImage);
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
-        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+        final Button favButton = view.findViewById(R.id.favButton);
+        rvAdapter.notifyDataSetChanged();
         final Button shareButton = view.findViewById(R.id.shareButton);
         final EditText notes = view.findViewById(R.id.notes);
         final Button notescheck = view.findViewById(R.id.check);
         final Button notesx = view.findViewById(R.id.x);
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getEID();
+                String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + current_Compound.getEID();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -172,185 +150,97 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 notes.clearFocus();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ((MainActivity)getActivity()).setNote(currentCompound, String.valueOf(notes.getText()));
+                    ((MainActivity)getActivity()).setNote(current_Compound, String.valueOf(notes.getText()));
                 }
-                notes.setText(currentCompound.getNotes());
+                notes.setText(current_Compound.getNotes());
             }
         });
         notesx.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 notes.clearFocus();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-                notes.setText(currentCompound.getNotes());
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
+                notes.setText(current_Compound.getNotes());
             }
         });
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
+                favorites_button.setVisibility(View.VISIBLE);
+                recents_button.setVisibility(View.VISIBLE);
+                if (current_state == 1) {
+                    favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                    recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                    currentList.clear();
+                    currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
+                    rvAdapter.notifyDataSetChanged();
+                }
+                if (current_state == 2) {
+                    favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                    recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                    currentList.clear();
+                    currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
+                    rvAdapter.notifyDataSetChanged();
+                }
             }
         });
         favButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View v) {
-                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
-                    ((MainActivity)getActivity()).removeFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID());
+                System.out.println("WORKING ON POS: " + current_pos);
+                System.out.println("POS EID: " + currentList.get(current_pos).getEID());
+                if (((MainActivity)getActivity()).checkFav(current_Compound.getEID())) {
+                    ((MainActivity)getActivity()).removeFav(current_Compound.getEID());
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 } else {
-                    ((MainActivity)getActivity()).addFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos));
+                    ((MainActivity)getActivity()).addFav(current_Compound);
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
                 }
-            }
-        });
-        search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {
-                    ((MainActivity)getActivity()).getGlobal().setSearch_type_startsWith(1);
-                } else {
-                    ((MainActivity)getActivity()).getGlobal().setSearch_type_startsWith(0);
-                }
-                rvAdapter.getFilter().filter(search);
-                resutlsNumb.setText("Results: " + "...");
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-                    }
-                }, 500);
-            }
-        }
-        );
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(getActivity(), "LOADING RESULTS", Toast.LENGTH_SHORT).show();
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + s + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
-                        .build()
-                        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                            @Override
-                            public void onStartOrResume() {
-
-                            }
-                        })
-                        .setOnPauseListener(new OnPauseListener() {
-                            @Override
-                            public void onPause() {
-
-                            }
-                        })
-                        .setOnCancelListener(new OnCancelListener() {
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        })
-                        .setOnProgressListener(new OnProgressListener() {
-                            @Override
-                            public void onProgress(Progress progress) {
-
-                            }
-                        })
-                        .start(new OnDownloadListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                            @Override
-                            public void onDownloadComplete() {
-                                List<Compound> searchList = new ArrayList<>();
-                                int on = 0;
-                                File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
-                                InputStream is = null;
-                                try {
-                                    is = new FileInputStream(file);
-                                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                                    String line = "";
-
-                                    try {
-                                        reader.readLine();
-                                        while (((line = reader.readLine()) != null)) {
-                                            //System.out.println(line);
-                                            List<String> tokens = split(line);
-                                            try {
-                                                searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
-                                                if (tokens.get(1).startsWith("\"")) {
-                                                    searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
-                                                }
-                                                if (tokens.get(4).startsWith("\"")) {
-                                                    searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
-                                                }
-                                                on++;
-                                            } catch (IndexOutOfBoundsException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    } catch (IOException e) {
-                                        Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-                                        e.printStackTrace();
-                                    }
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                                    ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
-                                } catch (NullPointerException e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    is.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                rvAdapter.notifyDataSetChanged();
-                                resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(Error error) {
-                                Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                Log.d("PRDownloader", "onError: " + error.toString());
-                            }
-                        });
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
                 rvAdapter.notifyDataSetChanged();
-                search = s;
-                rvAdapter.getFilter().filter(search);
-                resutlsNumb.setText("Results: " + "...");
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-                    }
-                }, 500);
-                return false;
             }
         });
+
+        favorites_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                currentList.clear();
+                currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
+                rvAdapter.notifyDataSetChanged();
+                current_state = 1;
+            }
+        });
+
+        recents_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                currentList.clear();
+                currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
+                rvAdapter.notifyDataSetChanged();
+                current_state = 2;
+            }
+        });
+
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
                 PhysicalProperties.setVisibility(View.VISIBLE);
                 PhysicalProperties.removeAllViews();
+                System.out.println("Clicked on item: " + position);
+                favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+                favorites_button.setVisibility(View.INVISIBLE);
+                recents_button.setVisibility(View.INVISIBLE);
+                current_pos = position;
+                final Compound currentCompound = currentList.get(position);
+                current_Compound = currentCompound;
+                ((MainActivity)getActivity()).addRecent(currentCompound);
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 current_pos = position;
-                currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(position);
-                ((MainActivity)getActivity()).addRecent(currentCompound);
-                //Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
-                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 notes.setText(currentCompound.getNotes());
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
                         .build()
@@ -649,35 +539,9 @@ public class SearchFragment extends Fragment {
                 compoundView_name.setText(" " + currentCompound.getName());
                 compoundView_formula.setText("  " + currentCompound.getFormula());
                 compoundView.setVisibility(View.VISIBLE);
+                rvAdapter.notifyDataSetChanged();
             }
         });
-
         return view;
-    }
-
-    public List<String> split(String input) {
-        boolean inP = false;
-        int last = -1;
-        List<String> out = new ArrayList<>();
-        for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) == '\"') {
-                if (inP == true) {
-                    inP = false;
-                } else {
-                    if (inP == false) {
-                        inP = true;
-                    }
-                }
-
-            }
-            if (input.charAt(i) == ',' && inP == false) {
-                //System.out.println(input.substring(last + 1, i));
-                out.add(input.substring(last + 1, i));
-                last = i;
-            }
-        }
-        //System.out.println(input.substring(last + 1, input.length() - 1));
-        out.add(input.substring(last + 1, input.length()-1));
-        return out;
     }
 }

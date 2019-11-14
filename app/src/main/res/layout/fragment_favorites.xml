@@ -5,54 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_type_startsWith" />
-
-    <CheckBox
-        android:id="@+id/search_type_startsWith"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="Starts With"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Button
+        android:id="@+id/favorite"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="5dp"
+        android:text="Favorites"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/resultsNumb"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Results: NULL"
-        android:textSize="20dp"
+    <Button
+        android:id="@+id/recent"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:text="Recent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_recent_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favorite"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_recent_recyclerview2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favorite"/>
 
     <ScrollView
         android:id="@+id/compound_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:layout_editor_absoluteY="50dp">
 
         <LinearLayout
             android:id="@+id/scrollView_LinearLayout"
@@ -103,90 +103,84 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text=" Compound Name"
-                android:textSize="16dp"/>
-
-            <TextView
-                android:id="@+id/Structures_Header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text=" Structure:"
-                android:textSize="24dp"/>
+                android:textSize="16dp" />
 
             <HorizontalScrollView
+                android:id="@+id/Structures_raw"
                 android:layout_width="wrap_content"
                 android:layout_height="175dp"
-                android:layout_marginTop="15dp"
-                android:id="@+id/Structures_raw">
+                android:layout_marginTop="15dp">
 
                 <LinearLayout
+                    android:id="@+id/Structures_grid"
                     android:layout_width="wrap_content"
                     android:layout_height="175dp"
-                    android:id="@+id/Structures_grid"
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/compoundView_images"
                         android:layout_width="wrap_content"
                         android:layout_height="150dp"
                         android:layout_marginLeft="35dp"
                         android:layout_marginRight="35dp"
-                        android:id="@+id/compoundView_images"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/compoundView_2dImage"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
                             android:layout_marginLeft="0dp"
-                            android:id="@+id/compoundView_2dImage"
-                            android:background="@drawable/image_background"/>
+                            android:background="@drawable/image_background" />
 
                         <ImageView
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_marginLeft="35dp"
                             android:id="@+id/compoundView_crystal"
-                            android:background="@drawable/image_background"/>
-                        <ImageView
                             android:layout_width="150dp"
                             android:layout_height="150dp"
                             android:layout_marginLeft="35dp"
+                            android:background="@drawable/image_background" />
+
+                        <ImageView
                             android:id="@+id/compoundView_3dImage"
-                            android:background="@drawable/image_background"/>
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="35dp"
+                            android:background="@drawable/image_background" />
                     </LinearLayout>
+
                     <LinearLayout
+                        android:id="@+id/compoundView_images_names"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
                         android:layout_marginLeft="35dp"
                         android:layout_marginRight="35dp"
-                        android:id="@+id/compoundView_images_names"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="20dp"
                             android:id="@+id/compoundView_images_names_2d"
+                            android:layout_width="150dp"
+                            android:layout_height="20dp"
                             android:layout_marginLeft="0dp"
-                            android:textSize="16dp"
+                            android:gravity="center"
                             android:text="2D View"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="20dp"
                             android:id="@+id/compoundView_images_names_3d"
-                            android:layout_marginLeft="35dp"
-                            android:textSize="16dp"
-                            android:text="3D View"
-                            android:gravity="center"/>
-
-                        <TextView
                             android:layout_width="150dp"
                             android:layout_height="20dp"
-                            android:id="@+id/compoundView_images_names_crystal"
                             android:layout_marginLeft="35dp"
-                            android:textSize="16dp"
+                            android:gravity="center"
+                            android:text="3D View"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/compoundView_images_names_crystal"
+                            android:layout_width="150dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="35dp"
+                            android:gravity="center"
                             android:text="Crystal"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -198,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text=" Chemical Safety:"
-                android:textSize="24dp"/>
+                android:textSize="24dp" />
 
             <TextView
                 android:id="@+id/Safety_NULL"
@@ -209,179 +203,181 @@
                 android:textSize="18dp"/>
 
             <HorizontalScrollView
+                android:id="@+id/SafetyItems_raw"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
-                android:layout_marginTop="15dp"
-                android:id="@+id/SafetyItems_raw">
+                android:layout_marginTop="15dp">
 
                 <LinearLayout
+                    android:id="@+id/SafetyItems_grid"
                     android:layout_width="wrap_content"
                     android:layout_height="150dp"
-                    android:id="@+id/SafetyItems_grid"
                     android:orientation="vertical">
+
                     <LinearLayout
+                        android:id="@+id/SafetyItems_Images"
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="20dp"
-                        android:id="@+id/SafetyItems_Images"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="35dp"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
                             android:id="@+id/SafetyItems_Images_GHS01"
-                            android:background="@drawable/ic_ghs01"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs01" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS02"
-                            android:background="@drawable/ic_ghs02"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs02" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS03"
-                            android:background="@drawable/ic_ghs03"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs03" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS04"
-                            android:background="@drawable/ic_ghs04"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs04" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS05"
-                            android:background="@drawable/ic_ghs05"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs05" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS06"
-                            android:background="@drawable/ic_ghs06"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs06" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS07"
-                            android:background="@drawable/ic_ghs07"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs07" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS08"
-                            android:background="@drawable/ic_ghs08"/>
-
-                        <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs08" />
+
+                        <ImageView
                             android:id="@+id/SafetyItems_Images_GHS09"
-                            android:background="@drawable/ic_ghs09"/>
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/ic_ghs09" />
 
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/SafetyItems_Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="30dp"
                         android:layout_marginTop="5dp"
-                        android:id="@+id/SafetyItems_Text"
+                        android:layout_marginRight="35dp"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS01"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Explosive"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS02"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Flammable"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS03"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Oxidizer"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS04"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Compressed Gas"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS05"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Corrosive"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS06"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Acute Toxic"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS07"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Irritant"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS08"
-                            android:textSize="16dp"
-                            android:text="Health Hazard"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
-
-                        <TextView
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            android:text="Health Hazard"
+                            android:textSize="16dp" />
+
+                        <TextView
                             android:id="@+id/SafetyItems_Text_GHS09"
-                            android:textSize="16dp"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
                             android:text="Environmental Hazard"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center"/>
+                            android:textSize="16dp" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -474,4 +470,5 @@
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
