@@ -8,6 +8,8 @@ import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
+import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.RequiresApi;
@@ -35,7 +37,8 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity {
 
     global global = new global(0,0);
-
+    public static Compound globalCompound = new Compound(0,"0","0");
+    public static int globalCurPos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PRDownloader.initialize(getApplicationContext());
@@ -62,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
     public global getGlobal() {
         return global;
     }
+
+    public void setCompViewInfo(Compound c,int i)
+    {
+        globalCompound=c;
+        globalCurPos=i;
+    }
+    public int getGlobalCurPos(){return globalCurPos;}
+    public Compound getGlobalCompound(){return globalCompound;}
 
     public boolean checkFav(int testEID) {
         for (Compound one : global.getFav()) {
@@ -304,4 +315,6 @@ public class MainActivity extends AppCompatActivity {
             return -10;
         }
     }
+
+
 }
