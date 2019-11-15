@@ -20,9 +20,5 @@
         android:id="@+id/navigation_ptable"
         android:icon="@drawable/ic_ptable"
         android:title="@string/title_ptable" />
-    <item
-        android:id="@+id/navigation_compFrag"
-        android:icon="@drawable/ic_ptable"
-        android:title="comp" />
 
 </menu>

@@ -3,6 +3,7 @@ package com.example.pubchem_chemistry_handbook;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     global global = new global(0,0);
     public static Compound globalCompound = new Compound(0,"0","0");
     public static int globalCurPos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PRDownloader.initialize(getApplicationContext());

@@ -34,6 +34,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,6 +69,7 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -76,6 +78,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -246,7 +249,7 @@ public class SearchFragment extends Fragment {
 
                             @Override
                             public void onError(Error error) {
-                                Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
                                 Log.d("PRDownloader", "onError: " + error.toString());
                             }
                         });
@@ -274,7 +277,7 @@ public class SearchFragment extends Fragment {
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ((MainActivity)getActivity()).setCompViewInfo(currentCompound,current_pos);
+                ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(current_pos),current_pos);
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity

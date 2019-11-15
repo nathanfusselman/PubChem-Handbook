@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favorite"/>
-
+<!--
     <ScrollView
         android:id="@+id/compound_scrollView"
         android:layout_width="match_parent"
@@ -470,5 +470,5 @@
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
-
+-->
 </androidx.constraintlayout.widget.ConstraintLayout>

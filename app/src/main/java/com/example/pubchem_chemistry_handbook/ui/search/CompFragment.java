@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -28,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.downloader.Error;
@@ -44,6 +43,7 @@ import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.SafetyItem;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -58,14 +58,17 @@ public class CompFragment extends Fragment {
     Compound currentCompound = new Compound(0,"","");
     int current_pos;
 
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final BottomNavigationView navBar= getActivity().findViewById(R.id.nav_view);
+        navBar.setVisibility(View.INVISIBLE);
         Compound globalcurrentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         currentCompound = globalcurrentCompound;
         int globalCurrent_pos=(((MainActivity)getActivity()).getGlobalCurPos());
         current_pos= globalCurrent_pos;
-        
+
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         //RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
         ((MainActivity) getActivity()).getGlobal().getCompounds().clear();
@@ -137,16 +140,17 @@ public class CompFragment extends Fragment {
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
+                navBar.setVisibility(View.VISIBLE);
             }
         });
         favButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View v) {
-                if (((MainActivity)getActivity()).checkFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID())) {
-                    ((MainActivity)getActivity()).removeFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos).getEID());
+                if (((MainActivity)getActivity()).checkFav(((currentCompound.getEID())))) {
+                    ((MainActivity)getActivity()).removeFav(((currentCompound.getEID())));
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 } else {
-                    ((MainActivity)getActivity()).addFav(((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos));
+                    ((MainActivity)getActivity()).addFav(((currentCompound)));
                     favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
                 }
             }
@@ -155,14 +159,11 @@ public class CompFragment extends Fragment {
                 PhysicalProperties.removeAllViews();
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
-                //current_pos = position;
-                //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(position);
+                //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ((MainActivity)getActivity()).addRecent(currentCompound);
         }
-        //Toast.makeText(getActivity(), "Loaded: " + currentCompound.getEID(), Toast.LENGTH_SHORT).show();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                //mgr.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
                 notes.setText(currentCompound.getNotes());
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
                         .build()
@@ -407,8 +408,6 @@ public class CompFragment extends Fragment {
 
         return view;
     }
-
-
 
 }
 
