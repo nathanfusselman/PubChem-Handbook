@@ -277,7 +277,7 @@ public class SearchFragment extends Fragment {
         rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(current_pos),current_pos);
+                ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity
