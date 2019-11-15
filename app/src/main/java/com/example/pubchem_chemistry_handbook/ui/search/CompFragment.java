@@ -62,7 +62,7 @@ public class CompFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final BottomNavigationView navBar= getActivity().findViewById(R.id.nav_view);
-        navBar.setVisibility(View.INVISIBLE);
+
         Compound globalcurrentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         currentCompound = globalcurrentCompound;
         int globalCurrent_pos=(((MainActivity)getActivity()).getGlobalCurPos());
@@ -139,7 +139,6 @@ public class CompFragment extends Fragment {
         compoundView_backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 compoundView.setVisibility(View.INVISIBLE);
-                navBar.setVisibility(View.VISIBLE);
             }
         });
         favButton.setOnClickListener(new View.OnClickListener() {
