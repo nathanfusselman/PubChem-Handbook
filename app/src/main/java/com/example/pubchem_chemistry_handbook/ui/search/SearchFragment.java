@@ -184,10 +184,15 @@ public class SearchFragment extends Fragment {
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
+<<<<<<< HEAD
                     btnclr.setVisibility(View.INVISIBLE);
                     reloadFrag();
+=======
+
+>>>>>>> parent of 2da9d8b... Search issue FIXED
                 }
             });
+            ((MainActivity)getActivity()).setPSearchQuery("");
             return view;
         }
         pSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -348,9 +353,13 @@ public class SearchFragment extends Fragment {
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
 
+<<<<<<< HEAD
                 reloadFrag();
+=======
+>>>>>>> parent of 2da9d8b... Search issue FIXED
             }
         });
+
 
         return view;
     }
