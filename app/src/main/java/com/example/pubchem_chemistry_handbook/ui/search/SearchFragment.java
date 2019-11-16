@@ -280,17 +280,17 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
+
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.search_frag, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity
-                transaction.addToBackStack(null);  // this will manage backstack
+                transaction.replace(R.id.search_frag, fragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
-                    InputMethodManager inputMethodManager =
-                            (InputMethodManager) getActivity().getSystemService(
-                                    Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(
-                            getActivity().getCurrentFocus().getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isAcceptingText()){
+                    ((MainActivity) getActivity()).clearKeyboard();}
 
             }
         });

@@ -1,9 +1,15 @@
 package com.example.pubchem_chemistry_handbook;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 
 import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         globalCompound=c;
         globalCurPos=i;
     }
+
     public int getGlobalCurPos(){return globalCurPos;}
     public Compound getGlobalCompound(){return globalCompound;}
 
@@ -318,5 +325,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    public void clearKeyboard(){
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                getCurrentFocus().getWindowToken(), 0);
+    }
 }

@@ -1,11 +1,14 @@
 package com.example.pubchem_chemistry_handbook.ui.pTable;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -27,6 +30,11 @@ public class pTableFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText()){
+            ((MainActivity) getActivity()).clearKeyboard();}
+
         pTableViewModel = ViewModelProviders.of(this).get(pTableViewModel.class);
         View view = inflater.inflate(R.layout.fragment_ptable, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

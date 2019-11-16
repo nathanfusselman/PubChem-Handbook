@@ -1,6 +1,7 @@
 package com.example.pubchem_chemistry_handbook.ui.news;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Event;
 
@@ -42,6 +45,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText()){
+            ((MainActivity) getActivity()).clearKeyboard();}
 
         newsViewModel =
                 ViewModelProviders.of(this).get(NewsViewModel.class);
