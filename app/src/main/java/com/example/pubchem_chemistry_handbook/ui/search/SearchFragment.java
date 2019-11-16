@@ -338,18 +338,22 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-                    Fragment fragment = new CompFragment();
+
+                Fragment fragment = new CompFragment();
                     FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.search_frag, fragment);
-                    transaction.commit();
-
+                transaction.commit();
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
-
-                reloadFrag();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        reloadFrag();
+                    }
+                }, 500);
 }
         });
 

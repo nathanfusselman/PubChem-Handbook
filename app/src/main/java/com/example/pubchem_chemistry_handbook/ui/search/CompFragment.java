@@ -62,13 +62,11 @@ public class CompFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //((MainActivity)getActivity()).setPSearchQuery("");
-        Compound globalcurrentCompound = (((MainActivity)getActivity()).getGlobalCompound());
-        currentCompound = globalcurrentCompound;
-        int globalCurrent_pos=(((MainActivity)getActivity()).getGlobalCurPos());
-        current_pos= globalCurrent_pos;
+        currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
+        current_pos=(((MainActivity)getActivity()).getGlobalCurPos());
 
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
-        //RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
+        RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
         ((MainActivity) getActivity()).getGlobal().getCompounds().clear();
         ((MainActivity) getActivity()).getGlobal().getCompounds().addAll(((MainActivity) getActivity()).getGlobal().getCompoundListFull());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -158,9 +156,9 @@ public class CompFragment extends Fragment {
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!(((MainActivity)getActivity()).checkRecent(((currentCompound.getEID())))))
-            {((MainActivity)getActivity()).addRecent(currentCompound);}
-        }
+            if (!(((MainActivity)getActivity()).checkRecent(((currentCompound.getEID()))))){
+           ((MainActivity)getActivity()).addRecent(currentCompound);}}
+
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 notes.setText(currentCompound.getNotes());
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getEID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getEID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getEID() + ".json")
@@ -190,7 +188,7 @@ public class CompFragment extends Fragment {
                             }
                         })
                         .start(new OnDownloadListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
