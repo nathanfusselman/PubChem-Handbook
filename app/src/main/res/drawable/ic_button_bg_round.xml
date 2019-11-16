@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <stroke android:color="#87CEEB" android:width="5dp" />
+            <solid android:color="#87CEEB"/>
+            <size android:width="28dp" android:height="28dp"/>
+        </shape>
+
+    </item>
+    <item
+        android:gravity="center"
+        android:drawable="@drawable/ic_ptable"/>
+</layer-list>

@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/compContainer"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+    <ScrollView
+        android:id="@+id/compound_scrollView"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?android:attr/windowBackground">
+
+        <LinearLayout
+            android:id="@+id/scrollView_LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/top_controlls"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/closeButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_close_black_24dp" />
+
+                <Button
+                    android:id="@+id/shareButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="275dp"
+                    android:background="@drawable/ic_share_black_24dp" />
+
+                <Button
+                    android:id="@+id/favButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/ic_favorite_border_black_24dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/compoundView_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text=" Compound Name"
+                android:textSize="32dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/compoundView_formula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Compound Name"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/Structures_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Structure:"
+                android:textSize="24dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="175dp"
+                android:layout_marginTop="15dp"
+                android:id="@+id/Structures_raw">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="175dp"
+                    android:id="@+id/Structures_grid"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="150dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/compoundView_images"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="0dp"
+                            android:id="@+id/compoundView_2dImage"
+                            android:background="@drawable/image_background"/>
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="35dp"
+                            android:id="@+id/compoundView_crystal"
+                            android:background="@drawable/image_background"/>
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="35dp"
+                            android:id="@+id/compoundView_3dImage"
+                            android:background="@drawable/image_background"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/compoundView_images_names"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/compoundView_images_names_2d"
+                            android:layout_marginLeft="0dp"
+                            android:textSize="16dp"
+                            android:text="2D View"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/compoundView_images_names_3d"
+                            android:layout_marginLeft="35dp"
+                            android:textSize="16dp"
+                            android:text="3D View"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/compoundView_images_names_crystal"
+                            android:layout_marginLeft="35dp"
+                            android:textSize="16dp"
+                            android:text="Crystal"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/Safety_Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=" Chemical Safety:"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:id="@+id/Safety_NULL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="   [No Safety Items]"
+                android:textSize="18dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_marginTop="15dp"
+                android:id="@+id/SafetyItems_raw">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:id="@+id/SafetyItems_grid"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:id="@+id/SafetyItems_Images"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS01"
+                            android:background="@drawable/ic_ghs01"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS02"
+                            android:background="@drawable/ic_ghs02"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS03"
+                            android:background="@drawable/ic_ghs03"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS04"
+                            android:background="@drawable/ic_ghs04"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS05"
+                            android:background="@drawable/ic_ghs05"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS06"
+                            android:background="@drawable/ic_ghs06"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS07"
+                            android:background="@drawable/ic_ghs07"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS08"
+                            android:background="@drawable/ic_ghs08"/>
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/SafetyItems_Images_GHS09"
+                            android:background="@drawable/ic_ghs09"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/SafetyItems_Text"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS01"
+                            android:textSize="16dp"
+                            android:text="Explosive"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS02"
+                            android:textSize="16dp"
+                            android:text="Flammable"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS03"
+                            android:textSize="16dp"
+                            android:text="Oxidizer"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS04"
+                            android:textSize="16dp"
+                            android:text="Compressed Gas"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS05"
+                            android:textSize="16dp"
+                            android:text="Corrosive"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS06"
+                            android:textSize="16dp"
+                            android:text="Acute Toxic"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS07"
+                            android:textSize="16dp"
+                            android:text="Irritant"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS08"
+                            android:textSize="16dp"
+                            android:text="Health Hazard"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SafetyItems_Text_GHS09"
+                            android:textSize="16dp"
+                            android:text="Environmental Hazard"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/Summary_Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text=" Physical Description:"
+                    android:textSize="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="15sp"
+                    android:id="@+id/Summary"
+                    android:layout_below="@+id/Summary_Header"/>
+
+                <TextView
+                    android:id="@+id/Properties_Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text=" Physical Properties:"
+                    android:textSize="24dp"
+                    android:layout_below="@+id/Summary"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/PhysicalProperties"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/Properties_Header"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Header"
+                    android:layout_below="@+id/PhysicalProperties">
+
+                    <TextView
+                        android:id="@+id/Notes_Header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text=" Notes:"
+                        android:textSize="24dp"/>
+
+                    <Button
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="335dp"
+                        android:text="X"
+                        android:textColor="#E91E63"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:id="@+id/x"/>
+
+                    <Button
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        android:text="✓"
+                        android:textColor="#4CAF50"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:id="@+id/check"/>
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="Add Notes Here"
+                    android:layout_below="@+id/Header"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

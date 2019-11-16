@@ -1,17 +1,27 @@
 package com.example.pubchem_chemistry_handbook;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 
 import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
+import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,6 +45,15 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity {
 
     global global = new global(0,0);
+    public static Compound globalCompound = new Compound(0,"0","0");
+    public static int globalCurPos;
+    public static String pSearchQuery="";
+
+    @Override
+    public void onBackPressed() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +73,25 @@ public class MainActivity extends AppCompatActivity {
         loadFav();
         loadRecents();
         loadElements();
-        //loadNotes();
+        loadNotes();
+        global.getCompoundListFull().clear();
+        global.getCompoundListFull().addAll(global.getCompounds());
     }
 
     public global getGlobal() {
         return global;
     }
+
+    public void setCompViewInfo(Compound c,int i)
+    {
+        globalCompound=c;
+        globalCurPos=i;
+    }
+    public int getGlobalCurPos(){return globalCurPos;}
+    public Compound getGlobalCompound(){return globalCompound;}
+
+    public void setPSearchQuery(String str) { pSearchQuery=str;}
+    public String getPSearchQuery(){return pSearchQuery;}
 
     public boolean checkFav(int testEID) {
         for (Compound one : global.getFav()) {
@@ -252,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-
     public void loadNotes() {
         File file = new File(getApplication().getFilesDir().toString() + "/notes.txt");
         try {
@@ -263,7 +293,10 @@ public class MainActivity extends AppCompatActivity {
             }
             while (sc.hasNextLine()) {
                 try {
-                    findCompound(Integer.parseInt(sc.nextLine())).setNotes(sc.nextLine());
+                    int EID = Integer.parseInt(sc.nextLine());
+                    String note = sc.nextLine();
+                    findCompound(EID).setNotes(note);
+                    System.out.println("Added Note '" + findCompound(EID).getNotes() + "' to: " + findCompound(EID).getName());
                 } catch (Exception e) {
 
                 }
@@ -280,13 +313,11 @@ public class MainActivity extends AppCompatActivity {
             FileWriter fr = new FileWriter(file, true);
             fr.write("\n" + EID.getEID() + "\n" + note);
             fr.close();
+            EID.setNotes(note);
         } catch (IOException e) {
 
         }
-        EID.setNotes(note);
     }
-
-     */
 
     public double getDouble(String in) {
         if (in.compareTo("null") != 0) {
@@ -302,5 +333,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return -10;
         }
+    }
+
+    public void clearKeyboard(){
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                getCurrentFocus().getWindowToken(), 0);
     }
 }
