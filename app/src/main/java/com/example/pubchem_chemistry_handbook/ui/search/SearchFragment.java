@@ -149,13 +149,17 @@ public class SearchFragment extends Fragment {
         if(!(((MainActivity)getActivity()).getPSearchQuery().equals(""))){
             rvAdapter.getFilter().filter(((MainActivity)getActivity()).getPSearchQuery());
             resutlsNumb.setText("Results: " + "...");
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            ((MainActivity)getActivity()).updating = true;
+            int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
+            int count = 0;
+            while (((MainActivity)getActivity()).updating && count < 25000000) {
+                count++;
+                if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
                     resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+                    System.out.println("Count: " + count);
+                    ((MainActivity)getActivity()).updating = false;
                 }
-            }, 500);
+            }
             ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.search_frag);
             final Button btnclr = new Button(getContext());
             btnclr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -167,7 +171,6 @@ public class SearchFragment extends Fragment {
             btnclr.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    reloadFrag();
                     ((MainActivity)getActivity()).setPSearchQuery("");
                 }
             });
@@ -186,12 +189,6 @@ public class SearchFragment extends Fragment {
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
                     btnclr.setVisibility(View.INVISIBLE);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            reloadFrag();
-                        }
-                    }, 500);
                 }
             });
             ((MainActivity)getActivity()).setPSearchQuery("");
@@ -222,13 +219,17 @@ public class SearchFragment extends Fragment {
                 }
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                ((MainActivity)getActivity()).updating = true;
+                int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
+                int count = 0;
+                while (((MainActivity)getActivity()).updating && count < 25000000) {
+                    count++;
+                    if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
                         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+                        System.out.println("Count: " + count);
+                        ((MainActivity)getActivity()).updating = false;
                     }
-                }, 500);
+                }
             }
         }
         );
@@ -338,6 +339,17 @@ public class SearchFragment extends Fragment {
                 search = s;
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
+                ((MainActivity)getActivity()).updating = true;
+                int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
+                int count = 0;
+                while (((MainActivity)getActivity()).updating && count < 25000000) {
+                    count++;
+                    if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
+                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+                        System.out.println("Count: " + count);
+                        ((MainActivity)getActivity()).updating = false;
+                    }
+                }
                 /*
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -365,25 +377,11 @@ public class SearchFragment extends Fragment {
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        reloadFrag();
-                    }
-                }, 500);
 }
         });
 
 
         return view;
-    }
-
-    public void reloadFrag(){
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //if (Build.VERSION.SDK_INT >= 26) {
-        //    ft.setReorderingAllowed(false);
-        //}
-        //ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
     }
 
     public List<String> split(String input) {

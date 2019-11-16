@@ -10,8 +10,10 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.global;

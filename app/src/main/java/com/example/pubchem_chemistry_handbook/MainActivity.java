@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static Compound globalCompound = new Compound(0,"0","0");
     public static int globalCurPos;
     public static String pSearchQuery="";
+    public boolean updating = false;
 
     @Override
     public void onBackPressed() {
