@@ -185,7 +185,12 @@ public class SearchFragment extends Fragment {
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
                     btnclr.setVisibility(View.INVISIBLE);
-                    reloadFrag();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            reloadFrag();
+                        }
+                    }, 500);
                 }
             });
             ((MainActivity)getActivity()).setPSearchQuery("");
