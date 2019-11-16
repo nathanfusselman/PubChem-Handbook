@@ -155,6 +155,21 @@ public class SearchFragment extends Fragment {
                     resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
                 }
             }, 500);
+            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.search_frag);
+            final Button btnclr = new Button(getContext());
+            btnclr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            btnclr.setText("clear pSearch");
+            btnclr.setTranslationX(350);
+            btnclr.setTranslationY(100);
+            //add button to the layout
+            layout.addView(btnclr);
+            btnclr.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    reloadFrag();
+                    ((MainActivity)getActivity()).setPSearchQuery("");
+                }
+            });
             rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
@@ -169,23 +184,8 @@ public class SearchFragment extends Fragment {
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
-
+                    btnclr.setVisibility(View.INVISIBLE);
                     reloadFrag();
-                }
-            });
-            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.search_frag);
-            Button btnclr = new Button(getContext());
-            btnclr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            btnclr.setText("clear pSearch");
-            btnclr.setTranslationX(350);
-            btnclr.setTranslationY(100);
-            //add button to the layout
-            layout.addView(btnclr);
-            btnclr.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    reloadFrag();
-                    ((MainActivity)getActivity()).setPSearchQuery("");
                 }
             });
             return view;
