@@ -94,6 +94,7 @@ public class SearchFragment extends Fragment {
     String search = "";
     int current_pos = 0;
     Compound currentCompound = null;
+    boolean webSearch = false;
 
 
     @Nullable
@@ -199,6 +200,10 @@ public class SearchFragment extends Fragment {
         pSearchButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
+             InputMethodManager imm = (InputMethodManager) getActivity()
+                     .getSystemService(Context.INPUT_METHOD_SERVICE);
+             if (imm.isAcceptingText()){
+                 ((MainActivity) getActivity()).clearKeyboard();}
              Fragment fragment = new pSearchFragment();
              FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
              transaction.addToBackStack(null);
@@ -262,6 +267,7 @@ public class SearchFragment extends Fragment {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onDownloadComplete() {
+                                webSearch = true;
                                 List<Compound> searchList = new ArrayList<>();
                                 int on = 0;
                                 File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
@@ -323,12 +329,16 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
-                rvAdapter.notifyDataSetChanged();
+                if (webSearch) {
+                    ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                    ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
+                    rvAdapter.notifyDataSetChanged();
+                    webSearch = false;
+                }
                 search = s;
                 rvAdapter.getFilter().filter(search);
                 resutlsNumb.setText("Results: " + "...");
+                /*
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -336,6 +346,8 @@ public class SearchFragment extends Fragment {
                         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
                     }
                 }, 500);
+
+                 */
                 return false;
             }
         });
@@ -367,11 +379,11 @@ public class SearchFragment extends Fragment {
     }
 
     public void reloadFrag(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 26) {
-            ft.setReorderingAllowed(false);
-        }
-        ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
+        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //if (Build.VERSION.SDK_INT >= 26) {
+        //    ft.setReorderingAllowed(false);
+        //}
+        //ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
     }
 
     public List<String> split(String input) {

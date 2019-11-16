@@ -67,13 +67,11 @@ public class CompFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
-        ((MainActivity) getActivity()).getGlobal().getCompounds().clear();
-        ((MainActivity) getActivity()).getGlobal().getCompounds().addAll(((MainActivity) getActivity()).getGlobal().getCompoundListFull());
+        //((MainActivity) getActivity()).getGlobal().getCompounds().clear();
+        //((MainActivity) getActivity()).getGlobal().getCompounds().addAll(((MainActivity) getActivity()).getGlobal().getCompoundListFull());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         final ScrollView compoundView = view.findViewById(R.id.compound_scrollView);
-        compoundView.setBackgroundColor(0xFFFFFFFF);
-        compoundView.setVisibility(View.INVISIBLE);
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
@@ -138,6 +136,9 @@ public class CompFragment extends Fragment {
                 compoundView.setVisibility(View.INVISIBLE);
             }
         });
+
+
+
         favButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View v) {
@@ -156,8 +157,8 @@ public class CompFragment extends Fragment {
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!(((MainActivity)getActivity()).checkRecent(((currentCompound.getEID()))))){
-           ((MainActivity)getActivity()).addRecent(currentCompound);}}
+            ((MainActivity)getActivity()).addRecent(currentCompound);
+        }
 
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 notes.setText(currentCompound.getNotes());

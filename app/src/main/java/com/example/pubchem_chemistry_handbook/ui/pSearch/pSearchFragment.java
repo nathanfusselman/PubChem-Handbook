@@ -190,7 +190,7 @@ public class pSearchFragment extends Fragment {
                 Log.d("search button", "on click now");
                 writeToString(symbols);
                 Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
-                getActivity().onBackPressed();                                              //this works but is bad hahaha, this is also what creates the news bug on second pSearch
+                getActivity().onBackPressed();                                             //this works but is bad hahaha, this is also what creates the news bug on second pSearch
             }
         });
         return view;
