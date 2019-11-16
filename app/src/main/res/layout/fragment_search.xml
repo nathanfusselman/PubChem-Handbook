@@ -45,4 +45,20 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/pSearchButton"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_button_bg_round"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"/>
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

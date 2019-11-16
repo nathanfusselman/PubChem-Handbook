@@ -60,6 +60,7 @@ import com.example.pubchem_chemistry_handbook.data.SafetyItem;
 import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
+import com.example.pubchem_chemistry_handbook.ui.pSearch.pSearchFragment;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -140,9 +141,19 @@ public class SearchFragment extends Fragment {
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
+        Button pSearchButton = view.findViewById(R.id.pSearchButton);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
 
-
+        pSearchButton.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             Fragment fragment = new pSearchFragment();
+             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+             transaction.addToBackStack(null);
+             transaction.add(R.id.search_frag,fragment);
+             transaction.commit();
+            }
+        });
         search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -280,12 +291,11 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-
-                Fragment fragment= new CompFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.search_frag, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    Fragment fragment = new CompFragment();
+                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.search_frag, fragment);
+                    transaction.commit();
 
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

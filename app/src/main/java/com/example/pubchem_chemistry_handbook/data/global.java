@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class global {
-    String searchString;
     int search_type_startsWith;
     int results;
     int safetyItems;
@@ -22,10 +21,6 @@ public class global {
         elements = new ArrayList<>();
         safetyItems = 0;
     }
-
-    public String getSearchString(){return searchString;}
-
-    public void setSearchString(String s){searchString = s;}
 
     public int getSearch_type_startsWith() {
         return search_type_startsWith;

@@ -21,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     global global = new global(0,0);
     public static Compound globalCompound = new Compound(0,"0","0");
     public static int globalCurPos;
+    public static String pSearchQuery="";
+
+    @Override
+    public void onBackPressed() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,11 @@ public class MainActivity extends AppCompatActivity {
         globalCompound=c;
         globalCurPos=i;
     }
-
     public int getGlobalCurPos(){return globalCurPos;}
     public Compound getGlobalCompound(){return globalCompound;}
+
+    public void setPSearchQuery(String str) { pSearchQuery=str;}
+    public String getPSearchQuery(){return pSearchQuery;}
 
     public boolean checkFav(int testEID) {
         for (Compound one : global.getFav()) {

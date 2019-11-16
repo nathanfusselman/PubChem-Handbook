@@ -152,7 +152,7 @@ public class FavoritesFragment extends Fragment {
             public void onItemClick(final int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
                 Fragment fragment= new CompFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.favorites_frag, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
