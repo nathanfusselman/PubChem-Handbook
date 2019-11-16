@@ -56,7 +56,7 @@ import java.io.IOException;
 public class CompFragment extends Fragment {
     Compound currentCompound = new Compound(0,"","");
     int current_pos;
-
+    static ScrollView compoundView;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -64,21 +64,19 @@ public class CompFragment extends Fragment {
         //((MainActivity)getActivity()).setPSearchQuery("");
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         current_pos=(((MainActivity)getActivity()).getGlobalCurPos());
-
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
         //((MainActivity) getActivity()).getGlobal().getCompounds().clear();
         //((MainActivity) getActivity()).getGlobal().getCompounds().addAll(((MainActivity) getActivity()).getGlobal().getCompoundListFull());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        compoundView = view.findViewById(R.id.compound_scrollView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        final ScrollView compoundView = view.findViewById(R.id.compound_scrollView);
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
-        final Button compoundView_backButton = view.findViewById(R.id.closeButton);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
         final SearchView searchView = view.findViewById(R.id.searchView);
@@ -128,12 +126,6 @@ public class CompFragment extends Fragment {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
-            }
-        });
-
-        compoundView_backButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                compoundView.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -402,10 +394,11 @@ public class CompFragment extends Fragment {
                 compoundView_formula.setText("  " + currentCompound.getFormula());
                 compoundView.setVisibility(View.VISIBLE);
 
-
         return view;
     }
-
+    public static void onBackPressed(){
+        compoundView.setVisibility(View.INVISIBLE);
+    }
 }
 
 
