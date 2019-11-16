@@ -169,9 +169,14 @@ public class SearchFragment extends Fragment {
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
 
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        ft.setReorderingAllowed(false);
+                    }
+                    ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
+
                 }
             });
-            ((MainActivity)getActivity()).setPSearchQuery("");
             return view;
         }
         pSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -332,9 +337,13 @@ public class SearchFragment extends Fragment {
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
 
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
             }
         });
-
 
         return view;
     }
