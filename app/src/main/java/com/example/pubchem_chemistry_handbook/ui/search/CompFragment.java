@@ -61,8 +61,6 @@ public class CompFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final BottomNavigationView navBar= getActivity().findViewById(R.id.nav_view);
-
         Compound globalcurrentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         currentCompound = globalcurrentCompound;
         int globalCurrent_pos=(((MainActivity)getActivity()).getGlobalCurPos());

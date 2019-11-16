@@ -144,13 +144,43 @@ public class SearchFragment extends Fragment {
         Button pSearchButton = view.findViewById(R.id.pSearchButton);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
 
+        if(!(((MainActivity)getActivity()).getPSearchQuery().equals(""))){
+            rvAdapter.getFilter().filter(((MainActivity)getActivity()).getPSearchQuery());
+            resutlsNumb.setText("Results: " + "...");
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+                }
+            }, 500);
+            rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
+                    Fragment fragment = new CompFragment();
+                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.search_frag, fragment);
+                    transaction.commit();
+
+                    InputMethodManager imm = (InputMethodManager) getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isAcceptingText()){
+                        ((MainActivity) getActivity()).clearKeyboard();}
+
+                }
+            });
+            ((MainActivity)getActivity()).setPSearchQuery("");
+            return view;
+        }
         pSearchButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
              Fragment fragment = new pSearchFragment();
              FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
              transaction.addToBackStack(null);
-             transaction.add(R.id.search_frag,fragment);
+             transaction.replace(R.id.search_frag,fragment);
              transaction.commit();
             }
         });
