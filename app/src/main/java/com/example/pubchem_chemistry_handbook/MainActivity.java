@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onBackPressed();
+        CompFragment.onBackPressed();
     }
 
     @Override
