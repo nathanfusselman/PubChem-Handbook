@@ -45,10 +45,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText()){
-            ((MainActivity) getActivity()).clearKeyboard();}
+
 
         newsViewModel =
                 ViewModelProviders.of(this).get(NewsViewModel.class);

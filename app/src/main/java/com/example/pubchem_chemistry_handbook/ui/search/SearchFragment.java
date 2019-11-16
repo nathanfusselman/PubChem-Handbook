@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -169,12 +170,22 @@ public class SearchFragment extends Fragment {
                     if (imm.isAcceptingText()){
                         ((MainActivity) getActivity()).clearKeyboard();}
 
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        ft.setReorderingAllowed(false);
-                    }
-                    ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
-
+                    reloadFrag();
+                }
+            });
+            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.search_frag);
+            Button btnclr = new Button(getContext());
+            btnclr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            btnclr.setText("clear pSearch");
+            btnclr.setTranslationX(350);
+            btnclr.setTranslationY(100);
+            //add button to the layout
+            layout.addView(btnclr);
+            btnclr.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    reloadFrag();
+                    ((MainActivity)getActivity()).setPSearchQuery("");
                 }
             });
             return view;
@@ -185,7 +196,7 @@ public class SearchFragment extends Fragment {
              Fragment fragment = new pSearchFragment();
              FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
              transaction.addToBackStack(null);
-             transaction.replace(R.id.search_frag,fragment);
+             transaction.add(R.id.search_frag,fragment);
              transaction.commit();
             }
         });
@@ -337,15 +348,19 @@ public class SearchFragment extends Fragment {
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
 
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                if (Build.VERSION.SDK_INT >= 26) {
-                    ft.setReorderingAllowed(false);
-                }
-                ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
+                reloadFrag();
             }
         });
 
         return view;
+    }
+
+    public void reloadFrag(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).attach(getFragmentManager().findFragmentById(R.id.nav_host_fragment)).commit();
     }
 
     public List<String> split(String input) {

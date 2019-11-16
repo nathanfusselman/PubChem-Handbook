@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,8 @@ import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.ui.pTable.RecyclerItemClickListener;
 import com.example.pubchem_chemistry_handbook.ui.pTable.pTableViewModel;
 import com.example.pubchem_chemistry_handbook.ui.pTable_Adapter;
+import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 
@@ -187,7 +190,7 @@ public class pSearchFragment extends Fragment {
                 Log.d("search button", "on click now");
                 writeToString(symbols);
                 Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
-                getActivity().onBackPressed();
+                getActivity().onBackPressed();                                              //this works but is bad hahaha, this is also what creates the news bug on second pSearch
             }
         });
         return view;
