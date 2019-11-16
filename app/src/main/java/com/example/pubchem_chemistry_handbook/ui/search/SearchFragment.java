@@ -285,6 +285,7 @@ public class SearchFragment extends Fragment {
                 transaction.replace(R.id.search_frag, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity
                 transaction.addToBackStack(null);  // this will manage backstack
                 transaction.commit();
+
                     InputMethodManager inputMethodManager =
                             (InputMethodManager) getActivity().getSystemService(
                                     Activity.INPUT_METHOD_SERVICE);

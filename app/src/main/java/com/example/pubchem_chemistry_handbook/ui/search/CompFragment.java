@@ -159,7 +159,8 @@ public class CompFragment extends Fragment {
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                 //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ((MainActivity)getActivity()).addRecent(currentCompound);
+            if (!(((MainActivity)getActivity()).checkRecent(((currentCompound.getEID())))))
+            {((MainActivity)getActivity()).addRecent(currentCompound);}
         }
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 notes.setText(currentCompound.getNotes());
