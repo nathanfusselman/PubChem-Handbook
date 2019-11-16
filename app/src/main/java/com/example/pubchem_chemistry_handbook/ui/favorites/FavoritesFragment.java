@@ -117,6 +117,7 @@ public class FavoritesFragment extends Fragment {
         StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
+
         rvAdapter.notifyDataSetChanged();
 
         favorites_button.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +149,7 @@ public class FavoritesFragment extends Fragment {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, fragment);
+                transaction.replace(R.id.favorites_frag, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

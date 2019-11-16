@@ -141,6 +141,8 @@ public class SearchFragment extends Fragment {
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+
+
         search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -280,17 +282,14 @@ public class SearchFragment extends Fragment {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity
+                transaction.replace(R.id.search_frag, fragment); // fragment container id in first parameter is the  container(Main layout id) of Activity
                 transaction.addToBackStack(null);  // this will manage backstack
                 transaction.commit();
-
-                {
                     InputMethodManager inputMethodManager =
                             (InputMethodManager) getActivity().getSystemService(
                                     Activity.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(
                             getActivity().getCurrentFocus().getWindowToken(), 0);
-                }
 
             }
         });
