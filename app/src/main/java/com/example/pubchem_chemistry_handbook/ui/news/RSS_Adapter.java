@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class RSS_Adapter extends RecyclerView.Adapter<RSS_Adapter.RSSViewHolder>{
     private List<Event> eventSet;

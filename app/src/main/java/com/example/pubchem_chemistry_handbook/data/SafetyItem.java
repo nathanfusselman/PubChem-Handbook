@@ -1,7 +1,5 @@
 package com.example.pubchem_chemistry_handbook.data;
 
-import java.util.List;
-
 public class SafetyItem {
     String name;
     String url;

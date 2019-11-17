@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,16 +12,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,8 +27,6 @@ import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.ui.pTable.RecyclerItemClickListener;
 import com.example.pubchem_chemistry_handbook.ui.pTable.pTableViewModel;
 import com.example.pubchem_chemistry_handbook.ui.pTable_Adapter;
-import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
-import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 

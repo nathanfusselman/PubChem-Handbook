@@ -1,6 +1,5 @@
 package com.example.pubchem_chemistry_handbook.data;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.example.pubchem_chemistry_handbook.ui;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Element;
-import com.example.pubchem_chemistry_handbook.data.Event;
 
 import java.util.List;
 
