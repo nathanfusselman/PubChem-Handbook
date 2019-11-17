@@ -54,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onBackPressed();
-        CompFragment.onBackPressed();
+        try{
+            CompFragment.onBackPressed();
+        }catch(Exception e){}
+
     }
 
     @Override
@@ -341,7 +344,8 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
+        try{
         inputMethodManager.hideSoftInputFromWindow(
-                getCurrentFocus().getWindowToken(), 0);
+                getCurrentFocus().getWindowToken(), 0);}catch(Exception e){}
     }
 }

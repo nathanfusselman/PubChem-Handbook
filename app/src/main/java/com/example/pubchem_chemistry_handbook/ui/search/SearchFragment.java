@@ -16,6 +16,9 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -39,6 +42,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -146,54 +150,6 @@ public class SearchFragment extends Fragment {
         Button pSearchButton = view.findViewById(R.id.pSearchButton);
         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
 
-        if(!(((MainActivity)getActivity()).getPSearchQuery().equals(""))){
-            rvAdapter.getFilter().filter(((MainActivity)getActivity()).getPSearchQuery());
-            resutlsNumb.setText("Results: " + "...");
-            ((MainActivity)getActivity()).updating = true;
-            int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
-            int count = 0;
-            while (((MainActivity)getActivity()).updating && count < 25000000) {
-                count++;
-                if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
-                    resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-                    System.out.println("Count: " + count);
-                    ((MainActivity)getActivity()).updating = false;
-                }
-            }
-            ConstraintLayout layout = (ConstraintLayout) view.findViewById(R.id.search_frag);
-            final Button btnclr = new Button(getContext());
-            btnclr.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            btnclr.setText("clear pSearch");
-            btnclr.setTranslationX(350);
-            btnclr.setTranslationY(100);
-            //add button to the layout
-            layout.addView(btnclr);
-            btnclr.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)getActivity()).setPSearchQuery("");
-                }
-            });
-            rvAdapter.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-                    Fragment fragment = new CompFragment();
-                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    transaction.addToBackStack(null);
-                    transaction.replace(R.id.search_frag, fragment);
-                    transaction.commit();
-
-                    InputMethodManager imm = (InputMethodManager) getActivity()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm.isAcceptingText()){
-                        ((MainActivity) getActivity()).clearKeyboard();}
-                    btnclr.setVisibility(View.INVISIBLE);
-                }
-            });
-            ((MainActivity)getActivity()).setPSearchQuery("");
-            return view;
-        }
         pSearchButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
@@ -206,6 +162,7 @@ public class SearchFragment extends Fragment {
              transaction.addToBackStack(null);
              transaction.add(R.id.search_frag,fragment);
              transaction.commit();
+
             }
         });
         search_type_startsWith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -234,6 +191,7 @@ public class SearchFragment extends Fragment {
         }
         );
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -350,16 +308,6 @@ public class SearchFragment extends Fragment {
                         ((MainActivity)getActivity()).updating = false;
                     }
                 }
-                /*
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-                    }
-                }, 500);
-
-                 */
                 return false;
             }
         });
@@ -380,8 +328,22 @@ public class SearchFragment extends Fragment {
 }
         });
 
+        if(!(((MainActivity)getActivity()).getPSearchQuery().equals(""))) {
+            searchView.post(new Runnable() {
+                @Override
+                public void run() {
+                    //MenuItemCompat.expandActionView(searchMenuItem);
+                    searchView.setQuery(((MainActivity)getActivity()).getPSearchQuery(), false);
+                    searchView.setFocusable(false);
+                    searchView.setIconified(false);
+                    searchView.clearFocus();
+                    ((MainActivity)getActivity()).setPSearchQuery("");
+                }
+            });
+        }
 
         return view;
+
     }
 
     public List<String> split(String input) {
