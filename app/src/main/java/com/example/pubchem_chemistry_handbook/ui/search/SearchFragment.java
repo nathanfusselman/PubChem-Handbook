@@ -132,6 +132,8 @@ public class SearchFragment extends Fragment {
              Fragment fragment = new pSearchFragment();
              FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
              transaction.addToBackStack(null);
+             searchView.setFocusable(false);
+             searchView.clearFocus();
              transaction.add(R.id.search_frag,fragment);
              transaction.commit();
 
