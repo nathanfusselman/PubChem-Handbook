@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     global.getFav().add(findCompound(Integer.parseInt(sc.nextLine())));
                 } catch (Exception e) {
-
+                    Log.e("Main Activity","Exception in loadFav");
                 }
             }
         } catch (Exception e) {
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     global.getRecents().add(findCompound(Integer.parseInt(sc.nextLine())));
                 } catch (Exception e) {
-
+                    Log.e("Main Activity","Exception in loadRecents");
                 }
             }
         } catch (Exception e) {

@@ -85,7 +85,7 @@ public class FavoritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
-        rvAdapter = new RVAdapter(getActivity(), currentList, ((MainActivity)getActivity()).getGlobal());
+        rvAdapter = new RVAdapter(currentList, ((MainActivity)getActivity()).getGlobal());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);
         compound_rview.setAdapter(rvAdapter);

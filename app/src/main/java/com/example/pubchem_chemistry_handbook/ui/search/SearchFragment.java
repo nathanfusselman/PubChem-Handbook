@@ -1,50 +1,25 @@
 package com.example.pubchem_chemistry_handbook.ui.search;
 
-import android.app.Activity;
-import android.app.DownloadManager;
+
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.SearchView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,56 +35,36 @@ import com.downloader.Progress;
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
-import com.example.pubchem_chemistry_handbook.data.Element;
-import com.example.pubchem_chemistry_handbook.data.SafetyItem;
-import com.example.pubchem_chemistry_handbook.data.global;
-import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 import com.example.pubchem_chemistry_handbook.ui.pSearch.pSearchFragment;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
-    RecyclerView compound_rview;
-    RVAdapter rvAdapter;
-    TextView resutlsNumb;
-    String search = "";
-    int current_pos = 0;
-    Compound currentCompound = null;
-    boolean webSearch = false;
+    private RVAdapter rvAdapter;
+    private TextView resutlsNumb;
+    private String search = "";
+    private boolean webSearch = false;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        final RecyclerView compound_rview;
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         compound_rview = view.findViewById(R.id.recyclerview);
         ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
         ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
-        rvAdapter = new RVAdapter(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
+        rvAdapter = new RVAdapter(((MainActivity)getActivity()).getGlobal().getCompounds(), ((MainActivity)getActivity()).getGlobal());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         compound_rview.setLayoutManager(layoutManager);

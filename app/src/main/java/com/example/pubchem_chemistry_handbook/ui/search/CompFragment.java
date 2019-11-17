@@ -61,16 +61,11 @@ public class CompFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //((MainActivity)getActivity()).setPSearchQuery("");
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         current_pos=(((MainActivity)getActivity()).getGlobalCurPos());
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
-        RVAdapter rvAdapter = new RVAdapter(getActivity(), ((MainActivity) getActivity()).getGlobal().getCompounds(), ((MainActivity) getActivity()).getGlobal());
-        //((MainActivity) getActivity()).getGlobal().getCompounds().clear();
-        //((MainActivity) getActivity()).getGlobal().getCompounds().addAll(((MainActivity) getActivity()).getGlobal().getCompoundListFull());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compoundView = view.findViewById(R.id.compound_scrollView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);

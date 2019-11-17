@@ -1,23 +1,17 @@
 package com.example.pubchem_chemistry_handbook.ui;
 
-import android.content.Context;
-import android.telephony.PhoneNumberUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.global;
-import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,10 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements Filterable {
-    Context mcContext;
     public List<Compound> CompoundList;
-    List<Compound> CompoundListFull;
-    global global;
+    private List<Compound> CompoundListFull;
+    private global global;
     private OnItemClickListener mListener;
 
 
@@ -40,14 +33,13 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
         mListener = listener;
     }
 
-    public RVAdapter(Context mcContext, List<Compound> compoundList, global global) {
-        this.mcContext = mcContext;
+    public RVAdapter(List<Compound> compoundList, global global) {
         this.CompoundList = compoundList;
         this.global = global;
         CompoundListFull = new ArrayList<>(compoundList);
     }
 
-
+    @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
@@ -116,7 +108,7 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                     }
                 }
             }
-            Collections.sort(filteredList, new Comparator() {
+            Collections.sort(filteredList, new Comparator<Object>() {
 
                 public int compare(Object o1, Object o2) {
                     Compound p1 = (Compound) o1;
@@ -127,9 +119,8 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                         ret = 0;
                     } else if (p1.getFormula().length() > p2.getFormula().length()) {
                         ret = 1;
-                    } else if (p1.getFormula().length() < p2.getFormula().length()) {
-                        ret = -1;
-                    }//end business logic
+                    }
+                    //end business logic
                     return ret;
                 }
             });
@@ -138,7 +129,7 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
             results.values = filteredList;
             return results;
         }
-
+        @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             CompoundList.clear();
@@ -147,7 +138,7 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
         }
     };
 
-    public static boolean isNumeric(final String str) {
+    private static boolean isNumeric(final String str) {
 
         // null or empty
         if (str == null || str.length() == 0) {
