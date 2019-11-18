@@ -47,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onBackPressed();
         try{
-            CompoundFragment.onBackPressed();
+          if(((getWindow().getCurrentFocus())!=null)&&CompoundFragment.fragExists) {
+              CompoundFragment.onBackPressed(getWindow().getCurrentFocus());
+          }
         }catch(Exception e){}
-
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,9 +20,9 @@ import java.util.List;
 public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableViewHolder>{
     private List<Element> elementSet;
 
-    public static class pTableViewHolder extends RecyclerView.ViewHolder{
-        public View pTableView;
-        public pTableViewHolder(View v) {
+    static class pTableViewHolder extends RecyclerView.ViewHolder{
+        View pTableView;
+        pTableViewHolder(View v) {
             super(v);
             pTableView = v;
         }
@@ -31,17 +32,17 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
         elementSet = elements;
     }
 
+    @NonNull
     @Override
     public pTable_Adapter.pTableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ptable_element, parent, false);
-        pTableViewHolder vh = new pTableViewHolder(v);
-        return vh;
+        return new pTableViewHolder(v);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onBindViewHolder(pTableViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull pTableViewHolder holder, int position) {
         if (elementSet.get(position).getAtomicNumber() > 0) {
             switch (elementSet.get(position).getChemicalGroupBlock()) {
                 case "Nonmetal":
@@ -85,7 +86,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
             } else {
                 if (elementSet.get(position).getAtomicNumber() == -2) {
                     (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams((int)(25), (int)(25));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(25, 25);
                     (holder.pTableView.findViewById(R.id.element_background)).setLayoutParams(lp);
                 } else {
                     (holder.pTableView.findViewById(R.id.element_background)).setBackground(null);

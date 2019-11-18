@@ -48,6 +48,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
     Compound currentCompound = new Compound(0,"","");
@@ -57,8 +58,9 @@ public class CompoundFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ScrollView compoundView;
+        fragExists=true;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
-        current_pos=(((MainActivity)getActivity()).getGlobalCurPos());
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compoundView = view.findViewById(R.id.compound_scrollView);
@@ -332,7 +334,9 @@ public class CompoundFragment extends Fragment {
                                                     String ExternalURLData = (String) contents.get(0);
                                                     StructureImageLayout.addView(StructureImages[2]);
                                                     StructureTextLayout.addView(StructureTexts[2]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_crystal);
+                                                    WeakReference<ImageView> weakCompViewCrystal;
+                                                    weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCompViewCrystal);
                                                     image_Loader.execute(ExternalURLData);
                                                 }
                                             }
@@ -408,11 +412,13 @@ public class CompoundFragment extends Fragment {
                 compoundView.setVisibility(View.VISIBLE);
 
         return view;
+
     }
-    public static void onBackPressed(){
-        compoundView.setVisibility(View.INVISIBLE);
-    }
+
+    public static void onBackPressed(View view){
+        {
+            fragExists=false;
+            view.setVisibility(View.INVISIBLE);
+        }
 }
-
-
-
+}

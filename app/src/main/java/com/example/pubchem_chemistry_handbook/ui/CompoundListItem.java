@@ -13,17 +13,17 @@ import com.example.pubchem_chemistry_handbook.data.Compound;
 
 public class CompoundListItem extends RecyclerView.ViewHolder {
 
-    public TextView name_TextView;
-    public TextView iso_TextView;
-    public ImageView image_ImageView;
+    private TextView name_TextView;
+    private TextView iso_TextView;
+    private ImageView image_ImageView;
 
 
     public CompoundListItem(View itemView, final RVAdapter.OnItemClickListener listener) {
         super(itemView);
         itemView.setClickable(true);
-        image_ImageView = (ImageView) itemView.findViewById(R.id.compound_image);
-        name_TextView = (TextView) itemView.findViewById(R.id.compound_name);
-        iso_TextView = (TextView) itemView.findViewById(R.id.compound_formula);
+        image_ImageView = itemView.findViewById(R.id.compound_image);
+        name_TextView = itemView.findViewById(R.id.compound_name);
+        iso_TextView = itemView.findViewById(R.id.compound_formula);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +38,7 @@ public class CompoundListItem extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(Compound compound) {
+    void bind(Compound compound) {
         Glide.with(image_ImageView)
                 .load("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + compound.getCID() +"&t=s")
                 .placeholder(R.drawable.ic_cloud_queue_black_24dp)

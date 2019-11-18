@@ -13,9 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -55,6 +55,7 @@ public class SearchFragment extends Fragment {
     private TextView resutlsNumb;
     private String search = "";
     private boolean webSearch = false;
+    private ProgressBar spinner;
 
 
     @Nullable
@@ -62,6 +63,8 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final RecyclerView compound_rview;
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
+        spinner = view.findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
         compound_rview = view.findViewById(R.id.recyclerview);
         ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
         ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
@@ -81,10 +84,13 @@ public class SearchFragment extends Fragment {
         pSearchButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
+             spinner.setVisibility(View.GONE);
+             PRDownloader.cancelAll();
              InputMethodManager imm = (InputMethodManager) getActivity()
                      .getSystemService(Context.INPUT_METHOD_SERVICE);
              if (imm.isAcceptingText()){
                  ((MainActivity) getActivity()).clearKeyboard();}
+
              Fragment fragment = new pSearchFragment();
              FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
              transaction.addToBackStack(null);
@@ -99,6 +105,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                spinner.setVisibility(View.GONE);
+                PRDownloader.cancelAll();
                 if (isChecked) {
                     ((MainActivity)getActivity()).getGlobal().setSearch_type_startsWith(1);
                 } else {
@@ -120,13 +128,14 @@ public class SearchFragment extends Fragment {
             }
         }
         );
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(getActivity(), "LOADING RESULTS", Toast.LENGTH_SHORT).show();
-                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + s + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
+                spinner.setVisibility(View.VISIBLE);
+                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + s + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:1000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                             @Override
@@ -143,6 +152,7 @@ public class SearchFragment extends Fragment {
                         .setOnCancelListener(new OnCancelListener() {
                             @Override
                             public void onCancel() {
+                                spinner.setVisibility(View.GONE);
 
                             }
                         })
@@ -204,13 +214,15 @@ public class SearchFragment extends Fragment {
                                 }
                                 rvAdapter.notifyDataSetChanged();
                                 resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
+                                spinner.setVisibility(View.GONE);
                             }
 
                             @Override
                             public void onError(Error error) {
+                                spinner.setVisibility(View.GONE);
                                 //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                Log.d("PRDownloader", "onError: " + error.toString());
+                                Log.e("PRDownloader", "onError: " + error.toString());
                             }
                         });
                 return false;
@@ -218,6 +230,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                spinner.setVisibility(View.GONE);
+                PRDownloader.cancelAll();
                 if (webSearch) {
                     ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
                     ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(((MainActivity)getActivity()).getGlobal().getCompoundListFull());
@@ -255,6 +269,9 @@ public class SearchFragment extends Fragment {
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
+                searchView.setFocusable(false);
+                searchView.setIconified(false);
+                searchView.clearFocus();
 }
         });
 
@@ -276,7 +293,7 @@ public class SearchFragment extends Fragment {
 
     }
 
-    public List<String> split(String input) {
+    private List<String> split(String input) {
         boolean inP = false;
         int last = -1;
         List<String> out = new ArrayList<>();

@@ -9,12 +9,14 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 
 public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
     private final static String TAG = "AsyncTaskLoadImage";
-    private ImageView imageView;
-    public AsyncTaskLoadImage(ImageView imageView) {
+
+    private WeakReference<ImageView> imageView;
+    public AsyncTaskLoadImage(WeakReference<ImageView> imageView) {
         this.imageView = imageView;
     }
     @Override
@@ -24,13 +26,14 @@ public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
             URL url = new URL(params[0]);
             bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
         } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+            if(e.getMessage()!=null){
+            Log.e(TAG, e.getMessage());}
         }
         return bitmap;
     }
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
+        imageView.get().setImageBitmap(bitmap);
     }
 
     public static Bitmap TrimBitmap(Bitmap bmp) {

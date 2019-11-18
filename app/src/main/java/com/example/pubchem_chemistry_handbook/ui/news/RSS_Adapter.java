@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.R;
@@ -20,28 +21,29 @@ import java.util.Locale;
 public class RSS_Adapter extends RecyclerView.Adapter<RSS_Adapter.RSSViewHolder>{
     private List<Event> eventSet;
 
-    public static class RSSViewHolder extends RecyclerView.ViewHolder{
-        public View RSSView;
-        public RSSViewHolder(View v) {
+    static class RSSViewHolder extends RecyclerView.ViewHolder{
+        View RSSView;
+        RSSViewHolder(View v) {
             super(v);
             RSSView = v;
         }
 }
 
-    public RSS_Adapter(List<Event> events) {
+     RSS_Adapter(List<Event> events) {
         eventSet = events;
     }
 
+    @NonNull
     @Override
     public RSS_Adapter.RSSViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rss_feed, parent, false);
-        RSSViewHolder vh = new RSSViewHolder(v);
-        return vh;
+        //RSSViewHolder vh = new RSSViewHolder(v);
+        return new RSSViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RSSViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RSSViewHolder holder, int position) {
         final Event rssModel = eventSet.get(position);
 
         String fixedDate= null;
@@ -63,10 +65,11 @@ public class RSS_Adapter extends RecyclerView.Adapter<RSS_Adapter.RSSViewHolder>
         return eventSet.size();
     }
 
-    private String fixDate(String rssDateStr) throws ParseException {
-
+    @SuppressWarnings("ConstantConditions")
+    private String fixDate( String rssDateStr) throws ParseException {
         DateFormat format= new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.ENGLISH);
-        Date date = new Date(format.parse(rssDateStr).getTime());
+        Date date;
+        date = new Date(format.parse(rssDateStr).getTime());
         DateFormat prefer = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm a z", Locale.ENGLISH);
         return prefer.format(date);
     }

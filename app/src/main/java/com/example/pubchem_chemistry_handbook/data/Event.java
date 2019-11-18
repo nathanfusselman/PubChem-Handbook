@@ -2,16 +2,11 @@ package com.example.pubchem_chemistry_handbook.data;
 
 
 public class Event {
-    String title;
-    String description;
-    String link;
-    String date;
+    private String title;
+    private String description;
+    private String link;
+    private String date;
 
-    public Event(String title, String description, String link, String date) {
-        this.title = title;
-        this.description = description;
-        this.link=link;
-    }
     public Event(){}
 
     public String getTitle() {
