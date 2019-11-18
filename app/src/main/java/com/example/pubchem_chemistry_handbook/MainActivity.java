@@ -52,16 +52,18 @@ public class MainActivity extends AppCompatActivity {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             } else {
                 ElementFragment.fragExists = false;
+                super.onBackPressed();
+                return;
             }
         }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onBackPressed();
         try{
-            if(CompoundFragment.fragExists!=null) {
                 if (((getWindow().getCurrentFocus()) != null) && CompoundFragment.fragExists) {
                     CompoundFragment.onBackPressed(getWindow().getCurrentFocus());
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
-            }
-        }catch(Exception e){}
+            }catch (Exception e){}
 
         }
 

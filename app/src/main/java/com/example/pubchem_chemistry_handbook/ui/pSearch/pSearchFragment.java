@@ -141,9 +141,9 @@ public class pSearchFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("search button", "on click now");
                 writeToString(symbols);
-                if(getActivity()!=null){Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
+                Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
                 getActivity().onBackPressed();}
-            }
+
         });
         return view;
     }
