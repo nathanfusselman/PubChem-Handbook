@@ -19,6 +19,8 @@ import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
+import com.example.pubchem_chemistry_handbook.ui.pTable.ElementFragment;
+import com.example.pubchem_chemistry_handbook.ui.pTable.pTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedReader;
@@ -41,17 +43,27 @@ public class MainActivity extends AppCompatActivity {
     public static int globalCurPos;
     public static String pSearchQuery="";
     public boolean updating = false;
+    public static int pTablePosition;
 
     @Override
     public void onBackPressed() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if(ElementFragment.fragExists!=null) {
+            if (!ElementFragment.fragExists) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            } else {
+                ElementFragment.fragExists = false;
+            }
+        }
         super.onBackPressed();
         try{
-          if(((getWindow().getCurrentFocus())!=null)&&CompoundFragment.fragExists) {
-              CompoundFragment.onBackPressed(getWindow().getCurrentFocus());
-          }
+            if(CompoundFragment.fragExists!=null) {
+                if (((getWindow().getCurrentFocus()) != null) && CompoundFragment.fragExists) {
+                    CompoundFragment.onBackPressed(getWindow().getCurrentFocus());
+                }
+            }
         }catch(Exception e){}
-    }
+
+        }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

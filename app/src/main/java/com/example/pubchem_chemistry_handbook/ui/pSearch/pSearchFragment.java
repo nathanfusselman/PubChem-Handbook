@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -87,9 +87,6 @@ public class pSearchFragment extends Fragment {
                     }
                 })
         );
-
-        //the layout on which you are working
-        RelativeLayout layout = view.findViewById(R.id.ptable_relative_frag);
 
         btnClear.setOnClickListener(new View.OnClickListener(){
             @Override

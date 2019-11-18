@@ -51,14 +51,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
-    public static Boolean fragExists=true;
     Compound currentCompound = new Compound(0,"","");
-    int current_pos;
-    static ScrollView compoundView;
 
+    public static Boolean fragExists=true;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragExists=true;
         final ScrollView compoundView;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
@@ -419,6 +418,7 @@ public class CompoundFragment extends Fragment {
 
     public static void onBackPressed(View view){
         {
+            fragExists=false;
             view.setVisibility(View.INVISIBLE);
         }
 }

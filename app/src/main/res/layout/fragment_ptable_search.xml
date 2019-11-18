@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MissingDefaultResource"
-    android:background="?android:attr/windowBackground"
     android:id="@+id/ptable_search_frag"
-    android:windowSoftInputMode="stateAlwaysHidden">
+    android:windowSoftInputMode="stateAlwaysHidden"
+    android:background="?android:attr/windowBackground">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -17,58 +17,78 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/scrollable">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ptable__search_relative_frag">
+                    android:layout_height="wrap_content">
+
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/pTable_search__Recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:scrollbars="horizontal" />
+                            android:scrollbars="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                        <ImageButton
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_marginTop="45dp"
-                            android:layout_marginHorizontal="150dp"
-                            android:id="@+id/search_button"
-                            android:background="@drawable/ic_search_gray_24dp"/>
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ptable__search_relative_frag">
 
-                        <ImageButton
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_marginTop="45dp"
-                            android:layout_marginHorizontal="435dp"
-                            android:id="@+id/backspace_button"
-                            android:background="@drawable/ic_backspace_gray_24dp"/>
+                                <ImageButton
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="45dp"
+                                    android:layout_marginBottom="400dp"
+                                    android:id="@+id/search_button"
+                                    android:background="@drawable/ic_search_gray_24dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/currentSearch"/>
 
-                        <ImageButton
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_marginTop="45dp"
-                            android:layout_marginHorizontal="470dp"
-                            android:id="@+id/clear_button"
-                            android:background="@drawable/ic_clear_gray_24dp"/>
+                                <ImageButton
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="45dp"
+                                    android:id="@+id/backspace_button"
+                                    android:background="@drawable/ic_backspace_gray_24dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/currentSearch"/>
 
-                        <TextView
-                            android:layout_width="250dp"
-                            android:layout_height="35dp"
-                            android:layout_marginTop="35dp"
-                            android:layout_marginHorizontal="180dp"
-                            android:gravity="center"
-                            android:id="@+id/currentSearch"
-                            android:text="Search Here" />
-                        <View
-                            android:layout_width="250dp"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="70dp"
-                            android:layout_marginHorizontal="180dp"
-                            android:background="@android:color/darker_gray"/>
+                                <ImageButton
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="45dp"
+                                    android:id="@+id/clear_button"
+                                    android:background="@drawable/ic_clear_gray_24dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/backspace_button"/>
+
+                                <TextView
+                                    android:layout_width="250dp"
+                                    android:layout_height="35dp"
+                                    android:layout_marginTop="35dp"
+                                    android:gravity="center"
+                                    android:id="@+id/currentSearch"
+                                    android:text="Search Here"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/left_guideline" />
+                                <View
+                                    android:layout_width="250dp"
+                                    android:layout_height="1dp"
+                                    android:layout_marginTop="70dp"
+                                    android:background="@android:color/darker_gray"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/left_guideline"/>
+
+                                <androidx.constraintlayout.widget.Guideline
+                                    android:id="@+id/left_guideline"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    app:layout_constraintGuide_percent="0.17" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </RelativeLayout>
         </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
