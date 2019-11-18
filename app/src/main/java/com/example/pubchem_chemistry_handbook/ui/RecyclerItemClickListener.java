@@ -1,4 +1,4 @@
-package com.example.pubchem_chemistry_handbook.ui.pTable;
+package com.example.pubchem_chemistry_handbook.ui;
 
 import android.content.Context;
 import android.view.GestureDetector;

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
+import com.example.pubchem_chemistry_handbook.ui.RecyclerItemClickListener;
 import com.example.pubchem_chemistry_handbook.ui.pTable_Adapter;
 
 public class pTableFragment extends Fragment {
