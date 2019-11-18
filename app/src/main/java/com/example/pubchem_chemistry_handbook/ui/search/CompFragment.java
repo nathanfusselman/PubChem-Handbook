@@ -108,6 +108,28 @@ public class CompFragment extends Fragment {
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         final Button shareButton = view.findViewById(R.id.shareButton);
         final EditText notes = view.findViewById(R.id.notes);
+        final Button notescheck = view.findViewById(R.id.check);
+        final Button notesx = view.findViewById(R.id.x);
+        notescheck.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ((MainActivity)getActivity()).setNote(currentCompound, String.valueOf(notes.getText()));
+                }
+                notes.setText(currentCompound.getNotes());
+            }
+        });
+        notesx.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                notes.clearFocus();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
+                notes.setText(currentCompound.getNotes());
+            }
+        });
+
 
 
 
