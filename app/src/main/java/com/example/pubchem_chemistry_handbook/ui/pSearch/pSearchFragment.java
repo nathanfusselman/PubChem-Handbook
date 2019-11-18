@@ -87,7 +87,7 @@ public class pSearchFragment extends Fragment {
                                 symbols.add(((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol());
                                 Log.d("PSearch", "Symbol Pressed " + symbols.get(symbols.size()-1));
                             }
-                            currentQuery.setText(symbols.toString());
+                            currentQuery.setText((writeToString(symbols)));
                         }}
                     }
 
@@ -104,7 +104,7 @@ public class pSearchFragment extends Fragment {
                                 Object checkedItem = lw.getAdapter().getItem(lw.getCheckedItemPosition());
                                 if(getActivity()!=null){symbols.add((((MainActivity)getActivity()).getGlobal().getElements().get(cur_pos).getSymbol())+checkedItem.toString());}
                                 Log.d("PSearch", "Symbol Long Pressed " + symbols.get(symbols.size()-1));
-                                currentQuery.setText(symbols.toString());
+                                currentQuery.setText(writeToString(symbols));
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -122,7 +122,7 @@ public class pSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
             symbols.clear();
-            currentQuery.setText(symbols.toString());
+            currentQuery.setText((writeToString(symbols)));
             }
         });
 
@@ -131,7 +131,7 @@ public class pSearchFragment extends Fragment {
             public void onClick(View v) {
                 if(symbols.size()>0) {
                     symbols.remove(symbols.size() - 1);
-                    currentQuery.setText(symbols.toString());
+                    currentQuery.setText((writeToString(symbols)));
                 }
             }
         });
@@ -140,7 +140,8 @@ public class pSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("search button", "on click now");
-                writeToString(symbols);
+
+                if(getActivity()!=null){((MainActivity)getActivity()).setPSearchQuery( writeToString(symbols));}
                 Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
                 getActivity().onBackPressed();}
 
@@ -148,12 +149,13 @@ public class pSearchFragment extends Fragment {
         return view;
     }
 
-    private void writeToString(ArrayList<String> arr)
+    private String writeToString(ArrayList<String> arr)
     {
         StringBuilder sb = new StringBuilder();
         for(String i : arr){
             sb=sb.append(i);
         }
-        if(getActivity()!=null){((MainActivity)getActivity()).setPSearchQuery(sb.toString());}
+        return sb.toString();
     }
+
 }
