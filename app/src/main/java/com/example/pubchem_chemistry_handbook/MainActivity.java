@@ -18,7 +18,7 @@ import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
-import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
+import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedReader;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onBackPressed();
         try{
-            CompFragment.onBackPressed();
+            CompoundFragment.onBackPressed();
         }catch(Exception e){}
 
     }
@@ -90,18 +90,18 @@ public class MainActivity extends AppCompatActivity {
     public void setPSearchQuery(String str) { pSearchQuery=str;}
     public String getPSearchQuery(){return pSearchQuery;}
 
-    public boolean checkFav(int testEID) {
+    public boolean checkFav(int testCID) {
         for (Compound one : global.getFav()) {
-            if (one.getEID() == testEID) {
+            if (one.getCID() == testCID) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean checkRecent(int testEID) {
+    public boolean checkRecent(int testCID) {
         for (Compound one : global.getRecents()) {
-            if (one.getEID() == testEID) {
+            if (one.getCID() == testCID) {
                 return true;
             }
         }
@@ -109,38 +109,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void addRecent(Compound EID) {
+    public void addRecent(Compound CID) {
         try {
             File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
             FileWriter fr = new FileWriter(file, true);
-            fr.write("\n" + Integer.toString(EID.getEID()));
+            fr.write("\n" + Integer.toString(CID.getCID()));
             fr.close();
         } catch (IOException e) {
         }
-        global.getRecents().add(0, EID);
+        global.getRecents().add(0, CID);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void addFav(Compound EID) {
+    public void addFav(Compound CID) {
         try {
             File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
             FileWriter fr = new FileWriter(file, true);
-            fr.write("\n" + Integer.toString(EID.getEID()));
+            fr.write("\n" + Integer.toString(CID.getCID()));
             fr.close();
         } catch (IOException e) {
 
         }
-        global.getFav().add(0, EID);
-        System.out.println("ADDED TO FAV EID: " + EID.getEID());
+        global.getFav().add(0, CID);
+        System.out.println("ADDED TO FAV CID: " + CID.getCID());
         System.out.println("NEW: " + global.getFav());
     }
 
-    public void removeRecent(int EID) {
+    public void removeRecent(int CID) {
         try {
             File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
             File temp = File.createTempFile("temp-recents", ".txt", file.getParentFile());
             String charset = "UTF-8";
-            String delete = Integer.toString(EID) + "\n";
+            String delete = Integer.toString(CID) + "\n";
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
 
@@ -159,19 +159,19 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         for (Compound one : global.getRecents()) {
-            if (one.getEID() == EID) {
+            if (one.getCID() == CID) {
                 global.getRecents().remove(one);
                 return;
             }
         }
     }
 
-    public void removeFav(int EID) {
+    public void removeFav(int CID) {
         try {
             File file = new File(getApplication().getFilesDir().toString() + "/favorites.txt");
             File temp = File.createTempFile("temp-fav", ".txt", file.getParentFile());
             String charset = "UTF-8";
-            String delete = Integer.toString(EID);
+            String delete = Integer.toString(CID);
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
 
@@ -189,9 +189,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("REMOVE TO FAV EID: " + EID);
+        System.out.println("REMOVE TO FAV CID: " + CID);
         for (Compound one : global.getFav()) {
-            if (one.getEID() == EID) {
+            if (one.getCID() == CID) {
                 global.getFav().remove(one);
                 System.out.println("NEW: " + global.getFav());
                 return;
@@ -237,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Compound findCompound(int EID) {
+    public Compound findCompound(int CID) {
         for (Compound item : global.getCompounds()) {
-            if (item.getEID() == EID) {
+            if (item.getCID() == CID) {
                 return item;
             }
         }
@@ -290,10 +290,10 @@ public class MainActivity extends AppCompatActivity {
             }
             while (sc.hasNextLine()) {
                 try {
-                    int EID = Integer.parseInt(sc.nextLine());
+                    int CID = Integer.parseInt(sc.nextLine());
                     String note = sc.nextLine();
-                    findCompound(EID).setNotes(note);
-                    System.out.println("Added Note '" + findCompound(EID).getNotes() + "' to: " + findCompound(EID).getName());
+                    findCompound(CID).setNotes(note);
+                    System.out.println("Added Note '" + findCompound(CID).getNotes() + "' to: " + findCompound(CID).getName());
                 } catch (Exception e) {
 
                 }
@@ -304,13 +304,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setNote(Compound EID, String note) {
+    public void setNote(Compound CID, String note) {
         try {
             File file = new File(getApplication().getFilesDir().toString() + "/notes.txt");
             FileWriter fr = new FileWriter(file, true);
-            fr.write("\n" + EID.getEID() + "\n" + note);
+            fr.write("\n" + CID.getCID() + "\n" + note);
             fr.close();
-            EID.setNotes(note);
+            CID.setNotes(note);
         } catch (IOException e) {
 
         }

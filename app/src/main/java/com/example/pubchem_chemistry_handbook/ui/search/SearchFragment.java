@@ -35,6 +35,7 @@ import com.downloader.Progress;
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
+import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 import com.example.pubchem_chemistry_handbook.ui.pSearch.pSearchFragment;
 
@@ -245,7 +246,7 @@ public class SearchFragment extends Fragment {
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
 
-                Fragment fragment = new CompFragment();
+                Fragment fragment = new CompoundFragment();
                     FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.search_frag, fragment);

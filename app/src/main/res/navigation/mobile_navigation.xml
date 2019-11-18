@@ -30,7 +30,7 @@
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/navigation_compFrag"
-        android:name="com.example.pubchem_chemistry_handbook.ui.search.CompFragment"
+        android:name="com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment"
         android:label="compFrag"
         tools:layout="@layout/fragment_comp" />
     <fragment

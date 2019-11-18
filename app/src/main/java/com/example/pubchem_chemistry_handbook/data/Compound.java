@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Compound {
-    int eid;
+    int CID;
     String name,formula, notes;
     List<SafetyItem> safetyItems = new ArrayList<>();
     List<String> nProperties = new ArrayList<>();
     List<String> vProperties = new ArrayList<>();
     List<String> uProperties = new ArrayList<>();
 
-    public Compound(int eid, String name, String formula) {
-        this.eid = eid;
+    public Compound(int CID, String name, String formula) {
+        this.CID = CID;
         this.name = name;
         this.formula = formula;
         this.notes = "";
@@ -30,13 +30,13 @@ public class Compound {
         return name;
     }
 
-    public int getEID() { return eid; }
+    public int getCID() { return CID; }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setEID(int eid) { this.eid = eid; }
+    public void setCID(int CID) { this.CID = CID; }
 
     public String getFormula() {
         return formula;

@@ -24,7 +24,7 @@ import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
-import com.example.pubchem_chemistry_handbook.ui.search.CompFragment;
+import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onItemClick(final int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-                Fragment fragment= new CompFragment();
+                Fragment fragment= new CompoundFragment();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.favorites_frag, fragment);
                 transaction.addToBackStack(null);

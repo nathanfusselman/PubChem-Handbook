@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements Filterable {
+public class RVAdapter extends RecyclerView.Adapter<CompoundListItem> implements Filterable {
     public List<Compound> CompoundList;
     private List<Compound> CompoundListFull;
     private global global;
@@ -41,13 +41,13 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public CompoundListItem onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        return new ItemViewHolder(view, mListener);
+        return new CompoundListItem(view, mListener);
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(CompoundListItem holder, int position) {
         Compound student = CompoundList.get(position);
         holder.bind(student);
     }
@@ -74,7 +74,7 @@ public class RVAdapter extends RecyclerView.Adapter<ItemViewHolder> implements F
                 } else {
                     for (Compound item : CompoundListFull) {
                         if (isNumeric(filterPattern)) {
-                            if (Integer.parseInt(filterPattern) == item.getEID()) {
+                            if (Integer.parseInt(filterPattern) == item.getCID()) {
                                 filteredList.add(item);
                             }
                         } else {
