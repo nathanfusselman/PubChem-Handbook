@@ -53,7 +53,7 @@ import java.lang.ref.WeakReference;
 public class CompoundFragment extends Fragment {
     Compound currentCompound = new Compound(0,"","");
 
-    public static Boolean fragExists=true;
+    public static Boolean fragExists;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

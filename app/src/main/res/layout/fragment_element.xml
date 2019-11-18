@@ -210,8 +210,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="100dp"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/leftLinLayout"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/toplinlayout"
             app:layout_constraintBottom_toBottomOf="parent"
