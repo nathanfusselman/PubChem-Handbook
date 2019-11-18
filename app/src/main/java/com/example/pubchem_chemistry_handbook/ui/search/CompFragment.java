@@ -48,17 +48,18 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class CompFragment extends Fragment {
-    Compound currentCompound = new Compound(0,"","");
-    int current_pos;
-    static ScrollView compoundView;
+    private Compound currentCompound = new Compound(0,"","");
+    public static Boolean fragExists;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ScrollView compoundView;
+        fragExists=true;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
-        current_pos=(((MainActivity)getActivity()).getGlobalCurPos());
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compoundView = view.findViewById(R.id.compound_scrollView);
@@ -291,13 +292,17 @@ public class CompFragment extends Fragment {
                                                 if (struct_name.equals("2D Structure")) {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
+                                                    WeakReference<ImageView> weakComp2dView;
+                                                    weakComp2dView = new WeakReference<>(compoundView_2dImage);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakComp2dView);
                                                     image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
+                                                    WeakReference<ImageView> weakComp3dView;
+                                                    weakComp3dView = new WeakReference<>(compoundView_3dImage);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakComp3dView);
                                                     image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getEID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
@@ -310,7 +315,9 @@ public class CompFragment extends Fragment {
                                                     String ExternalURLData = (String) contents.get(0);
                                                     StructureImageLayout.addView(StructureImages[2]);
                                                     StructureTextLayout.addView(StructureTexts[2]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_crystal);
+                                                    WeakReference<ImageView> weakCompViewCrystal;
+                                                    weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCompViewCrystal);
                                                     image_Loader.execute(ExternalURLData);
                                                 }
                                             }
@@ -386,10 +393,15 @@ public class CompFragment extends Fragment {
                 compoundView.setVisibility(View.VISIBLE);
 
         return view;
+
     }
-    public static void onBackPressed(){
-        compoundView.setVisibility(View.INVISIBLE);
-    }
+
+    public static void onBackPressed(View view){
+        {
+            fragExists=false;
+            view.setVisibility(View.INVISIBLE);
+        }
+}
 }
 
 

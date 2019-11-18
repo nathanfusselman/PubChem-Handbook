@@ -11,19 +11,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 
-public class ItemViewHolder extends RecyclerView.ViewHolder {
+class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView name_TextView;
-    public TextView iso_TextView;
-    public ImageView image_ImageView;
+    private TextView name_TextView;
+    private TextView iso_TextView;
+    private ImageView image_ImageView;
 
 
-    public ItemViewHolder(View itemView, final RVAdapter.OnItemClickListener listener) {
+    ItemViewHolder(View itemView, final RVAdapter.OnItemClickListener listener) {
         super(itemView);
         itemView.setClickable(true);
-        image_ImageView = (ImageView) itemView.findViewById(R.id.compound_image);
-        name_TextView = (TextView) itemView.findViewById(R.id.compound_name);
-        iso_TextView = (TextView) itemView.findViewById(R.id.compound_formula);
+        image_ImageView = itemView.findViewById(R.id.compound_image);
+        name_TextView = itemView.findViewById(R.id.compound_name);
+        iso_TextView = itemView.findViewById(R.id.compound_formula);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +38,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(Compound compound) {
+    void bind(Compound compound) {
         Glide.with(image_ImageView)
                 .load("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + compound.getEID() +"&t=s")
                 .placeholder(R.drawable.ic_cloud_queue_black_24dp)

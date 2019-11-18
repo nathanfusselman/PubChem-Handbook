@@ -1,7 +1,6 @@
 package com.example.pubchem_chemistry_handbook.ui.pSearch;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -18,35 +16,28 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.ui.pTable.RecyclerItemClickListener;
-import com.example.pubchem_chemistry_handbook.ui.pTable.pTableViewModel;
 import com.example.pubchem_chemistry_handbook.ui.pTable_Adapter;
 
 import java.util.ArrayList;
 
 public class pSearchFragment extends Fragment {
 
-    private com.example.pubchem_chemistry_handbook.ui.pTable.pTableViewModel pTableViewModel;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    pTable_Adapter mAdapter;
-    final ArrayList<String> symbols = new ArrayList<>();
+
+    private final ArrayList<String> symbols = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText()){
-            ((MainActivity) getActivity()).clearKeyboard();}
+        RecyclerView recyclerView;
+        RecyclerView.LayoutManager layoutManager;
+        pTable_Adapter mAdapter;
 
-        pTableViewModel = ViewModelProviders.of(this).get(pTableViewModel.class);
         View view = inflater.inflate(R.layout.fragment_ptable, container, false);
 
         final TextView currentQuery = view.findViewById(R.id.element_delatils_Electron_Affinity);
@@ -55,7 +46,7 @@ public class pSearchFragment extends Fragment {
         queryTitle.setText("Current Query:");
         currentQuery.setTextSize(14);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        if(getActivity()!=null){getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);}
         recyclerView = view.findViewById(R.id.pTable_Recycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(getContext(), 18);
@@ -65,11 +56,12 @@ public class pSearchFragment extends Fragment {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
+                        if(getActivity()!=null){
                         if (((MainActivity)getActivity()).getGlobal().getElements().get(position).getAtomicNumber() > 0) {
                             symbols.add(((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol());
-                            Log.d("PSearch", "Symbol Pressed " + symbols.get(symbols.size()-1).toString());
+                            Log.d("PSearch", "Symbol Pressed " + symbols.get(symbols.size()-1));
                             currentQuery.setText(symbols.toString());
-                        }
+                        }}
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -83,8 +75,8 @@ public class pSearchFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int item) {
                                 ListView lw = ((AlertDialog)dialog).getListView();
                                 Object checkedItem = lw.getAdapter().getItem(lw.getCheckedItemPosition());
-                                symbols.add((((MainActivity)getActivity()).getGlobal().getElements().get(cur_pos).getSymbol())+checkedItem.toString());
-                                Log.d("PSearch", "Symbol Long Pressed " + symbols.get(symbols.size()-1).toString());
+                                if(getActivity()!=null){symbols.add((((MainActivity)getActivity()).getGlobal().getElements().get(cur_pos).getSymbol())+checkedItem.toString());}
+                                Log.d("PSearch", "Symbol Long Pressed " + symbols.get(symbols.size()-1));
                                 currentQuery.setText(symbols.toString());
                             }
                         });
@@ -100,7 +92,7 @@ public class pSearchFragment extends Fragment {
         );
 
         //the layout on which you are working
-        RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.ptable_relative_frag);
+        RelativeLayout layout = view.findViewById(R.id.ptable_relative_frag);
 
         //set the properties for button
         Button btnCoef = new Button(getContext());
@@ -124,7 +116,7 @@ public class pSearchFragment extends Fragment {
                                 ListView lw = ((AlertDialog)dialog).getListView();
                                 Object checkedItem = lw.getAdapter().getItem(lw.getCheckedItemPosition());
                                 symbols.add(checkedItem.toString());
-                                Log.d("PSearch", "coeff added " + symbols.get(symbols.size()-1).toString());
+                                Log.d("PSearch", "coeff added " + symbols.get(symbols.size()-1));
                                 currentQuery.setText(symbols.toString());
                             }
                         });
@@ -182,19 +174,19 @@ public class pSearchFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("search button", "on click now");
                 writeToString(symbols);
-                Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
-                getActivity().onBackPressed();                                             //this works but is bad hahaha, this is also what creates the news bug on second pSearch
+                if(getActivity()!=null){Log.d("check for pSearch",((MainActivity) getActivity()).getPSearchQuery());
+                getActivity().onBackPressed();}
             }
         });
         return view;
     }
 
-    public void writeToString(ArrayList<String> arr)
+    private void writeToString(ArrayList<String> arr)
     {
         StringBuilder sb = new StringBuilder();
         for(String i : arr){
             sb=sb.append(i);
         }
-        ((MainActivity)getActivity()).setPSearchQuery(sb.toString());
+        if(getActivity()!=null){((MainActivity)getActivity()).setPSearchQuery(sb.toString());}
     }
 }

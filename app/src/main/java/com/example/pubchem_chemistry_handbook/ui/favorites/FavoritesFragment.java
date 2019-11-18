@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -31,25 +29,21 @@ import java.util.List;
 
 public class FavoritesFragment extends Fragment {
 
-    private FavoritesViewModel favoritesViewModel;
-    RecyclerView compound_rview;
-    RVAdapter rvAdapter;
-    List<Compound> currentList;
-    int current_pos = 0;
-    Compound current_Compound = null;
-    int current_state = 0;
+    //FavoritesViewModel favoritesViewModel; //notused
+    private RVAdapter rvAdapter;
+    private List<Compound> currentList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText()){
-            ((MainActivity) getActivity()).clearKeyboard();}
 
-        currentList = new ArrayList<Compound>(((MainActivity)getActivity()).getGlobal().getFav());
-        current_state = 1;
-        //favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        if(getActivity()!=null){
+            InputMethodManager imm = (InputMethodManager) getActivity()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isAcceptingText()){
+                ((MainActivity) getActivity()).clearKeyboard();}}
+
+        RecyclerView compound_rview;
+        if(getActivity() != null) {currentList = new ArrayList<>(((MainActivity)getActivity()).getGlobal().getFav());}
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         compound_rview = view.findViewById(R.id.fav_recent_recyclerview);
@@ -61,34 +55,6 @@ public class FavoritesFragment extends Fragment {
         final Button recents_button = view.findViewById(R.id.recent);
         favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        final ImageView[] HazardImages = new ImageView[9];
-        final TextView[] HazardTexts = new TextView[9];
-        HazardImages[0] = view.findViewById(R.id.SafetyItems_Images_GHS01);
-        HazardTexts[0] = view.findViewById(R.id.SafetyItems_Text_GHS01);
-        HazardImages[1] = view.findViewById(R.id.SafetyItems_Images_GHS02);
-        HazardTexts[1] = view.findViewById(R.id.SafetyItems_Text_GHS02);
-        HazardImages[2] = view.findViewById(R.id.SafetyItems_Images_GHS03);
-        HazardTexts[2] = view.findViewById(R.id.SafetyItems_Text_GHS03);
-        HazardImages[3] = view.findViewById(R.id.SafetyItems_Images_GHS04);
-        HazardTexts[3] = view.findViewById(R.id.SafetyItems_Text_GHS04);
-        HazardImages[4] = view.findViewById(R.id.SafetyItems_Images_GHS05);
-        HazardTexts[4] = view.findViewById(R.id.SafetyItems_Text_GHS05);
-        HazardImages[5] = view.findViewById(R.id.SafetyItems_Images_GHS06);
-        HazardTexts[5] = view.findViewById(R.id.SafetyItems_Text_GHS06);
-        HazardImages[6] = view.findViewById(R.id.SafetyItems_Images_GHS07);
-        HazardTexts[6] = view.findViewById(R.id.SafetyItems_Text_GHS07);
-        HazardImages[7] = view.findViewById(R.id.SafetyItems_Images_GHS08);
-        HazardTexts[7] = view.findViewById(R.id.SafetyItems_Text_GHS08);
-        HazardImages[8] = view.findViewById(R.id.SafetyItems_Images_GHS09);
-        HazardTexts[8] = view.findViewById(R.id.SafetyItems_Text_GHS09);
-        final ImageView[] StructureImages = new ImageView[3];
-        final TextView[] StructureTexts = new TextView[3];
-        StructureImages[0] = view.findViewById(R.id.compoundView_2dImage);
-        StructureTexts[0] = view.findViewById(R.id.compoundView_images_names_2d);
-        StructureImages[1] = view.findViewById(R.id.compoundView_3dImage);
-        StructureTexts[1] = view.findViewById(R.id.compoundView_images_names_3d);
-        StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
-        StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
 
         rvAdapter.notifyDataSetChanged();
 
@@ -97,9 +63,8 @@ public class FavoritesFragment extends Fragment {
                 favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                 currentList.clear();
-                currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());
+                if(getActivity() != null) {currentList.addAll(((MainActivity)getActivity()).getGlobal().getFav());}
                 rvAdapter.notifyDataSetChanged();
-                current_state = 1;
             }
         });
 
@@ -108,9 +73,8 @@ public class FavoritesFragment extends Fragment {
                 favorites_button.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                 recents_button.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 currentList.clear();
-                currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());
+                if(getActivity() != null) {currentList.addAll(((MainActivity)getActivity()).getGlobal().getRecents());}
                 rvAdapter.notifyDataSetChanged();
-                current_state = 2;
             }
         });
 
@@ -118,7 +82,7 @@ public class FavoritesFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(final int position) {
-                ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
+                if(getActivity() != null) {((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);}
                 Fragment fragment= new CompFragment();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.favorites_frag, fragment);

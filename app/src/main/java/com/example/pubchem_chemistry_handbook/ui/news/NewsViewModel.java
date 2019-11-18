@@ -47,10 +47,10 @@ public class NewsViewModel extends ViewModel {
         textDay.setValue(currentDay);
     }
 
-    public LiveData<String> getDate() {
+    LiveData<String> getDate() {
         return textDate;
     }
-    public LiveData<String> getDay() {
+    LiveData<String> getDay() {
         return textDay;
     }
 }

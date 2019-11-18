@@ -1,23 +1,23 @@
 package com.example.pubchem_chemistry_handbook.data;
 
 public class Element {
-    int AtomicNumber;
-    String Symbol;
-    String Name;
-    String ChemicalGroupBlock;
-    double AtomicMass;
-    String ElectronConfiguration;
-    double Electronegativity;
-    int AtomicRadius;
-    double IonizationEnergy;
-    double ElectronAffinity;
-    String OxidationStates;
-    String StandardState;
-    double MeltingPoint;
-    double BoilingPoint;
-    double Density;
-    String CPKHexColor;
-    String YearDiscoverd;
+    private int AtomicNumber;
+    private String Symbol;
+    private String Name;
+    private String ChemicalGroupBlock;
+    private double AtomicMass;
+    private String ElectronConfiguration;
+    private double Electronegativity;
+    private int AtomicRadius;
+    private double IonizationEnergy;
+    private double ElectronAffinity;
+    private String OxidationStates;
+    private String StandardState;
+    private double MeltingPoint;
+    private double BoilingPoint;
+    private double Density;
+    private String CPKHexColor;
+    private String YearDiscoverd;
 
     public Element(int atomicNumber, String symbol, String name, String chemicalGroupBlock, double atomicMass, String electronConfiguration, double electronegativity, int atomicRadius, double ionizationEnergy, double electronAffinity, String oxidationStates, String standardState, double meltingPoint, double boilingPoint, double density, String CPKHexColor, String yearDiscoverd) {
         this.AtomicNumber = atomicNumber;

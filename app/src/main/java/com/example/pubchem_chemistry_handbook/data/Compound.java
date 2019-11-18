@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Compound {
-    int eid;
-    String name,formula, notes;
-    List<SafetyItem> safetyItems = new ArrayList<>();
-    List<String> nProperties = new ArrayList<>();
-    List<String> vProperties = new ArrayList<>();
-    List<String> uProperties = new ArrayList<>();
+    private int eid;
+    private String name,formula, notes;
+    private List<SafetyItem> safetyItems = new ArrayList<>();
+    private List<String> nProperties = new ArrayList<>();
+    private List<String> vProperties = new ArrayList<>();
+    private List<String> uProperties = new ArrayList<>();
 
     public Compound(int eid, String name, String formula) {
         this.eid = eid;
