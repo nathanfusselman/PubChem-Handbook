@@ -209,7 +209,7 @@ public class SearchFragment extends Fragment {
                                 }
                                 try {
                                     is.close();
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 rvAdapter.notifyDataSetChanged();
