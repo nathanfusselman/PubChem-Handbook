@@ -58,8 +58,7 @@ public class CompoundFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ScrollView compoundView;
-        fragExists=true;
+        final ScrollView compoundView;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
         final View view = inflater.inflate(R.layout.fragment_comp, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -417,7 +416,6 @@ public class CompoundFragment extends Fragment {
 
     public static void onBackPressed(View view){
         {
-            fragExists=false;
             view.setVisibility(View.INVISIBLE);
         }
 }
