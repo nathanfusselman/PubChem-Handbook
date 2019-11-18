@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
+    public static Boolean fragExists=true;
     Compound currentCompound = new Compound(0,"","");
     int current_pos;
     static ScrollView compoundView;
@@ -314,13 +315,15 @@ public class CompoundFragment extends Fragment {
                                                 if (struct_name.equals("2D Structure")) {
                                                     StructureImageLayout.addView(StructureImages[0]);
                                                     StructureTextLayout.addView(StructureTexts[0]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_2dImage);
+                                                    WeakReference<ImageView> weakCV2D=new WeakReference<ImageView>(compoundView_2dImage);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
                                                     image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("3D Conformer")) {
                                                     StructureImageLayout.addView(StructureImages[1]);
                                                     StructureTextLayout.addView(StructureTexts[1]);
-                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(compoundView_3dImage);
+                                                    WeakReference<ImageView> weakCV3D=new WeakReference<ImageView>(compoundView_3dImage);
+                                                    AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
                                                     image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s");
                                                 }
                                                 if (struct_name.equals("Crystal Structures")) {
