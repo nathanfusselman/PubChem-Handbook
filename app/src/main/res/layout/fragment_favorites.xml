@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/favorites_frag">
-<LinearLayout
-    android:layout_width="400dp"
-    android:layout_height="45dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:id="@+id/linlayout">
-    <Button
-        android:id="@+id/favorite"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="5dp"
-        android:text="Favorites"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/recent"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
-        android:text="Recent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</LinearLayout>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/linlayout">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingLeft="4.0dip"
+            android:paddingTop="5.0dip"
+            android:paddingRight="4.0dip"
+            android:paddingBottom="1.0dip"
+            android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/favorite"
+                android:layout_width="0.0dip" android:layout_height="fill_parent"
+                android:text="Favorites"
+                android:layout_weight="1.0"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/recent"
+                android:layout_width="0.0dip" android:layout_height="fill_parent"
+                android:text="Recent"
+                android:layout_weight="1.0" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fav_recent_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linlayout"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fav_recent_recyclerview2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"

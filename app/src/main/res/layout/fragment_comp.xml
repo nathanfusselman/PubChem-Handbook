@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/top_controlls"
                 android:orientation="horizontal"
-                android:layout_gravity="right"
-                >
+                android:layout_gravity="right">
 
                 <Button
                     android:id="@+id/shareButton"
@@ -403,7 +402,7 @@
                     <Button
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="237dp"
+                        android:layout_marginLeft="335dp"
                         android:text="X"
                         android:textColor="#E91E63"
                         android:textSize="20sp"
