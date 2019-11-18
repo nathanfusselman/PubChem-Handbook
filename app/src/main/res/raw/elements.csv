@@ -114,16 +114,16 @@
 106;Sg;Seaborgium;Transition metal;271.134;[Rn]7s2 5f14 6d4;null;132;null;null;null;Solid;null;null;null;D90045;1974
 107;Bh;Bohrium;Transition metal;274.144;[Rn]7s2 5f14 6d5;null;128;null;null;null;Solid;null;null;null;E00038;1976
 108;Hs;Hassium;Transition metal;277.152;[Rn]7s2 5f14 6d6;null;126;null;null;null;Solid;null;null;null;E6002E;1984
-109;Mt;Meitnerium;Transition metal;278.156;[Rn]7s2 5f14 6d7;null;128;null;null;null;Solid;null;null;null;EB0026;1982
-110;Ds;Darmstadtium;Transition metal;281.165;[Rn]7s2 5f14 6d8;null;132;null;null;null;Expected to be a Solid;null;null;null;null;1994
-111;Rg;Roentgenium;Transition metal;282.169;[Rn]7s2 5f14 6d9;null;138;null;null;null;Expected to be a Solid;null;null;null;null;1994
-112;Cn;Copernicium;Transition metal;285.177;[Rn]7s2 5f14 6d10;null;147;null;null;null;Expected to be a Solid;null;null;null;null;1996
-113;Nh;Nihonium;Post-transition metal;286.183;[Rn]5f14 6d10 7s2 7p1;null;170;null;null;null;Expected to be a Solid;null;null;null;null;2004
-114;Fl;Flerovium;Post-transition metal;289.191;[Rn]7s2 7p2 5f14 6d10;null;180;null;null;null;Expected to be a Solid;null;null;null;null;1998
-115;Mc;Moscovium;Post-transition metal;290.196;[Rn]7s2 7p3 5f14 6d10;null;187;null;null;null;Expected to be a Solid;null;null;null;null;2003
-116;Lv;Livermorium;Post-transition metal;293.205;[Rn]7s2 7p4 5f14 6d10;null;183;null;null;null;Expected to be a Solid;null;null;null;null;2000
-117;Ts;Tennessine;Halogen;294.211;[Rn]7s2 7p5 5f14 6d10;null;138;null;null;null;Expected to be a Solid;null;null;null;null;2010
-118;Og;Oganesson;Noble gas;294.214;[Rn]7s2 7p6 5f14 6d10;null;null;null;null;null;Expected to be a Gas;null;null;null;null;2006
+109;Mt;Meitnerium;Transition metal;278.156;[Rn]7s2 5f14 6d7 (calculated);null;128;null;null;null;Solid;null;null;null;EB0026;1982
+110;Ds;Darmstadtium;Transition metal;281.165;[Rn]7s2 5f14 6d8 (predicted);null;132;null;null;null;Expected to be a Solid;null;null;null;null;1994
+111;Rg;Roentgenium;Transition metal;282.169;[Rn]7s2 5f14 6d9 (predicted);null;138;null;null;null;Expected to be a Solid;null;null;null;null;1994
+112;Cn;Copernicium;Transition metal;285.177;[Rn]7s2 5f14 6d10 (predicted);null;147;null;null;null;Expected to be a Solid;null;null;null;null;1996
+113;Nh;Nihonium;Post-transition metal;286.183;[Rn]5f14 6d10 7s2 7p1 (predicted);null;170;null;null;null;Expected to be a Solid;null;null;null;null;2004
+114;Fl;Flerovium;Post-transition metal;289.191;[Rn]7s2 7p2 5f14 6d10 (predicted);null;180;null;null;null;Expected to be a Solid;null;null;null;null;1998
+115;Mc;Moscovium;Post-transition metal;290.196;[Rn]7s2 7p3 5f14 6d10 (predicted);null;187;null;null;null;Expected to be a Solid;null;null;null;null;2003
+116;Lv;Livermorium;Post-transition metal;293.205;[Rn]7s2 7p4 5f14 6d10 (predicted);null;183;null;null;null;Expected to be a Solid;null;null;null;null;2000
+117;Ts;Tennessine;Halogen;294.211;[Rn]7s2 7p5 5f14 6d10 (predicted);null;138;null;null;null;Expected to be a Solid;null;null;null;null;2010
+118;Og;Oganesson;Noble gas;294.214;[Rn]7s2 7p6 5f14 6d10 (predicted);null;null;null;null;null;Expected to be a Gas;null;null;null;null;2006
 -2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
 -2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
 -2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
