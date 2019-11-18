@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment {
              transaction.addToBackStack(null);
              searchView.setFocusable(false);
              searchView.clearFocus();
-             transaction.add(R.id.search_frag,fragment);
+             transaction.add(R.id.search_frag ,fragment);
              transaction.commit();
 
             }
