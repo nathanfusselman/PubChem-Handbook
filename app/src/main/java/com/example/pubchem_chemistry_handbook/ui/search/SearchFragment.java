@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +63,8 @@ public class SearchFragment extends Fragment {
     private String search = "";
     private boolean webSearch = false;
     private ProgressBar spinner;
-
+    private int waitingTime = 200;
+    private CountDownTimer cntr;
 
     @Nullable
     @Override
@@ -643,7 +645,7 @@ public class SearchFragment extends Fragment {
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
+            public boolean onQueryTextChange(final String s) {
                 spinner.setVisibility(View.GONE);
                 PRDownloader.cancelAll();
                 if (webSearch) {
@@ -652,20 +654,34 @@ public class SearchFragment extends Fragment {
                     rvAdapter.notifyDataSetChanged();
                     webSearch = false;
                 }
-                search = s;
-                rvAdapter.getFilter().filter(search);
-                resutlsNumb.setText("Results: " + "...");
-                ((MainActivity)getActivity()).updating = true;
-                int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
-                int count = 0;
-                while (((MainActivity)getActivity()).updating && count < 25000000) {
-                    count++;
-                    if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
-                        resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
-                        System.out.println("Count: " + count);
-                        ((MainActivity)getActivity()).updating = false;
-                    }
+
+                if(cntr != null){
+                    cntr.cancel();
                 }
+                cntr = new CountDownTimer(waitingTime, 500) {
+
+                    public void onTick(long millisUntilFinished) {
+                        Log.d("TIME","seconds remaining: " + millisUntilFinished / 1000);
+                    }
+
+                    public void onFinish() {
+                        Log.d("FINISHED","DONE");
+                        search = s;
+                        rvAdapter.getFilter().filter(search);
+                        resutlsNumb.setText("Results: " + "...");
+                        ((MainActivity)getActivity()).updating = true;
+                        int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
+                        int count = 0;
+                        while (((MainActivity)getActivity()).updating && count < 25000000) {
+                            count++;
+                            if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
+                                resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
+                                System.out.println("Count: " + count);
+                                ((MainActivity)getActivity()).updating = false;
+                            }
+                        }
+                    }};
+                cntr.start();
                 return false;
             }
         });
