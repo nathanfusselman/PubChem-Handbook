@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.downloader.PRDownloader;
 import com.example.pubchem_chemistry_handbook.MainActivity;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.ui.RecyclerItemClickListener;
@@ -29,6 +32,8 @@ public class pSearchFragment extends Fragment {
 
 
     private final ArrayList<String> symbols = new ArrayList<>();
+
+    boolean exactSearch_state = false;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,6 +54,17 @@ public class pSearchFragment extends Fragment {
         final ImageButton btnBack = view.findViewById(R.id.backspace_button);
         final ImageButton btnClear = view.findViewById(R.id.clear_button);
         final ImageButton btnSearch = view.findViewById(R.id.search_button);
+        final CheckBox exactSearch = view.findViewById(R.id.search_type_exactSearch);
+
+        exactSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                exactSearch_state = isChecked;
+                currentQuery.setText((writeToString(symbols)));
+            }
+        });
+
         recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
@@ -182,8 +198,20 @@ public class pSearchFragment extends Fragment {
     private String writeToString(ArrayList<String> arr)
     {
         StringBuilder sb = new StringBuilder();
-        for(String i : arr){
-            sb=sb.append(i);
+        if (exactSearch_state) {
+            for(String i : arr){
+                sb=sb.append(i);
+            }
+        } else {
+            boolean first = true;
+            for(String i : arr) {
+                if (first) {
+                    sb = sb.append(i);
+                    first = false;
+                } else {
+                    sb = sb.append(" " + i);
+                }
+            }
         }
         return sb.toString();
     }

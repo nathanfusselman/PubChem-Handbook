@@ -78,6 +78,7 @@
                                     android:layout_height="1dp"
                                     android:layout_marginTop="70dp"
                                     android:background="@android:color/darker_gray"
+                                    android:id="@+id/bottomLine"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintStart_toStartOf="@+id/left_guideline"/>
 
@@ -87,6 +88,17 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     app:layout_constraintGuide_percent="0.17" />
+
+                                <CheckBox
+                                    android:id="@+id/search_type_exactSearch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="32dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="Exact Match"
+                                    app:layout_constraintLeft_toLeftOf="@+id/search_button"
+                                    app:layout_constraintTop_toBottomOf="@+id/bottomLine" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>
