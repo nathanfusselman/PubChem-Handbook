@@ -134,6 +134,7 @@ public class CompoundFragment extends Fragment {
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         final Button shareButton = view.findViewById(R.id.shareButton);
         final TextView notes = view.findViewById(R.id.notes);
+        notes.setText(currentCompound.getNotes());
         final Button notesButton = view.findViewById(R.id.notes_button);
 
         notesButton.setText("Edit Notes");
@@ -149,6 +150,7 @@ public class CompoundFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         notes.setText(input.getText().toString());
+                        currentCompound.setNotes(notes.getText().toString());
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
