@@ -34,6 +34,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
@@ -284,11 +286,34 @@ public class MainActivity extends AppCompatActivity {
         InputStream is = getResources().openRawResource(R.raw.elements);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
+        boolean first = true;
 
         try {
             while (((line = reader.readLine()) != null)) {
-                String[] tokens = line.split(";");
-                global.getElements().add(new Element(getInt(tokens[0]), tokens[1], tokens[2], tokens[3], getDouble(tokens[4]), tokens[5], getDouble(tokens[6]), getInt(tokens[7]), getDouble(tokens[8]), getDouble(tokens[9]), tokens[10], tokens[11], getDouble(tokens[12]), getDouble(tokens[13]), getDouble(tokens[14]), tokens[15], tokens[16]));
+                if (line.charAt(0) == '0') {
+                    global.getElements().add(new Element(0,null,null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                } else {
+                    if (line.charAt(0) == '-' && line.charAt(1) == '1') {
+                        if (first) {
+                            first= false;
+                            global.getElements().add(new Element(-1,"         *",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                        } else {
+                            global.getElements().add(new Element(-1,"       **",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                        }
+                    } else {
+                        if (line.charAt(0) == '-' && line.charAt(1) == '2') {
+                            global.getElements().add(new Element(-2,null,null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                        } else {
+                            List<String> tokens = split(line);
+                            try {
+                                global.getElements().add(new Element(getInt(tokens.get(0)), tokens.get(1), tokens.get(2), tokens.get(15), getDouble(tokens.get(3)), tokens.get(5), getDouble(tokens.get(6)), getInt(tokens.get(7)), getDouble(tokens.get(8)), getDouble(tokens.get(9)), tokens.get(10), tokens.get(11), getDouble(tokens.get(12)), getDouble(tokens.get(13)), getDouble(tokens.get(14)), tokens.get(4), tokens.get(15)));
+                            } catch (Exception ex) {
+                                System.out.println("ERROR AT: " + tokens.get(0));
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
@@ -332,19 +357,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public double getDouble(String in) {
+        if (in != null) {
+            return Double.parseDouble(in);
+        } else {
+            return -10;
+        }
+
+        /*
         if (in.compareTo("null") != 0) {
             return Double.parseDouble(in);
         } else {
             return -10;
         }
+
+         */
     }
 
     public int getInt(String in) {
+        if (in != null) {
+            return Integer.parseInt(in);
+        } else {
+            return -10;
+        }
+        /*
         if (in.compareTo("null") != 0) {
             return Integer.parseInt(in);
         } else {
             return -10;
         }
+
+         */
     }
 
     public void clearKeyboard(){
@@ -354,5 +396,48 @@ public class MainActivity extends AppCompatActivity {
         try{
         inputMethodManager.hideSoftInputFromWindow(
                 getCurrentFocus().getWindowToken(), 0);}catch(Exception e){}
+    }
+
+    private List<String> split(String input) {
+        boolean inP = false;
+        boolean hadP = false;
+        int last = -1;
+        List<String> out = new ArrayList<>();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '\"') {
+                hadP = true;
+                if (inP == true) {
+                    inP = false;
+                } else {
+                    if (inP == false) {
+                        inP = true;
+                    }
+                }
+
+            }
+            if (input.charAt(i) == ',' && inP == false) {
+                if (hadP) {
+                    //System.out.println(input.substring(last + 2, i-1));
+                    if (input.substring(last + 2, i-1).length() == 0) {
+                        out.add(null);
+                    } else {
+                        out.add(input.substring(last + 2, i-1));
+                    }
+
+                } else {
+                    //System.out.println(input.substring(last + 1, i));
+                    if (input.substring(last + 1, i).length() == 0) {
+                        out.add(null);
+                    } else {
+                        out.add(input.substring(last + 1, i));
+                    }
+                }
+                last = i;
+                hadP = false;
+            }
+        }
+        //System.out.println(input.substring(last + 1, input.length() - 1));
+        out.add(input.substring(last + 1, input.length()-1));
+        return out;
     }
 }

@@ -748,5 +748,4 @@ public class SearchFragment extends Fragment {
         out.add(input.substring(last + 1, input.length()-1));
         return out;
     }
-
 }
