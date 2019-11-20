@@ -131,6 +131,7 @@ public class CompoundFragment extends Fragment {
         final Button shareButton = view.findViewById(R.id.shareButton);
         final TextView notes = view.findViewById(R.id.notes);
         final Button notesButton = view.findViewById(R.id.notes_button);
+
         notesButton.setText("Edit Notes");
         notesButton.setOnClickListener(new View.OnClickListener() {
             @Override

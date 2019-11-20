@@ -333,7 +333,7 @@
                             android:gravity="center"/>
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="105dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS09"
                             android:textSize="16dp"
