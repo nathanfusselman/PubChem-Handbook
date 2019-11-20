@@ -1,11 +1,18 @@
 package com.example.pubchem_chemistry_handbook.ui.compound;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -51,12 +59,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
-    Compound currentCompound = new Compound(0,"","");
-
+    private Compound currentCompound = new Compound(0,"","");
     public static Boolean fragExists;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         fragExists=true;
         final ScrollView compoundView;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
@@ -66,12 +73,26 @@ public class CompoundFragment extends Fragment {
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
+        compoundView_2dImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImage(compoundView_2dImage,v,container);
+            }});
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
+        compoundView_3dImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImage(compoundView_3dImage,v,container);
+            }});
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
+        compoundView_crystal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImage(compoundView_3dImage,v,container);
+            }});
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
-        final SearchView searchView = view.findViewById(R.id.searchView);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
         final Button favButton = view.findViewById(R.id.favButton);
@@ -108,6 +129,49 @@ public class CompoundFragment extends Fragment {
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         final Button shareButton = view.findViewById(R.id.shareButton);
+        final TextView notes = view.findViewById(R.id.notes);
+        final Button notesButton = view.findViewById(R.id.notes_button);
+
+        notesButton.setText("Edit Notes");
+        notesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext()).setNeutralButton("Clear",null);
+                builder.setTitle("Edit Notes");
+                final EditText input = new EditText(v.getContext());
+                builder.setView(input);
+                input.setText(notes.getText().toString());
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        notes.setText(input.getText().toString());
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                        button.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+                                input.setText("");
+                            }
+                        });
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        /*
         final EditText notes = view.findViewById(R.id.notes);
         final Button notescheck = view.findViewById(R.id.check);
         final Button notesx = view.findViewById(R.id.x);
@@ -130,16 +194,22 @@ public class CompoundFragment extends Fragment {
                 notes.setText(currentCompound.getNotes());
             }
         });
-
+        */
 
 
 
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID();
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                String shareNotes = notes.getText().toString();
+                //Intent i = new Intent(Intent.ACTION_VIEW);
+                //i.setData(Uri.parse(url));
+                //startActivity(i);
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
+                startActivity(Intent.createChooser(sharingIntent, "Share Compound Info"));
             }
         });
 
@@ -422,4 +492,25 @@ public class CompoundFragment extends Fragment {
             view.setVisibility(View.INVISIBLE);
         }
 }
+
+    private void showImage(ImageView compoundImage,View v, ViewGroup container){
+        final Dialog settingsDialog = new Dialog(v.getContext(),R.style.DialogTheme);
+        View v2 = getLayoutInflater().inflate(R.layout.image_layout
+                , container,false);
+        ImageButton close = v2.findViewById(R.id.x_button);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingsDialog.dismiss();
+            }});
+        ImageView img = v2.findViewById(R.id.imgvlayout);
+        Drawable draw = compoundImage.getDrawable();
+        if (draw!=null){
+            Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+            img.setImageDrawable(d);
+            settingsDialog.setContentView(v2);
+            settingsDialog.show();
+        }
+    }
 }

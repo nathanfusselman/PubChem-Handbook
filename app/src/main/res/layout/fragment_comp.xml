@@ -333,7 +333,7 @@
                             android:gravity="center"/>
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="105dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/SafetyItems_Text_GHS09"
                             android:textSize="16dp"
@@ -401,7 +401,7 @@
                         android:text=" Notes:"
                         android:textSize="24dp"/>
 
-                    <Button
+                    <!--<Button
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="335dp"
@@ -422,18 +422,35 @@
                         android:textStyle="bold"
                         app:layout_constraintRight_toLeftOf="@+id/x"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:id="@+id/check"/>
-
+                        android:id="@+id/check"/>-->
+                    <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="335dp"
+                    android:textSize="12sp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/notes_button" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/back"
+                    android:layout_below="@+id/Header"/>
 
-                <EditText
+                <!--<EditText
                     android:id="@+id/notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:fontFamily="sans-serif-condensed"
                     android:hint="Add Notes Here"
-                    android:layout_below="@+id/Header"/>
+                    android:layout_below="@+id/Header"/>-->
 
             </RelativeLayout>
         </LinearLayout>
