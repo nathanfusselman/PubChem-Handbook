@@ -1,7 +1,9 @@
 package com.example.pubchem_chemistry_handbook.ui.compound;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -10,11 +12,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -126,6 +129,48 @@ public class CompoundFragment extends Fragment {
         StructureImages[2] = view.findViewById(R.id.compoundView_crystal);
         StructureTexts[2] = view.findViewById(R.id.compoundView_images_names_crystal);
         final Button shareButton = view.findViewById(R.id.shareButton);
+        final TextView notes = view.findViewById(R.id.notes);
+        final Button notesButton = view.findViewById(R.id.notes_button);
+        notesButton.setText("Edit Notes");
+        notesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext()).setNeutralButton("Clear",null);
+                builder.setTitle("Edit Notes");
+                final EditText input = new EditText(v.getContext());
+                builder.setView(input);
+                input.setText(notes.getText().toString());
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        notes.setText(input.getText().toString());
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                        button.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+                                input.setText("");
+                            }
+                        });
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        /*
         final EditText notes = view.findViewById(R.id.notes);
         final Button notescheck = view.findViewById(R.id.check);
         final Button notesx = view.findViewById(R.id.x);
@@ -148,7 +193,7 @@ public class CompoundFragment extends Fragment {
                 notes.setText(currentCompound.getNotes());
             }
         });
-
+        */
 
 
 
