@@ -22,7 +22,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -56,11 +55,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
-    Compound currentCompound = new Compound(0,"","");
+    private Compound currentCompound = new Compound(0,"","");
     public static Boolean fragExists;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         fragExists=true;
         final ScrollView compoundView;
         currentCompound = (((MainActivity)getActivity()).getGlobalCompound());
@@ -73,78 +72,23 @@ public class CompoundFragment extends Fragment {
         compoundView_2dImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                View v2 = getLayoutInflater().inflate(R.layout.image_layout
-                        , null);
-                Button close = v2.findViewById(R.id.x_button);
-                close.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         settingsDialog.dismiss();
-                     }});
-                ImageView img = v2.findViewById(R.id.imgvlayout);
-                Drawable draw = compoundView_2dImage.getDrawable();
-                if (draw!=null){
-                Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
-                Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
-                img.setImageDrawable(d);
-                settingsDialog.setContentView(v2);
-                settingsDialog.show();
-            }
+                showImage(compoundView_2dImage,v,container);
             }});
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         compoundView_3dImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                View v2 = getLayoutInflater().inflate(R.layout.image_layout
-                        , null);
-                Button close = v2.findViewById(R.id.x_button);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        settingsDialog.dismiss();
-                    }});
-                ImageView img = v2.findViewById(R.id.imgvlayout);
-                Drawable draw = compoundView_3dImage.getDrawable();
-                if (draw!=null){
-                    Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
-                    Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
-                    img.setImageDrawable(d);
-                    settingsDialog.setContentView(v2);
-                    settingsDialog.show();
-                }
+                showImage(compoundView_3dImage,v,container);
             }});
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
         compoundView_crystal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                View v2 = getLayoutInflater().inflate(R.layout.image_layout
-                        , null);
-                Button close = v2.findViewById(R.id.x_button);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        settingsDialog.dismiss();
-                    }});
-                ImageView img = v2.findViewById(R.id.imgvlayout);
-                Drawable draw = compoundView_crystal.getDrawable();
-                if (draw!=null){
-                    Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
-                    Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
-                    img.setImageDrawable(d);
-                    settingsDialog.setContentView(v2);
-                    settingsDialog.show();
-                }
+                showImage(compoundView_3dImage,v,container);
             }});
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
-        final SearchView searchView = view.findViewById(R.id.searchView);
         final ImageView[] HazardImages = new ImageView[9];
         final TextView[] HazardTexts = new TextView[9];
         final Button favButton = view.findViewById(R.id.favButton);
@@ -495,4 +439,26 @@ public class CompoundFragment extends Fragment {
             view.setVisibility(View.INVISIBLE);
         }
 }
+
+    private void showImage(ImageView compoundImage,View v, ViewGroup container){
+        final Dialog settingsDialog = new Dialog(v.getContext(),R.style.DialogTheme);
+        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        View v2 = getLayoutInflater().inflate(R.layout.image_layout
+                , container,false);
+        Button close = v2.findViewById(R.id.x_button);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingsDialog.dismiss();
+            }});
+        ImageView img = v2.findViewById(R.id.imgvlayout);
+        Drawable draw = compoundImage.getDrawable();
+        if (draw!=null){
+            Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+            img.setImageDrawable(d);
+            settingsDialog.setContentView(v2);
+            settingsDialog.show();
+        }
+    }
 }
