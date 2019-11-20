@@ -155,9 +155,15 @@ public class CompoundFragment extends Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID();
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                String shareNotes = notes.getText().toString();
+                //Intent i = new Intent(Intent.ACTION_VIEW);
+                //i.setData(Uri.parse(url));
+                //startActivity(i);
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
+                startActivity(Intent.createChooser(sharingIntent, "Share Compound Info"));
             }
         });
 
