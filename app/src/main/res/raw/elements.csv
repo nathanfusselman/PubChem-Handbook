@@ -1,33 +1,33 @@
 1,"H","Hydrogen",1.0080,"FFFFFF","1s1",2.2,120,13.598,0.754,"+1, -1","Gas",13.81,20.28,0.00008988,"Nonmetal",1766
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 2,"He","Helium",4.00260,"D9FFFF","1s2","",140,24.587,"",0,"Gas",0.95,4.22,0.0001785,"Noble gas",1868
 3,"Li","Lithium",7.0,"CC80FF","[He]2s1",0.98,182,5.392,0.618,+1,"Solid",453.65,1615,0.534,"Alkali metal",1817
 4,"Be","Beryllium",9.012183,"C2FF00","[He]2s2",1.57,153,9.323,"",+2,"Solid",1560,2744,1.85,"Alkaline earth metal",1798
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 5,"B","Boron",10.81,"FFB5B5","[He]2s2 2p1",2.04,192,8.298,0.277,+3,"Solid",2348,4273,2.37,"Metalloid",1808
 6,"C","Carbon",12.011,909090,"[He]2s2 2p2",2.55,170,11.260,1.263,"+4, +2, -4","Solid",3823,4098,2.2670,"Nonmetal","Ancient"
 7,"N","Nitrogen",14.007,"3050F8","[He] 2s2 2p3",3.04,155,14.534,"","+5, +4, +3, +2, +1, -1, -2, -3","Gas",63.15,77.36,0.0012506,"Nonmetal",1772
@@ -36,16 +36,16 @@
 10,"Ne","Neon",20.180,"B3E3F5","[He]2s2 2p6","",154,21.565,"",0,"Gas",24.56,27.07,0.0008999,"Noble gas",1898
 11,"Na","Sodium",22.9897693,"AB5CF2","[Ne]3s1",0.93,227,5.139,0.548,+1,"Solid",370.95,1156,0.97,"Alkali metal",1807
 12,"Mg","Magnesium",24.305,"8AFF00","[Ne]3s2",1.31,173,7.646,"",+2,"Solid",923,1363,1.74,"Alkaline earth metal",1808
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 13,"Al","Aluminum",26.981538,"BFA6A6","[Ne]3s2 3p1",1.61,184,5.986,0.441,+3,"Solid",933.437,2792,2.70,"Post-transition metal","Ancient"
 14,"Si","Silicon",28.085,"F0C8A0","[Ne]3s2 3p2",1.9,210,8.152,1.385,"+4, +2, -4","Solid",1687,3538,2.3296,"Metalloid",1854
 15,"P","Phosphorus",30.97376200,"FF8000","[Ne]3s2 3p3",2.19,180,10.487,0.746,"+5, +3, -3","Solid",317.3,553.65,1.82,"Nonmetal",1669
@@ -90,7 +90,7 @@
 54,"Xe","Xenon",131.29,"429EB0","[Kr]5s2 4d10 5p6",2.6,216,12.130,"",0,"Gas",161.36,165.03,0.005887,"Noble gas",1898
 55,"Cs","Cesium",132.9054520,"57178F","[Xe]6s1",0.79,343,3.894,0.472,+1,"Solid",301.59,944,1.93,"Alkali metal",1860
 56,"Ba","Barium",137.33,"00C900","[Xe]6s2",0.89,268,5.212,"",+2,"Solid",1000,2170,3.62,"Alkaline earth metal",1808
--1;*;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+-1,*,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 72,"Hf","Hafnium",178.5,"4DC2FF","[Xe]6s2 4f14 5d2",1.3,212,6.825,"",+4,"Solid",2506,4876,13.3,"Transition metal",1923
 73,"Ta","Tantalum",180.9479,"4DA6FF","[Xe]6s2 4f14 5d3",1.5,217,7.89,0.322,+5,"Solid",3290,5731,16.4,"Transition metal",1802
 74,"W","Tungsten",183.8,"2194D6","[Xe]6s2 4f14 5d4",2.36,210,7.98,0.815,+6,"Solid",3695,5828,19.3,"Transition metal",1783
@@ -108,7 +108,7 @@
 86,"Rn","Radon",222.01758,428296,"[Xe]6s2 4f14 5d10 6p6","",220,10.745,"",0,"Gas",202,211.45,0.00973,"Noble gas",1900
 87,"Fr","Francium",223.01973,420066,"[Rn]7s1",0.7,348,3.9,0.47,+1,"Solid",300,"","","Alkali metal",1939
 88,"Ra","Radium",226.02541,"007D00","[Rn]7s2",0.9,283,5.279,"",+2,"Solid",973,1413,5,"Alkaline earth metal",1898
--1;**;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+-1,**,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 104,"Rf","Rutherfordium",267.122,"CC0059","[Rn]7s2 5f14 6d2","",150,"","",+4,"Solid","","","","Transition metal",1964
 105,"Db","Dubnium",268.126,"D1004F","[Rn]7s2 5f14 6d3","",139,"","","5, 4, 3","Solid","","","","Transition metal",1967
 106,"Sg","Seaborgium",271.134,"D90045","[Rn]7s2 5f14 6d4","",132,"","","6, 5, 4, 3, 0","Solid","","","","Transition metal",1974
@@ -124,27 +124,27 @@
 116,"Lv","Livermorium",293.205,"","[Rn]7s2 7p4 5f14 6d10 (predicted)","",183,"","","+4​, +2, -2","Expected to be a Solid","","","","Post-transition metal",2000
 117,"Ts","Tennessine",294.211,"","[Rn]7s2 7p5 5f14 6d10 (predicted)","",138,"","","+5, +3, +1, -1","Expected to be a Solid","","","","Halogen",2010
 118,"Og","Oganesson",294.214,"","[Rn]7s2 7p6 5f14 6d10 (predicted)","","","","","+6, +4, +2, +1, 0, -1","Expected to be a Gas","","","","Noble gas",2006
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--2;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--1;         *;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-1,         *,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 57,"La","Lanthanum",138.9055,"70D4FF","[Xe]6s2 5d1",1.1,240,5.577,0.5,+3,"Solid",1191,3737,6.15,"Lanthanide",1839
 58,"Ce","Cerium",140.12,"FFFFC7","[Xe]6s2 4f1 5d1",1.12,235,5.539,0.5,"+4, +3","Solid",1071,3697,6.770,"Lanthanide",1803
 59,"Pr","Praseodymium",140.9077,"D9FFC7","[Xe]6s2 4f3",1.13,239,5.464,"",+3,"Solid",1204,3793,6.77,"Lanthanide",1885
@@ -160,9 +160,9 @@
 69,"Tm","Thulium",168.93422,"00D452","[Xe]6s2 4f13",1.25,227,6.184,"",+3,"Solid",1818,2223,9.32,"Lanthanide",1879
 70,"Yb","Ytterbium",173.04,"00BF38","[Xe]6s2 4f14","",242,6.254,"","+3, +2","Solid",1092,1469,6.90,"Lanthanide",1878
 71,"Lu","Lutetium",174.967,"00AB24","[Xe]6s2 4f14 5d1",1.27,221,5.426,"",+3,"Solid",1936,3675,9.84,"Lanthanide",1907
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
-0;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
--1;       **;null;null;null;null;null;null;null;null;null;null;null;null;null;null;null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+-1,       **,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 89,"Ac","Actinium",227.02775,"70ABFA","[Rn]7s2 6d1",1.1,260,5.17,"",+3,"Solid",1324,3471,10.07,"Actinide",1899
 90,"Th","Thorium",232.038,"00BAFF","[Rn]7s2 6d2",1.3,237,6.08,"",+4,"Solid",2023,5061,11.72,"Actinide",1828
 91,"Pa","Protactinium",231.0359,"00A1FF","[Rn]7s2 5f2 6d1",1.5,243,5.89,"","+5, +4","Solid",1845,"",15.37,"Actinide",1913

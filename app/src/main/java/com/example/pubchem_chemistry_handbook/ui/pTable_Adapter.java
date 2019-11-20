@@ -61,7 +61,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFFFFFD4,0xFFFFFFCE});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Noble gas":
@@ -69,7 +69,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFFEE8D1,0xFFFEE5CC});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Alkali metal":
@@ -77,7 +77,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFFDD0D3,0xFFFCCCD0});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Alkaline earth metal":
@@ -85,7 +85,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFD8D8FF,0xFFD7D5FF});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Metalloid":
@@ -93,7 +93,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFE5F0D1,0xFFE2EECB});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Post-transition metal":
@@ -101,7 +101,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFCEFFD3,0xFFC7FFCD});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Transition metal":
@@ -109,7 +109,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFCCE4FF,0xFFC5DFFF});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Lanthanide":
@@ -117,7 +117,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFC3FFFF,0xFFBCFFFF});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Actinide":
@@ -125,7 +125,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFC3FFED,0xFFBCFFEC});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                     }
@@ -137,7 +137,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFCEFFFF,0xFFC7FFFF});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Solid":
@@ -145,7 +145,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFF2F2F3,0xFFF1F1F2});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Liquid":
@@ -153,7 +153,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFFDCED1,0xFFFCC6CA});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Expected to be a Solid":
@@ -161,7 +161,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFFCFCFC,0xFFFBFBFB});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                         case "Expected to be a Gas":
@@ -169,7 +169,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                     GradientDrawable.Orientation.BOTTOM_TOP,
                                     new int[] {0xFFEFFFFF,0xFFE6FEFE});
                             gd.setCornerRadius(5f);
-                            gd.setStroke(1, Color.argb(50,0,0,0));
+                            gd.setStroke(2, Color.argb(64,100,100,100));
                             background.setBackgroundDrawable(gd);
                             break;
                     }
@@ -188,7 +188,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
 
                     gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom,top});
                     gd.setCornerRadius(5f);
-                    gd.setStroke(1, Color.argb(50,0,0,0));
+                    gd.setStroke(2, Color.argb(64,100,100,100));
                     background.setBackgroundDrawable(gd);
                     break;
                 case 3:
@@ -200,7 +200,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                         GradientDrawable.Orientation.BOTTOM_TOP,
                                         new int[] {0xFFFDCDD0,0xFFFCC5C9});
                                 gd.setCornerRadius(5f);
-                                gd.setStroke(1, Color.argb(50,0,0,0));
+                                gd.setStroke(2, Color.argb(64,100,100,100));
                                 background.setBackgroundDrawable(gd);
                                 break;
                             case 'p':
@@ -208,7 +208,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                         GradientDrawable.Orientation.BOTTOM_TOP,
                                         new int[] {0xFFCEFFD3,0xFFC6FFCD});
                                 gd.setCornerRadius(5f);
-                                gd.setStroke(1, Color.argb(50,0,0,0));
+                                gd.setStroke(2, Color.argb(64,100,100,100));
                                 background.setBackgroundDrawable(gd);
                                 break;
                             case 'd':
@@ -216,7 +216,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                         GradientDrawable.Orientation.BOTTOM_TOP,
                                         new int[] {0xFFFFFFD5,0xFFFFFFCE});
                                 gd.setCornerRadius(5f);
-                                gd.setStroke(1, Color.argb(50,0,0,0));
+                                gd.setStroke(2, Color.argb(64,100,100,100));
                                 background.setBackgroundDrawable(gd);
                                 break;
                             case 'f':
@@ -224,7 +224,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                                         GradientDrawable.Orientation.BOTTOM_TOP,
                                         new int[] {0xFFCCE3FF,0xFFC4DEFF});
                                 gd.setCornerRadius(5f);
-                                gd.setStroke(1, Color.argb(50,0,0,0));
+                                gd.setStroke(2, Color.argb(64,100,100,100));
                                 background.setBackgroundDrawable(gd);
                                 break;
                         }
@@ -279,7 +279,211 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                             GradientDrawable.Orientation.BOTTOM_TOP,
                             colors);
                     gd.setCornerRadius(5f);
-                    gd.setStroke(1, Color.argb(50,0,0,0));
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 5:
+                    int R_Bottom_5 = 97;
+                    int G_Bottom_5 = 224;
+                    int B_Bottom_5 = 195;
+                    int R_Top_5 = 121;
+                    int G_Top_5 = 229;
+                    int B_Top_5 = 204;
+                    double scale_5;
+                    int alpha_5;
+                    int bottom_5;
+                    int top_5;
+                    if (elementSet.get(position).getElectronegativity() != -10) {
+                        scale_5 = elementSet.get(position).getElectronegativity() / 4;
+                        alpha_5 = (int) (255*scale_5);
+                        bottom_5 = Color.argb(alpha_5,R_Bottom_5,G_Bottom_5,B_Bottom_5);
+                        top_5 = Color.argb(alpha_5,R_Top_5,G_Top_5,B_Top_5);
+                    } else {
+                        top_5 = 0xFFF2F2F2;
+                        bottom_5 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_5,top_5});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 6:
+                    List<Integer> colors_6 = new ArrayList<>();
+                    for (int i_clock = 0; i_clock < 5; i_clock++) {
+                        colors_6.add(0xFF79E5CC);
+                    }
+                    for (int i_clock = 0; i_clock < 10; i_clock++) {
+                        colors_6.add(0xFFF2F2F2);
+                    }
+                    int colors_6_array[] = new int[colors_6.size()];
+                    int i_6 = 0;
+                    for (int color : colors_6) {
+                        colors_6_array[i_6] = color;
+                        i_6++;
+                    }
+                    gd = new GradientDrawable();
+                    gd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                    gd.setColors(colors_6_array);
+                    gd.setGradientRadius(elementSet.get(position).getAtomicRadius()/3);
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 7:
+                    int R_Bottom_7 = 97;
+                    int G_Bottom_7 = 224;
+                    int B_Bottom_7 = 195;
+                    int R_Top_7 = 121;
+                    int G_Top_7 = 229;
+                    int B_Top_7 = 204;
+                    double scale_7;
+                    int alpha_7;
+                    int bottom_7;
+                    int top_7;
+                    if (elementSet.get(position).getIonizationEnergy() != -10) {
+                        scale_7 = elementSet.get(position).getIonizationEnergy() / 25;
+                        alpha_7 = (int) (255*scale_7);
+                        bottom_7 = Color.argb(alpha_7,R_Bottom_7,G_Bottom_7,B_Bottom_7);
+                        top_7 = Color.argb(alpha_7,R_Top_7,G_Top_7,B_Top_7);
+                    } else {
+                        top_7 = 0xFFF2F2F2;
+                        bottom_7 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_7,top_7});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 8:
+                    int R_Bottom_8 = 97;
+                    int G_Bottom_8 = 224;
+                    int B_Bottom_8 = 195;
+                    int R_Top_8 = 121;
+                    int G_Top_8 = 229;
+                    int B_Top_8 = 204;
+                    double scale_8;
+                    int alpha_8;
+                    int bottom_8;
+                    int top_8;
+                    if (elementSet.get(position).getElectronAffinity() != -10) {
+                        scale_8 = elementSet.get(position).getElectronAffinity() / 4;
+                        alpha_8 = (int) (255*scale_8);
+                        bottom_8 = Color.argb(alpha_8,R_Bottom_8,G_Bottom_8,B_Bottom_8);
+                        top_8 = Color.argb(alpha_8,R_Top_8,G_Top_8,B_Top_8);
+                    } else {
+                        top_8 = 0xFFF2F2F2;
+                        bottom_8 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_8,top_8});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 9:
+                    int R_Bottom_9 = 156;
+                    int G_Bottom_9 = 251;
+                    int B_Bottom_9 = 253;
+                    int R_Top_9 = 169;
+                    int G_Top_9 = 252;
+                    int B_Top_9 = 253;
+                    double scale_9;
+                    int alpha_9;
+                    int bottom_9;
+                    int top_9;
+                    if (elementSet.get(position).getMeltingPoint() != -10) {
+                        scale_9 = elementSet.get(position).getMeltingPoint() / 4000;
+                        alpha_9 = (int) (255*scale_9);
+                        bottom_9 = Color.argb(alpha_9,R_Bottom_9,G_Bottom_9,B_Bottom_9);
+                        top_9 = Color.argb(alpha_9,R_Top_9,G_Top_9,B_Top_9);
+                    } else {
+                        top_9 = 0xFFF2F2F2;
+                        bottom_9 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_9,top_9});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 10:
+                    int R_Bottom_10 = 241;
+                    int G_Bottom_10 = 115;
+                    int B_Bottom_10 = 104;
+                    int R_Top_10 = 242;
+                    int G_Top_10 = 132;
+                    int B_Top_10 = 123;
+                    double scale_10;
+                    int alpha_10;
+                    int bottom_10;
+                    int top_10;
+                    if (elementSet.get(position).getBoilingPoint() != -10) {
+                        scale_10 = elementSet.get(position).getBoilingPoint() / 6000;
+                        alpha_10 = (int) (255*scale_10);
+                        bottom_10 = Color.argb(alpha_10,R_Bottom_10,G_Bottom_10,B_Bottom_10);
+                        top_10 = Color.argb(alpha_10,R_Top_10,G_Top_10,B_Top_10);
+                    } else {
+                        top_10 = 0xFFF2F2F2;
+                        bottom_10 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_10,top_10});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 11:
+                    int R_Bottom_11 = 97;
+                    int G_Bottom_11 = 224;
+                    int B_Bottom_11 = 195;
+                    int R_Top_11 = 121;
+                    int G_Top_11 = 229;
+                    int B_Top_11 = 204;
+                    double scale_11;
+                    int alpha_11;
+                    int bottom_11;
+                    int top_11;
+                    if (elementSet.get(position).getDensity() != -10) {
+                        scale_11 = elementSet.get(position).getDensity() / 23;
+                        alpha_11 = (int) (255*scale_11);
+                        bottom_11 = Color.argb(alpha_11,R_Bottom_11,G_Bottom_11,B_Bottom_11);
+                        top_11 = Color.argb(alpha_11,R_Top_11,G_Top_11,B_Top_11);
+                    } else {
+                        top_11 = 0xFFF2F2F2;
+                        bottom_11 = 0xFFF2F2F2;
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_11,top_11});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
+                    background.setBackgroundDrawable(gd);
+                    break;
+                case 12:
+                    int R_Bottom_12 = 97;
+                    int G_Bottom_12 = 224;
+                    int B_Bottom_12 = 195;
+                    int R_Top_12 = 121;
+                    int G_Top_12 = 229;
+                    int B_Top_12 = 204;
+                    double scale_12;
+                    int alpha_12;
+                    int bottom_12;
+                    int top_12;
+                    try {
+                        scale_12 = (Double.parseDouble(elementSet.get(position).getYearDiscoverd()) / (1500-2050)) + 3.75;
+                        alpha_12 = (int) (255*scale_12);
+                        bottom_12 = Color.argb(alpha_12,R_Bottom_12,G_Bottom_12,B_Bottom_12);
+                        top_12 = Color.argb(alpha_12,R_Top_12,G_Top_12,B_Top_12);
+                    } catch (Exception ex) {
+                        bottom_12 = Color.argb(255,R_Bottom_12,G_Bottom_12,B_Bottom_12);
+                        top_12 = Color.argb(255,R_Top_12,G_Top_12,B_Top_12);
+                    }
+
+                    gd = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] {bottom_12,top_12});
+                    gd.setCornerRadius(5f);
+                    gd.setStroke(2, Color.argb(64,100,100,100));
                     background.setBackgroundDrawable(gd);
                     break;
                 default:
@@ -287,7 +491,7 @@ public class pTable_Adapter extends RecyclerView.Adapter<pTable_Adapter.pTableVi
                             GradientDrawable.Orientation.BOTTOM_TOP,
                             new int[] {0xFFC9F5EA,0xFFB5F1E3});
                     gd.setCornerRadius(5f);
-                    gd.setStroke(1, Color.argb(50,0,0,0));
+                    gd.setStroke(2, Color.argb(64,100,100,100));
                     background.setBackgroundDrawable(gd);
                     break;
             }

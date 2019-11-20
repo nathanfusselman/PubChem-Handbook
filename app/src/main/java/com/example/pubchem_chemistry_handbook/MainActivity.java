@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         InputStream is = getResources().openRawResource(R.raw.elements);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
         String line = "";
-        boolean first = true;
+        int time = 0;
 
         try {
             while (((line = reader.readLine()) != null)) {
@@ -294,19 +294,29 @@ public class MainActivity extends AppCompatActivity {
                     global.getElements().add(new Element(0,null,null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
                 } else {
                     if (line.charAt(0) == '-' && line.charAt(1) == '1') {
-                        if (first) {
-                            first= false;
-                            global.getElements().add(new Element(-1,"         *",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                        if (time == 0) {
+                            global.getElements().add(new Element(-1,"*",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
                         } else {
-                            global.getElements().add(new Element(-1,"       **",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                            if (time == 1) {
+                                global.getElements().add(new Element(-1,"**",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                            } else {
+                                if (time == 2) {
+                                    global.getElements().add(new Element(-1,"         *",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                                } else {
+                                    if (time ==3) {
+                                        global.getElements().add(new Element(-1,"       **",null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
+                                    }
+                                }
+                            }
                         }
+                        time++;
                     } else {
                         if (line.charAt(0) == '-' && line.charAt(1) == '2') {
                             global.getElements().add(new Element(-2,null,null,null,-1,null,-1,-1,-1,-1,null,null,-1,-1,-1,null,null));
                         } else {
                             List<String> tokens = split(line);
                             try {
-                                global.getElements().add(new Element(getInt(tokens.get(0)), tokens.get(1), tokens.get(2), tokens.get(15), getDouble(tokens.get(3)), tokens.get(5), getDouble(tokens.get(6)), getInt(tokens.get(7)), getDouble(tokens.get(8)), getDouble(tokens.get(9)), tokens.get(10), tokens.get(11), getDouble(tokens.get(12)), getDouble(tokens.get(13)), getDouble(tokens.get(14)), tokens.get(4), tokens.get(15)));
+                                global.getElements().add(new Element(getInt(tokens.get(0)), tokens.get(1), tokens.get(2), tokens.get(15), getDouble(tokens.get(3)), tokens.get(5), getDouble(tokens.get(6)), getInt(tokens.get(7)), getDouble(tokens.get(8)), getDouble(tokens.get(9)), tokens.get(10), tokens.get(11), getDouble(tokens.get(12)), getDouble(tokens.get(13)), getDouble(tokens.get(14)), tokens.get(4), tokens.get(16)));
                             } catch (Exception ex) {
                                 System.out.println("ERROR AT: " + tokens.get(0));
                                 ex.printStackTrace();
@@ -436,8 +446,12 @@ public class MainActivity extends AppCompatActivity {
                 hadP = false;
             }
         }
+        if (hadP) {
+            out.add(input.substring(last + 2, input.length()-1));
+        } else {
+            out.add(input.substring(last + 1, input.length()));
+        }
         //System.out.println(input.substring(last + 1, input.length() - 1));
-        out.add(input.substring(last + 1, input.length()-1));
         return out;
     }
 }
