@@ -147,10 +147,11 @@ public class CompoundFragment extends Fragment {
                 builder.setView(input);
                 input.setText(notes.getText().toString());
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         notes.setText(input.getText().toString());
-                        currentCompound.setNotes(notes.getText().toString());
+                        ((MainActivity)getActivity()).setNote(currentCompound,notes.getText().toString());
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
