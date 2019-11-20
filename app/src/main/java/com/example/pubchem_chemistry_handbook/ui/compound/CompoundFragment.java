@@ -443,7 +443,6 @@ public class CompoundFragment extends Fragment {
 
     private void showImage(ImageView compoundImage,View v, ViewGroup container){
         final Dialog settingsDialog = new Dialog(v.getContext(),R.style.DialogTheme);
-        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View v2 = getLayoutInflater().inflate(R.layout.image_layout
                 , container,false);
         ImageButton close = v2.findViewById(R.id.x_button);
