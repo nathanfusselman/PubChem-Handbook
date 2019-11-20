@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -445,7 +446,7 @@ public class CompoundFragment extends Fragment {
         settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View v2 = getLayoutInflater().inflate(R.layout.image_layout
                 , container,false);
-        Button close = v2.findViewById(R.id.x_button);
+        ImageButton close = v2.findViewById(R.id.x_button);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
