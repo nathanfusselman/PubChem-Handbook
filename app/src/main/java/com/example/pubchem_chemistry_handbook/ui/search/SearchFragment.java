@@ -669,7 +669,8 @@ public class SearchFragment extends Fragment {
                         search = s;
                         rvAdapter.getFilter().filter(search);
                         resutlsNumb.setText("Results: " + "...");
-                        ((MainActivity)getActivity()).updating = true;
+                        if(((MainActivity)getActivity())!=null){
+                        ((MainActivity)getActivity()).updating = true;}
                         int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
                         int count = 0;
                         while (((MainActivity)getActivity()).updating && count < 25000000) {
