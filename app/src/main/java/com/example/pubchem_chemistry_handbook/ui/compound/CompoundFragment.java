@@ -1,8 +1,12 @@
 package com.example.pubchem_chemistry_handbook.ui.compound;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +57,6 @@ import java.lang.ref.WeakReference;
 
 public class CompoundFragment extends Fragment {
     Compound currentCompound = new Compound(0,"","");
-
     public static Boolean fragExists;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -66,8 +70,77 @@ public class CompoundFragment extends Fragment {
         final TextView compoundView_name = view.findViewById(R.id.compoundView_name);
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
+        compoundView_2dImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                View v2 = getLayoutInflater().inflate(R.layout.image_layout
+                        , null);
+                Button close = v2.findViewById(R.id.x_button);
+                close.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         settingsDialog.dismiss();
+                     }});
+                ImageView img = v2.findViewById(R.id.imgvlayout);
+                Drawable draw = compoundView_2dImage.getDrawable();
+                if (draw!=null){
+                Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
+                Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+                img.setImageDrawable(d);
+                settingsDialog.setContentView(v2);
+                settingsDialog.show();
+            }
+            }});
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
+        compoundView_3dImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                View v2 = getLayoutInflater().inflate(R.layout.image_layout
+                        , null);
+                Button close = v2.findViewById(R.id.x_button);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        settingsDialog.dismiss();
+                    }});
+                ImageView img = v2.findViewById(R.id.imgvlayout);
+                Drawable draw = compoundView_3dImage.getDrawable();
+                if (draw!=null){
+                    Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
+                    Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+                    img.setImageDrawable(d);
+                    settingsDialog.setContentView(v2);
+                    settingsDialog.show();
+                }
+            }});
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
+        compoundView_crystal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog settingsDialog = new Dialog(getContext(),R.style.DialogTheme);
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                View v2 = getLayoutInflater().inflate(R.layout.image_layout
+                        , null);
+                Button close = v2.findViewById(R.id.x_button);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        settingsDialog.dismiss();
+                    }});
+                ImageView img = v2.findViewById(R.id.imgvlayout);
+                Drawable draw = compoundView_crystal.getDrawable();
+                if (draw!=null){
+                    Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
+                    Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+                    img.setImageDrawable(d);
+                    settingsDialog.setContentView(v2);
+                    settingsDialog.show();
+                }
+            }});
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
         final LinearLayout SafetyItems_Text = view.findViewById(R.id.SafetyItems_Text);
