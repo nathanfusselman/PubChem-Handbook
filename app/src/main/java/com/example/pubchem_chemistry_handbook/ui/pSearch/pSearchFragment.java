@@ -44,12 +44,14 @@ public class pSearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_ptable_search, container, false);
 
+        ((MainActivity)getActivity()).getGlobal().setStyle(0);
+
         if(getActivity()!=null){getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);}
         recyclerView = view.findViewById(R.id.pTable_search__Recycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(getContext(), 18);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new pTable_Adapter(((MainActivity)getActivity()).getGlobal().getElements());
+        mAdapter = new pTable_Adapter(((MainActivity)getActivity()).getGlobal().getElements(), ((MainActivity)getActivity()).getGlobal());
         final TextView currentQuery = view.findViewById(R.id.currentSearch);
         final ImageButton btnBack = view.findViewById(R.id.backspace_button);
         final ImageButton btnClear = view.findViewById(R.id.clear_button);

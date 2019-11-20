@@ -2,6 +2,7 @@ package com.example.pubchem_chemistry_handbook.ui.pTable;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,38 +45,138 @@ public class ElementFragment extends Fragment {
         final TextView detailsDensity = elementView.findViewById(R.id.element_delatils_Density);
         final TextView detailsYearDiscovered = elementView.findViewById(R.id.element_delatils_Year_Discovered);
         int position = pTablePosition;
+        GradientDrawable gd = null;
         if (getActivity() != null) {
             if (((MainActivity) getActivity()).getGlobal().getElements().get(position).getAtomicNumber() > 0) {
-                switch (((MainActivity) getActivity()).getGlobal().getElements().get(position).getChemicalGroupBlock()) {
-                    case "Nonmetal":
-                        elementCard.setBackgroundColor(Color.parseColor("#FEFECE"));
+                switch (((MainActivity) getActivity()).getGlobal().getStyle()) {
+                    case 0:
+                        switch (((MainActivity) getActivity()).getGlobal().getElements().get(position).getChemicalGroupBlock()) {
+                            case "Nonmetal":
+                            case "Halogen":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFFFFFD4,0xFFFFFFCE});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#DEDDB8"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Noble gas":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFFEE8D1,0xFFFEE5CC});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#DDC7B0"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Alkali metal":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFFDD0D3,0xFFFCCCD0});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#DCB1B4"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Alkaline earth metal":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFD8D8FF,0xFFD7D5FF});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#BCBDDE"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Metalloid":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFE5F0D1,0xFFE2EECB});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#C8D1B8"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Post-transition metal":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFCEFFD3,0xFFC7FFCD});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#B4DDB8"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Transition metal":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFCCE4FF,0xFFC5DFFF});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#B1C5DD"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Lanthanide":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFC3FFFF,0xFFBCFFFF});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#A7DEDD"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Actinide":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFC3FFED,0xFFBCFFEC});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#ADDED0"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                        }
                         break;
-                    case "Halogen":
-                        elementCard.setBackgroundColor(Color.parseColor("#FEFED3"));
+                    case 1:
+                        switch (((MainActivity) getActivity()).getGlobal().getElements().get(position).getStandardState()) {
+                            case "Gas":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFCEFFFF,0xFFC7FFFF});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#B6DEDE"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Solid":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFF2F2F3,0xFFF1F1F2});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#D1D2D3"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Liquid":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFFDCED1,0xFFFCC6CA});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#DCB1B4"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Expected to be a Solid":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFFCFCFC,0xFFFBFBFB});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#DBDBDB"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                            case "Expected to be a Gas":
+                                gd = new GradientDrawable(
+                                        GradientDrawable.Orientation.BOTTOM_TOP,
+                                        new int[] {0xFFEFFFFF,0xFFE6FEFE});
+                                gd.setCornerRadius(5f);
+                                gd.setStroke(1, Color.parseColor("#D2DEDD"));
+                                elementCard.setBackgroundDrawable(gd);
+                                break;
+                        }
                         break;
-                    case "Noble gas":
-                        elementCard.setBackgroundColor(Color.parseColor("#FBE4C8"));
-                        break;
-                    case "Alkali metal":
-                        elementCard.setBackgroundColor(Color.parseColor("#FACFCB"));
-                        break;
-                    case "Alkaline earth metal":
-                        elementCard.setBackgroundColor(Color.parseColor("#D3D4FD"));
-                        break;
-                    case "Metalloid":
-                        elementCard.setBackgroundColor(Color.parseColor("#E2EDC9"));
-                        break;
-                    case "Post-transition metal":
-                        elementCard.setBackgroundColor(Color.parseColor("#DBFDD1"));
-                        break;
-                    case "Transition metal":
-                        elementCard.setBackgroundColor(Color.parseColor("#CADDFD"));
-                        break;
-                    case "Lanthanide":
-                        elementCard.setBackgroundColor(Color.parseColor("#D4FEFF"));
-                        break;
-                    case "Actinide":
-                        elementCard.setBackgroundColor(Color.parseColor("#D7FEED"));
+                    default:
+                        gd = new GradientDrawable(
+                                GradientDrawable.Orientation.BOTTOM_TOP,
+                                new int[] {0xFFC9F5EA,0xFFB5F1E3});
+                        gd.setCornerRadius(5f);
+                        gd.setStroke(1, Color.parseColor("#AFD5CC"));
+                        elementCard.setBackgroundDrawable(gd);
                         break;
                 }
                 atomicNumber.setText(Integer.toString(((MainActivity) getActivity()).getGlobal().getElements().get(position).getAtomicNumber()));

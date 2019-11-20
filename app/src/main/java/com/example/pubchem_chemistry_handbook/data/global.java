@@ -10,6 +10,7 @@ public class global {
     private int safetyItems;
     private List<Element> elements;
     private List<Compound> fav, recents, compounds, compoundListFull;
+    private int style;
 
     public  global(int search_type_startsWith, int results) {
         this.search_type_startsWith = search_type_startsWith;
@@ -20,6 +21,15 @@ public class global {
         compoundListFull = new ArrayList<>();
         elements = new ArrayList<>();
         safetyItems = 0;
+        style = 0;
+    }
+
+    public int getStyle() {
+        return style;
+    }
+
+    public void setStyle(int style) {
+        this.style = style;
     }
 
     public int getSearch_type_startsWith() {
