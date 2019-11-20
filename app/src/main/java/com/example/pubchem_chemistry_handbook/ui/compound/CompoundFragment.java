@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -74,21 +75,24 @@ public class CompoundFragment extends Fragment {
         final TextView compoundView_formula = view.findViewById(R.id.compoundView_formula);
         final ImageView compoundView_2dImage = view.findViewById(R.id.compoundView_2dImage);
         compoundView_2dImage.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
-                showImage(compoundView_2dImage,v,container);
+                showImage(compoundView_2dImage,v,container,2);
             }});
         final ImageView compoundView_3dImage = view.findViewById(R.id.compoundView_3dImage);
         compoundView_3dImage.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
-                showImage(compoundView_3dImage,v,container);
+                showImage(compoundView_3dImage,v,container,3);
             }});
         final ImageView compoundView_crystal = view.findViewById(R.id.compoundView_crystal);
         compoundView_crystal.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
-                showImage(compoundView_3dImage,v,container);
+                showImage(compoundView_3dImage,v,container,4);
             }});
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
@@ -493,7 +497,8 @@ public class CompoundFragment extends Fragment {
         }
 }
 
-    private void showImage(ImageView compoundImage,View v, ViewGroup container){
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void showImage(ImageView compoundImage, View v, ViewGroup container, int whichOne){
         final Dialog settingsDialog = new Dialog(v.getContext(),R.style.DialogTheme);
         View v2 = getLayoutInflater().inflate(R.layout.image_layout
                 , container,false);
@@ -506,8 +511,15 @@ public class CompoundFragment extends Fragment {
         ImageView img = v2.findViewById(R.id.imgvlayout);
         Drawable draw = compoundImage.getDrawable();
         if (draw!=null){
+            if(whichOne==2)
+            {
+                v2.setBackgroundColor(Color.parseColor("#f5f5f5"));
+            }
+            else {
+                v2.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
             Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
-            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1100, 1200, true));
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1200, 1200, true));
             img.setImageDrawable(d);
             settingsDialog.setContentView(v2);
             settingsDialog.show();
