@@ -280,6 +280,29 @@ public class MainActivity extends AppCompatActivity {
             Log.wtf("MyActivity", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
+
+        File file = new File(getApplication().getFilesDir().toString() + "/additional_compounds.csv");
+        try {
+            Scanner sc = new Scanner(file);
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                try {
+                    String[] tokens = line.split(";");
+                    if (!tokens[2].substring(1, tokens[2].length()-1).isEmpty() && !tokens[2].substring(1, tokens[2].length()-1).contentEquals(" ")) {
+                        global.getCompoundListFull().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
+                        global.getCompounds().add(new Compound(Integer.parseInt(tokens[0]), tokens[1].substring(1, tokens[1].length() - 1), tokens[2].substring(1, tokens[2].length() - 1)));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Main Activity","Exception in loadCompound x2");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadElements() {
@@ -406,6 +429,29 @@ public class MainActivity extends AppCompatActivity {
         try{
         inputMethodManager.hideSoftInputFromWindow(
                 getCurrentFocus().getWindowToken(), 0);}catch(Exception e){}
+    }
+
+    public boolean findCompound(List<Compound> list, Compound find) {
+        boolean found = false;
+        for (Compound current : list) {
+            if (find.getCID() == current.getCID())  {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void addCompound(Compound CID) {
+        try {
+            File file = new File(getApplication().getFilesDir().toString() + "/additional_compounds.csv");
+            FileWriter fr = new FileWriter(file, true);
+            fr.write("\n" + Integer.toString(CID.getCID()) + ";\"" + CID.getName() + "\";\"" +  CID.getFormula() + "\"");
+            fr.close();
+        } catch (IOException e) {
+        }
+        global.getCompoundListFull().add(CID);
     }
 
     private List<String> split(String input) {
