@@ -137,6 +137,8 @@ public class CompoundFragment extends Fragment {
         notes.setText(currentCompound.getNotes());
         final Button notesButton = view.findViewById(R.id.notes_button);
 
+        ((MainActivity)getActivity()).loadNotes();
+
         notesButton.setText("Edit Notes");
         notesButton.setOnClickListener(new View.OnClickListener() {
             @Override

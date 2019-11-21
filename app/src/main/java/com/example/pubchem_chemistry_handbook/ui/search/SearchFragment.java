@@ -143,6 +143,10 @@ public class SearchFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 final List<Compound> searchList = new ArrayList<>();
                 if (isChecked) {
+                    InputMethodManager imm = (InputMethodManager) getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isAcceptingText()){
+                        ((MainActivity) getActivity()).clearKeyboard();}
                     if (search != null && search != "") {
                         final String[] key = {""};
                         spinner.setVisibility(View.VISIBLE);
