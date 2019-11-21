@@ -211,14 +211,17 @@ public class CompoundFragment extends Fragment {
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID();
                 String shareNotes = notes.getText().toString();
-                //Intent i = new Intent(Intent.ACTION_VIEW);
-                //i.setData(Uri.parse(url));
-                //startActivity(i);
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
-                startActivity(Intent.createChooser(sharingIntent, "Share Compound Info"));
+                String shareString = url;
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shareString);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
+                Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+                viewIntent.setData(Uri.parse(url));
+                Intent chooserIntent = Intent.createChooser(sendIntent, "Share Compound Info");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{viewIntent});
+                startActivity(chooserIntent);
             }
         });
 
