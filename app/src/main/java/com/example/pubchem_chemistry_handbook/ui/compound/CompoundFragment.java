@@ -250,6 +250,10 @@ public class CompoundFragment extends Fragment {
 
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 notes.setText(currentCompound.getNotes());
+        SafetyItems_Images.removeAllViews();
+        SafetyItems_Text.removeAllViews();
+        StructureImageLayout.removeAllViews();
+        StructureTextLayout.removeAllViews();
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
