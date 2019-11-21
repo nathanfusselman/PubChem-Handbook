@@ -141,269 +141,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                final List<Compound> searchList = new ArrayList<>();
-                if (isChecked) {
-                    InputMethodManager imm = (InputMethodManager) getActivity()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm.isAcceptingText()){
-                        ((MainActivity) getActivity()).clearKeyboard();}
-                    if (search != null && search != "") {
-                        final String[] key = {""};
-                        spinner.setVisibility(View.VISIBLE);
-                        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                        final boolean[] foundFlag = {false};
-                        int downloadIdFirst = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/unified_search/structure_search.fcgi?format=json&queryblob=%7B%22query%22%3A%7B%22type%22%3A%22formula%22%2C%22parameter%22%3A%5B%7B%22name%22%3A%22FormulaQuery%22%2C%22string%22%3A%22" + search + "%22%7D%2C%7B%22name%22%3A%22UseCache%22%2C%22bool%22%3Atrue%7D%2C%7B%22name%22%3A%22SearchTimeMsec%22%2C%22num%22%3A5000%7D%2C%7B%22name%22%3A%22SearchMaxRecords%22%2C%22num%22%3A100000%7D%2C%7B%22name%22%3A%22allowotherelements%22%2C%22bool%22%3Afalse%7D%5D%7D%7D", getActivity().getFilesDir().toString(), "searchKey.json")
-                                .build()
-                                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                    @Override
-                                    public void onStartOrResume() {
-
-                                    }
-                                })
-                                .setOnPauseListener(new OnPauseListener() {
-                                    @Override
-                                    public void onPause() {
-
-                                    }
-                                })
-                                .setOnCancelListener(new OnCancelListener() {
-                                    @Override
-                                    public void onCancel() {
-                                        spinner.setVisibility(View.GONE);
-
-                                    }
-                                })
-                                .setOnProgressListener(new OnProgressListener() {
-                                    @Override
-                                    public void onProgress(Progress progress) {
-
-                                    }
-                                })
-                                .start(new OnDownloadListener() {
-                                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                    @Override
-                                    public void onDownloadComplete() {
-                                        JSONParser jsonParser = new JSONParser();
-                                        webSearch = true;
-                                        try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/searchKey.json"))
-                                        {
-
-                                            JSONObject obj = (JSONObject) jsonParser.parse(reader);
-                                            JSONObject response = (JSONObject) obj.get("response");
-                                            key[0] = (String) response.get("cachekey");
-                                            System.out.println(key[0]);
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        if (key[0] == "" || key[0] == null) {
-                                            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + search + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:1000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
-                                                    .build()
-                                                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                                        @Override
-                                                        public void onStartOrResume() {
-
-                                                        }
-                                                    })
-                                                    .setOnPauseListener(new OnPauseListener() {
-                                                        @Override
-                                                        public void onPause() {
-
-                                                        }
-                                                    })
-                                                    .setOnCancelListener(new OnCancelListener() {
-                                                        @Override
-                                                        public void onCancel() {
-                                                            spinner.setVisibility(View.GONE);
-
-                                                        }
-                                                    })
-                                                    .setOnProgressListener(new OnProgressListener() {
-                                                        @Override
-                                                        public void onProgress(Progress progress) {
-
-                                                        }
-                                                    })
-                                                    .start(new OnDownloadListener() {
-                                                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                                        @Override
-                                                        public void onDownloadComplete() {
-                                                            webSearch = true;
-                                                            int on = 0;
-                                                            File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
-                                                            InputStream is = null;
-                                                            try {
-                                                                is = new FileInputStream(file);
-                                                                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                                                                String line = "";
-
-                                                                try {
-                                                                    reader.readLine();
-                                                                    while (((line = reader.readLine()) != null)) {
-                                                                        //System.out.println(line);
-                                                                        List<String> tokens = split(line);
-                                                                        try {
-                                                                            searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
-                                                                            if (tokens.get(1).startsWith("\"")) {
-                                                                                searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
-                                                                            }
-                                                                            if (tokens.get(4).startsWith("\"")) {
-                                                                                searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
-                                                                            }
-                                                                            on++;
-                                                                        } catch (IndexOutOfBoundsException e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                } catch (IOException e) {
-                                                                    Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-                                                                    e.printStackTrace();
-                                                                }
-                                                            } catch (FileNotFoundException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
-                                                            } catch (NullPointerException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                is.close();
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            rvAdapter.notifyDataSetChanged();
-                                                            resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                                            for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
-                                                                if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
-                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                        ((MainActivity)getActivity()).addCompound(compound);
-                                                                    }
-                                                                }
-                                                            }
-                                                            //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
-                                                            spinner.setVisibility(View.GONE);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(Error error) {
-                                                            spinner.setVisibility(View.GONE);
-                                                            //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                                            Log.e("PRDownloader", "onError: " + error.toString());
-                                                        }
-                                                    });
-                                        } else {
-                                            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22input%22:{%22type%22:%22netcachekey%22,%22idtype%22:%22cid%22,%22key%22:%22" + key[0] +"%22}}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
-                                                    .build()
-                                                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                                        @Override
-                                                        public void onStartOrResume() {
-
-                                                        }
-                                                    })
-                                                    .setOnPauseListener(new OnPauseListener() {
-                                                        @Override
-                                                        public void onPause() {
-
-                                                        }
-                                                    })
-                                                    .setOnCancelListener(new OnCancelListener() {
-                                                        @Override
-                                                        public void onCancel() {
-                                                            spinner.setVisibility(View.GONE);
-
-                                                        }
-                                                    })
-                                                    .setOnProgressListener(new OnProgressListener() {
-                                                        @Override
-                                                        public void onProgress(Progress progress) {
-
-                                                        }
-                                                    })
-                                                    .start(new OnDownloadListener() {
-                                                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                                        @Override
-                                                        public void onDownloadComplete() {
-                                                            webSearch = true;
-                                                            int on = 0;
-                                                            File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
-                                                            InputStream is = null;
-                                                            try {
-                                                                is = new FileInputStream(file);
-                                                                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                                                                String line = "";
-
-                                                                try {
-                                                                    reader.readLine();
-                                                                    while (((line = reader.readLine()) != null)) {
-                                                                        //System.out.println(line);
-                                                                        List<String> tokens = split(line);
-                                                                        try {
-                                                                            searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
-                                                                            if (tokens.get(1).startsWith("\"")) {
-                                                                                searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
-                                                                            }
-                                                                            if (tokens.get(4).startsWith("\"")) {
-                                                                                searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
-                                                                            }
-                                                                            on++;
-                                                                        } catch (IndexOutOfBoundsException e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                } catch (IOException e) {
-                                                                    Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-                                                                    e.printStackTrace();
-                                                                }
-                                                            } catch (FileNotFoundException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
-                                                            } catch (NullPointerException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                is.close();
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            rvAdapter.notifyDataSetChanged();
-                                                            resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                                            for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
-                                                                if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
-                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                        ((MainActivity)getActivity()).addCompound(compound);
-                                                                    }
-                                                                }
-                                                            }
-                                                            //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
-                                                            spinner.setVisibility(View.GONE);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(Error error) {
-                                                            spinner.setVisibility(View.GONE);
-                                                            //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                                            Log.e("PRDownloader", "onError: " + error.toString());
-                                                        }
-                                                    });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(Error error) {
-                                        //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                        Log.e("PRDownloader", "onError: " + error.toString());
-                                    }
-                                });
-                    }
-                }
+                searchRun(isChecked);
             }
         });
 
@@ -411,265 +149,7 @@ public class SearchFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String s) {
-                final List<Compound> searchList = new ArrayList<>();
-                if (search_type_webSearch.isChecked()) {
-                    if (search != null && search != "") {
-                        final String[] key = {""};
-                        spinner.setVisibility(View.VISIBLE);
-                        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                        final boolean[] foundFlag = {false};
-                        int downloadIdFirst = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/unified_search/structure_search.fcgi?format=json&queryblob=%7B%22query%22%3A%7B%22type%22%3A%22formula%22%2C%22parameter%22%3A%5B%7B%22name%22%3A%22FormulaQuery%22%2C%22string%22%3A%22" + search + "%22%7D%2C%7B%22name%22%3A%22UseCache%22%2C%22bool%22%3Atrue%7D%2C%7B%22name%22%3A%22SearchTimeMsec%22%2C%22num%22%3A5000%7D%2C%7B%22name%22%3A%22SearchMaxRecords%22%2C%22num%22%3A100000%7D%2C%7B%22name%22%3A%22allowotherelements%22%2C%22bool%22%3Afalse%7D%5D%7D%7D", getActivity().getFilesDir().toString(), "searchKey.json")
-                                .build()
-                                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                    @Override
-                                    public void onStartOrResume() {
-
-                                    }
-                                })
-                                .setOnPauseListener(new OnPauseListener() {
-                                    @Override
-                                    public void onPause() {
-
-                                    }
-                                })
-                                .setOnCancelListener(new OnCancelListener() {
-                                    @Override
-                                    public void onCancel() {
-                                        spinner.setVisibility(View.GONE);
-
-                                    }
-                                })
-                                .setOnProgressListener(new OnProgressListener() {
-                                    @Override
-                                    public void onProgress(Progress progress) {
-
-                                    }
-                                })
-                                .start(new OnDownloadListener() {
-                                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                    @Override
-                                    public void onDownloadComplete() {
-                                        JSONParser jsonParser = new JSONParser();
-                                        webSearch = true;
-                                        try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/searchKey.json"))
-                                        {
-
-                                            JSONObject obj = (JSONObject) jsonParser.parse(reader);
-                                            JSONObject response = (JSONObject) obj.get("response");
-                                            key[0] = (String) response.get("cachekey");
-                                            System.out.println(key[0]);
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        if (key[0] == "" || key[0] == null) {
-                                            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + search + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:1000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
-                                                    .build()
-                                                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                                        @Override
-                                                        public void onStartOrResume() {
-
-                                                        }
-                                                    })
-                                                    .setOnPauseListener(new OnPauseListener() {
-                                                        @Override
-                                                        public void onPause() {
-
-                                                        }
-                                                    })
-                                                    .setOnCancelListener(new OnCancelListener() {
-                                                        @Override
-                                                        public void onCancel() {
-                                                            spinner.setVisibility(View.GONE);
-
-                                                        }
-                                                    })
-                                                    .setOnProgressListener(new OnProgressListener() {
-                                                        @Override
-                                                        public void onProgress(Progress progress) {
-
-                                                        }
-                                                    })
-                                                    .start(new OnDownloadListener() {
-                                                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                                        @Override
-                                                        public void onDownloadComplete() {
-                                                            webSearch = true;
-                                                            int on = 0;
-                                                            File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
-                                                            InputStream is = null;
-                                                            try {
-                                                                is = new FileInputStream(file);
-                                                                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                                                                String line = "";
-
-                                                                try {
-                                                                    reader.readLine();
-                                                                    while (((line = reader.readLine()) != null)) {
-                                                                        //System.out.println(line);
-                                                                        List<String> tokens = split(line);
-                                                                        try {
-                                                                            searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
-                                                                            if (tokens.get(1).startsWith("\"")) {
-                                                                                searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
-                                                                            }
-                                                                            if (tokens.get(4).startsWith("\"")) {
-                                                                                searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
-                                                                            }
-                                                                            on++;
-                                                                        } catch (IndexOutOfBoundsException e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                } catch (IOException e) {
-                                                                    Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-                                                                    e.printStackTrace();
-                                                                }
-                                                            } catch (FileNotFoundException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
-                                                            } catch (NullPointerException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                is.close();
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            rvAdapter.notifyDataSetChanged();
-                                                            resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                                            for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
-                                                                if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
-                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                        ((MainActivity)getActivity()).addCompound(compound);
-                                                                    }
-                                                                }
-                                                            }
-                                                            //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
-                                                            spinner.setVisibility(View.GONE);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(Error error) {
-                                                            spinner.setVisibility(View.GONE);
-                                                            //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                                            Log.e("PRDownloader", "onError: " + error.toString());
-                                                        }
-                                                    });
-                                        } else {
-                                            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22input%22:{%22type%22:%22netcachekey%22,%22idtype%22:%22cid%22,%22key%22:%22" + key[0] +"%22}}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
-                                                    .build()
-                                                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                                                        @Override
-                                                        public void onStartOrResume() {
-
-                                                        }
-                                                    })
-                                                    .setOnPauseListener(new OnPauseListener() {
-                                                        @Override
-                                                        public void onPause() {
-
-                                                        }
-                                                    })
-                                                    .setOnCancelListener(new OnCancelListener() {
-                                                        @Override
-                                                        public void onCancel() {
-                                                            spinner.setVisibility(View.GONE);
-
-                                                        }
-                                                    })
-                                                    .setOnProgressListener(new OnProgressListener() {
-                                                        @Override
-                                                        public void onProgress(Progress progress) {
-
-                                                        }
-                                                    })
-                                                    .start(new OnDownloadListener() {
-                                                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                                        @Override
-                                                        public void onDownloadComplete() {
-                                                            webSearch = true;
-                                                            int on = 0;
-                                                            File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
-                                                            InputStream is = null;
-                                                            try {
-                                                                is = new FileInputStream(file);
-                                                                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                                                                String line = "";
-
-                                                                try {
-                                                                    reader.readLine();
-                                                                    while (((line = reader.readLine()) != null)) {
-                                                                        //System.out.println(line);
-                                                                        List<String> tokens = split(line);
-                                                                        try {
-                                                                            searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
-                                                                            if (tokens.get(1).startsWith("\"")) {
-                                                                                searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
-                                                                            }
-                                                                            if (tokens.get(4).startsWith("\"")) {
-                                                                                searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
-                                                                            }
-                                                                            on++;
-                                                                        } catch (IndexOutOfBoundsException e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                } catch (IOException e) {
-                                                                    Log.wtf("MyActivity", "Error reading data file on line " + line, e);
-                                                                    e.printStackTrace();
-                                                                }
-                                                            } catch (FileNotFoundException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
-                                                                ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
-                                                            } catch (NullPointerException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            try {
-                                                                is.close();
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            rvAdapter.notifyDataSetChanged();
-                                                            resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
-                                                            for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
-                                                                if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
-                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                        ((MainActivity)getActivity()).addCompound(compound);
-                                                                    }
-                                                                }
-                                                            }
-                                                            //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
-                                                            spinner.setVisibility(View.GONE);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(Error error) {
-                                                            spinner.setVisibility(View.GONE);
-                                                            //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                                            Log.e("PRDownloader", "onError: " + error.toString());
-                                                        }
-                                                    });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(Error error) {
-                                        //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                                        Log.e("PRDownloader", "onError: " + error.toString());
-                                    }
-                                });
-                    }
-                }
+                searchRun(search_type_webSearch.isChecked());
                 return false;
             }
 
@@ -777,5 +257,271 @@ public class SearchFragment extends Fragment {
         //System.out.println(input.substring(last + 1, input.length() - 1));
         out.add(input.substring(last + 1));
         return out;
+    }
+
+    private void searchRun(boolean isChecked) {
+        final List<Compound> searchList = new ArrayList<>();
+        if (isChecked) {
+            InputMethodManager imm = (InputMethodManager) getActivity()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isAcceptingText()){
+                ((MainActivity) getActivity()).clearKeyboard();}
+            if (search != null && search != "") {
+                final String[] key = {""};
+                spinner.setVisibility(View.VISIBLE);
+                ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                final boolean[] foundFlag = {false};
+                int downloadIdFirst = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/unified_search/structure_search.fcgi?format=json&queryblob=%7B%22query%22%3A%7B%22type%22%3A%22formula%22%2C%22parameter%22%3A%5B%7B%22name%22%3A%22FormulaQuery%22%2C%22string%22%3A%22" + search + "%22%7D%2C%7B%22name%22%3A%22UseCache%22%2C%22bool%22%3Atrue%7D%2C%7B%22name%22%3A%22SearchTimeMsec%22%2C%22num%22%3A5000%7D%2C%7B%22name%22%3A%22SearchMaxRecords%22%2C%22num%22%3A100000%7D%2C%7B%22name%22%3A%22allowotherelements%22%2C%22bool%22%3Afalse%7D%5D%7D%7D", getActivity().getFilesDir().toString(), "searchKey.json")
+                        .build()
+                        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                            @Override
+                            public void onStartOrResume() {
+
+                            }
+                        })
+                        .setOnPauseListener(new OnPauseListener() {
+                            @Override
+                            public void onPause() {
+
+                            }
+                        })
+                        .setOnCancelListener(new OnCancelListener() {
+                            @Override
+                            public void onCancel() {
+                                spinner.setVisibility(View.GONE);
+
+                            }
+                        })
+                        .setOnProgressListener(new OnProgressListener() {
+                            @Override
+                            public void onProgress(Progress progress) {
+
+                            }
+                        })
+                        .start(new OnDownloadListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onDownloadComplete() {
+                                JSONParser jsonParser = new JSONParser();
+                                webSearch = true;
+                                try (FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/searchKey.json"))
+                                {
+
+                                    JSONObject obj = (JSONObject) jsonParser.parse(reader);
+                                    JSONObject response = (JSONObject) obj.get("response");
+                                    key[0] = (String) response.get("cachekey");
+                                    System.out.println(key[0]);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (key[0] == "" || key[0] == null) {
+                                    int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22*%22:%22" + search + "%22}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:1000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
+                                            .build()
+                                            .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                                @Override
+                                                public void onStartOrResume() {
+
+                                                }
+                                            })
+                                            .setOnPauseListener(new OnPauseListener() {
+                                                @Override
+                                                public void onPause() {
+
+                                                }
+                                            })
+                                            .setOnCancelListener(new OnCancelListener() {
+                                                @Override
+                                                public void onCancel() {
+                                                    spinner.setVisibility(View.GONE);
+
+                                                }
+                                            })
+                                            .setOnProgressListener(new OnProgressListener() {
+                                                @Override
+                                                public void onProgress(Progress progress) {
+
+                                                }
+                                            })
+                                            .start(new OnDownloadListener() {
+                                                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                                                @Override
+                                                public void onDownloadComplete() {
+                                                    webSearch = true;
+                                                    int on = 0;
+                                                    File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
+                                                    InputStream is = null;
+                                                    try {
+                                                        is = new FileInputStream(file);
+                                                        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                                                        String line = "";
+
+                                                        try {
+                                                            reader.readLine();
+                                                            while (((line = reader.readLine()) != null)) {
+                                                                //System.out.println(line);
+                                                                List<String> tokens = split(line);
+                                                                try {
+                                                                    searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
+                                                                    if (tokens.get(1).startsWith("\"")) {
+                                                                        searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
+                                                                    }
+                                                                    if (tokens.get(4).startsWith("\"")) {
+                                                                        searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
+                                                                    }
+                                                                    on++;
+                                                                } catch (IndexOutOfBoundsException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        } catch (IOException e) {
+                                                            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+                                                            e.printStackTrace();
+                                                        }
+                                                    } catch (FileNotFoundException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    try {
+                                                        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                                                        ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
+                                                    } catch (NullPointerException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    try {
+                                                        is.close();
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    rvAdapter.notifyDataSetChanged();
+                                                    resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
+                                                    for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
+                                                        if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                ((MainActivity)getActivity()).addCompound(compound);
+                                                            }
+                                                        }
+                                                    }
+                                                    //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
+                                                    spinner.setVisibility(View.GONE);
+                                                }
+
+                                                @Override
+                                                public void onError(Error error) {
+                                                    spinner.setVisibility(View.GONE);
+                                                    //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                                    Log.e("PRDownloader", "onError: " + error.toString());
+                                                }
+                                            });
+                                } else {
+                                    int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22input%22:{%22type%22:%22netcachekey%22,%22idtype%22:%22cid%22,%22key%22:%22" + key[0] +"%22}}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
+                                            .build()
+                                            .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                                @Override
+                                                public void onStartOrResume() {
+
+                                                }
+                                            })
+                                            .setOnPauseListener(new OnPauseListener() {
+                                                @Override
+                                                public void onPause() {
+
+                                                }
+                                            })
+                                            .setOnCancelListener(new OnCancelListener() {
+                                                @Override
+                                                public void onCancel() {
+                                                    spinner.setVisibility(View.GONE);
+
+                                                }
+                                            })
+                                            .setOnProgressListener(new OnProgressListener() {
+                                                @Override
+                                                public void onProgress(Progress progress) {
+
+                                                }
+                                            })
+                                            .start(new OnDownloadListener() {
+                                                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                                                @Override
+                                                public void onDownloadComplete() {
+                                                    webSearch = true;
+                                                    int on = 0;
+                                                    File file = new File(getActivity().getApplication().getFilesDir().toString() + "/search.csv");
+                                                    InputStream is = null;
+                                                    try {
+                                                        is = new FileInputStream(file);
+                                                        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                                                        String line = "";
+
+                                                        try {
+                                                            reader.readLine();
+                                                            while (((line = reader.readLine()) != null)) {
+                                                                //System.out.println(line);
+                                                                List<String> tokens = split(line);
+                                                                try {
+                                                                    searchList.add(new Compound(Integer.parseInt(tokens.get(0)), tokens.get(1), tokens.get(4)));
+                                                                    if (tokens.get(1).startsWith("\"")) {
+                                                                        searchList.get(on).setName(tokens.get(1).substring(1, tokens.get(1).length() - 1));
+                                                                    }
+                                                                    if (tokens.get(4).startsWith("\"")) {
+                                                                        searchList.get(on).setFormula(tokens.get(4).substring(1, tokens.get(4).length() - 1));
+                                                                    }
+                                                                    on++;
+                                                                } catch (IndexOutOfBoundsException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        } catch (IOException e) {
+                                                            Log.wtf("MyActivity", "Error reading data file on line " + line, e);
+                                                            e.printStackTrace();
+                                                        }
+                                                    } catch (FileNotFoundException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    try {
+                                                        ((MainActivity)getActivity()).getGlobal().getCompounds().clear();
+                                                        ((MainActivity)getActivity()).getGlobal().getCompounds().addAll(searchList);
+                                                    } catch (NullPointerException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    try {
+                                                        is.close();
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    rvAdapter.notifyDataSetChanged();
+                                                    resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getCompounds().size());
+                                                    for (Compound compound : ((MainActivity)getActivity()).getGlobal().getCompounds()) {
+                                                        if (!((MainActivity)getActivity()).findCompound(((MainActivity)getActivity()).getGlobal().getCompoundListFull(), compound)) {
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                ((MainActivity)getActivity()).addCompound(compound);
+                                                            }
+                                                        }
+                                                    }
+                                                    //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
+                                                    spinner.setVisibility(View.GONE);
+                                                }
+
+                                                @Override
+                                                public void onError(Error error) {
+                                                    spinner.setVisibility(View.GONE);
+                                                    //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                                    Log.e("PRDownloader", "onError: " + error.toString());
+                                                }
+                                            });
+                                }
+                            }
+
+                            @Override
+                            public void onError(Error error) {
+                                //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                Log.e("PRDownloader", "onError: " + error.toString());
+                            }
+                        });
+            }
+        }
     }
 }
