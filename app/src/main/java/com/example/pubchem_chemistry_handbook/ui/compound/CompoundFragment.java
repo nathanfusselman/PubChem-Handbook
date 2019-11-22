@@ -9,14 +9,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.session.PlaybackState;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,10 +67,15 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import static java.lang.Thread.sleep;
 
@@ -544,16 +552,35 @@ public class CompoundFragment extends Fragment {
                     if (struct_name.equals("2D Structure")) {
                         StructureImageLayout.addView(StructureImages[0]);
                         StructureTextLayout.addView(StructureTexts[0]);
+                        final File directory = getContext().getExternalFilesDir(null);
+                        File fullPath = new File(directory + "/" + currentCompound.getCID()+"/2d.jpg");
                         WeakReference<ImageView> weakCV2D = new WeakReference<ImageView>(compoundView_2dImage);
-                        AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
-                        image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
+                        if(!fullPath.exists()) {
+                            AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
+                            image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
+                            new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s", "2d");
+                        }
+                        else{
+                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                            weakCV2D.get().setImageBitmap(myBitmap);
+                        }
                     }
                     if (struct_name.equals("3D Conformer")) {
                         StructureImageLayout.addView(StructureImages[1]);
                         StructureTextLayout.addView(StructureTexts[1]);
+                        final File directory = getContext().getExternalFilesDir(null);
+                        File fullPath = new File(directory + "/" + currentCompound.getCID() + "/3d.jpg");
                         WeakReference<ImageView> weakCV3D = new WeakReference<ImageView>(compoundView_3dImage);
+                        if(!fullPath.exists()) {
                         AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
                         image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s");
+                        new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s", "3d");
+                        }
+                        else
+                        {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                            weakCV3D.get().setImageBitmap(myBitmap);
+                        }
                     }
                     if (struct_name.equals("Crystal Structures")) {
                         JSONArray temp = (JSONArray) struct_1.get("Section");
@@ -565,10 +592,20 @@ public class CompoundFragment extends Fragment {
                         String ExternalURLData = (String) contents.get(0);
                         StructureImageLayout.addView(StructureImages[2]);
                         StructureTextLayout.addView(StructureTexts[2]);
+                        final File directory = getContext().getExternalFilesDir(null);
+                        File fullPath = new File(directory + "/" + currentCompound.getCID() + "/crystal.jpg");
                         WeakReference<ImageView> weakCompViewCrystal;
                         weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
+                        if(!fullPath.exists()) {
                         AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCompViewCrystal);
                         image_Loader.execute(ExternalURLData);
+                        new getBitmapFromURL().execute(ExternalURLData, "crystal");
+                        }
+                        else
+                        {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                            weakCompViewCrystal.get().setImageBitmap(myBitmap);
+                        }
                     }
                 }
             }
@@ -644,5 +681,50 @@ public class CompoundFragment extends Fragment {
         e.printStackTrace();
     }
 }
+
+    private class getBitmapFromURL extends AsyncTask<String, Void, Bitmap> {
+        String type;
+        Bitmap myBitmap;
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            type = strings[1];
+            String src = strings[0];
+            try {
+                java.net.URL url = new java.net.URL(src);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        @SuppressLint("WrongThread")
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            String savedImagePath = null;
+            String imageFileName = type + ".jpg";
+            final File directory = getContext().getExternalFilesDir(null);
+            File fullPath = new File(directory + "/" + currentCompound.getCID()+"/");
+            boolean success = true;
+            if (!fullPath.exists()) {
+                success = fullPath.mkdirs();
+            }
+            if (success) {
+                File imageFile = new File(fullPath, imageFileName);
+                savedImagePath = imageFile.getAbsolutePath();
+                try {
+                    OutputStream fOut = new FileOutputStream(imageFile);
+                    myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } }
+    }
     }
 
