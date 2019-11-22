@@ -64,6 +64,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class CompoundFragment extends Fragment {
     private Compound currentCompound = new Compound(0,"","");
@@ -213,43 +214,48 @@ public class CompoundFragment extends Fragment {
         });
         */
 
-
-downloadButton.setOnClickListener(new View.OnClickListener() {
+            downloadButton.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         String LCSSLink = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID() + "#datasheet=LCSS";
         final File directory = getContext().getExternalFilesDir(null);
         final String fileName="Compound" + currentCompound.getCID() + ".pdf";
-        final ProgressDialog progressDialog=new ProgressDialog(getContext());
-        progressDialog.setMessage("Please wait");
-        progressDialog.show();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(LCSSLink);
-        webView.setWebViewClient(new WebViewClient() {
+        File fullPath= new File(directory+"/"+fileName);
+        if(fullPath.exists()) {
+            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "PDF already downloaded! Do you want to open the pdf file?" + fileName, fullPath.toString());
+        }
+        else {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Downloading LCSS PDF, pleas wait");
+            progressDialog.show();
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.loadUrl(LCSSLink);
+            webView.setWebViewClient(new WebViewClient() {
 
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    return false;
+                }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                Log.i("webview", "page finished loading " + url);
-                PdfView.createWebPrintJob(getActivity(),view, directory, fileName, new PdfView.Callback() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    Log.i("webview", "page finished loading " + url);
+                    PdfView.createWebPrintJob(getActivity(), view, directory, fileName, new PdfView.Callback() {
 
-                    @Override
-                    public void success(String path) {
-                        progressDialog.dismiss();
-                        PdfView.openPdfFile(getActivity(),getString(R.string.app_name),"Do you want to open the pdf file?"+fileName,path);
-                    }
+                        @Override
+                        public void success(String path) {
+                            progressDialog.dismiss();
+                            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "Do you want to open the pdf file?" + fileName, path);
+                        }
 
-                    @Override
-                    public void failure() {
-                        progressDialog.dismiss();
+                        @Override
+                        public void failure() {
+                            progressDialog.dismiss();
 
                         }
-                        });
-                    }
-                });
+                    });
+                }
+            });
+        }
             }
         });
 
@@ -583,4 +589,5 @@ downloadButton.setOnClickListener(new View.OnClickListener() {
             settingsDialog.show();
         }
     }
-}
+    }
+
