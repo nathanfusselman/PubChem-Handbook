@@ -98,7 +98,7 @@ public class CompoundFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
-                showImage(compoundView_3dImage,v,container,4);
+                showImage(compoundView_crystal,v,container,4);
             }});
         final TableLayout PhysicalProperties = view.findViewById(R.id.PhysicalProperties);
         final LinearLayout SafetyItems_Images = view.findViewById(R.id.SafetyItems_Images);
@@ -296,6 +296,10 @@ downloadButton.setOnClickListener(new View.OnClickListener() {
 
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 notes.setText(currentCompound.getNotes());
+        SafetyItems_Images.removeAllViews();
+        SafetyItems_Text.removeAllViews();
+        StructureImageLayout.removeAllViews();
+        StructureTextLayout.removeAllViews();
                 int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
                         .build()
                         .setOnStartOrResumeListener(new OnStartOrResumeListener() {
