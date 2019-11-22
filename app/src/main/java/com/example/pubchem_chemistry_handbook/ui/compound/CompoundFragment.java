@@ -2,6 +2,7 @@ package com.example.pubchem_chemistry_handbook.ui.compound;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,15 +11,19 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -26,7 +31,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -48,12 +52,14 @@ import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.SafetyItem;
 import com.example.pubchem_chemistry_handbook.ui.AsyncTaskLoadImage;
+import com.webviewtopdf.PdfView;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -136,6 +142,8 @@ public class CompoundFragment extends Fragment {
         final TextView notes = view.findViewById(R.id.notes);
         notes.setText(currentCompound.getNotes());
         final Button notesButton = view.findViewById(R.id.notes_button);
+        final Button downloadButton = view.findViewById(R.id.downloadButton);
+        final WebView webView=view.findViewById(R.id.web_view);
 
         ((MainActivity)getActivity()).loadNotes();
 
@@ -206,17 +214,55 @@ public class CompoundFragment extends Fragment {
         */
 
 
+downloadButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        String LCSSLink = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID() + "#datasheet=LCSS";
+        final File directory = getContext().getExternalFilesDir(null);
+        final String fileName="Compound" + currentCompound.getCID() + ".pdf";
+        final ProgressDialog progressDialog=new ProgressDialog(getContext());
+        progressDialog.setMessage("Please wait");
+        progressDialog.show();
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(LCSSLink);
+        webView.setWebViewClient(new WebViewClient() {
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.i("webview", "page finished loading " + url);
+                PdfView.createWebPrintJob(getActivity(),view, directory, fileName, new PdfView.Callback() {
+
+                    @Override
+                    public void success(String path) {
+                        progressDialog.dismiss();
+                        PdfView.openPdfFile(getActivity(),getString(R.string.app_name),"Do you want to open the pdf file?"+fileName,path);
+                    }
+
+                    @Override
+                    public void failure() {
+                        progressDialog.dismiss();
+
+                        }
+                        });
+                    }
+                });
+            }
+        });
 
         shareButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
                 String url = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID();
                 String shareNotes = notes.getText().toString();
-                String shareString = url;
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType("text/plain");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, shareString);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, url);
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
-                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out " + currentCompound.getName() + " on PubChem:\n" + url + "\n\nNotes:\n" + shareNotes);
                 Intent viewIntent = new Intent(Intent.ACTION_VIEW);
                 viewIntent.setData(Uri.parse(url));
                 Intent chooserIntent = Intent.createChooser(sendIntent, "Share Compound Info");
