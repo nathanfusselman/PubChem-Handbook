@@ -410,10 +410,12 @@ public class CompoundFragment extends Fragment {
                 v2.setBackgroundColor(Color.parseColor("#ffffff"));
             }
             Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
-            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1200, 1200, true));
-            img.setImageDrawable(d);
-            settingsDialog.setContentView(v2);
+            try {
+                Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1200, 1200, true));
+                img.setImageDrawable(d);
+                settingsDialog.setContentView(v2);
             settingsDialog.show();
+            }catch(NullPointerException e){e.printStackTrace();}
         }
     }
 
