@@ -33,7 +33,7 @@ public class pSearchFragment extends Fragment {
 
     private final ArrayList<String> symbols = new ArrayList<>();
 
-    boolean exactSearch_state = false;
+    private boolean exactSearch_state = false;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -74,37 +74,6 @@ public class pSearchFragment extends Fragment {
                         if(getActivity()!=null){
                         if (((MainActivity)getActivity()).getGlobal().getElements().get(position).getAtomicNumber() > 0) {
                             boolean exists = false;
-                            /* STYLE ONE
-                            int on = 0;
-                            for (String symbol : symbols) {
-                                if (symbol.contains(((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol())) {
-                                    System.out.println("TRUE AT: " + symbol);
-                                    exists = true;
-                                    int mult = 1;
-                                    int total = 0;
-                                    boolean first = true;
-                                    for (int i = symbol.length()-1; i >= 0; i--) {
-                                        if (Character.isDigit(symbol.charAt(i))) {
-                                            //System.out.println("ADDING: " + mult*Integer.parseInt(String.valueOf(symbol.charAt(i))) + " AT: " + symbol.charAt(i));
-                                            total += mult*Integer.parseInt(String.valueOf(symbol.charAt(i)));
-                                            mult = mult*10;
-                                            first = false;
-                                        }
-                                    }
-                                    //System.out.println("Old Total: " + total);
-                                    total++;
-                                    if (first) {
-                                        total++;
-                                    }
-                                    //System.out.println("New Total: " + total);
-                                    symbols.set(on, ((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol() + total);
-                                    Log.d("PSearch", "Symbol Pressed " + symbols.get(on));
-                                }
-                                on++;
-                            }
-                             */
-
-                            //STYLE TWO
                             if (symbols.size() > 0) {
                                 if (symbols.get(symbols.size()-1).contains(((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol())) {
                                     System.out.println("TRUE AT: " + symbols.get(symbols.size()-1));
@@ -114,18 +83,15 @@ public class pSearchFragment extends Fragment {
                                     boolean first = true;
                                     for (int i = symbols.get(symbols.size()-1).length()-1; i >= 0; i--) {
                                         if (Character.isDigit(symbols.get(symbols.size()-1).charAt(i))) {
-                                            //System.out.println("ADDING: " + mult*Integer.parseInt(String.valueOf(symbol.charAt(i))) + " AT: " + symbol.charAt(i));
                                             total += mult*Integer.parseInt(String.valueOf(symbols.get(symbols.size()-1).charAt(i)));
                                             mult = mult*10;
                                             first = false;
                                         }
                                     }
-                                    //System.out.println("Old Total: " + total);
                                     total++;
                                     if (first) {
                                         total++;
                                     }
-                                    //System.out.println("New Total: " + total);
                                     symbols.set(symbols.size()-1, ((MainActivity)getActivity()).getGlobal().getElements().get(position).getSymbol() + total);
                                     Log.d("PSearch", "Symbol Pressed " + symbols.get(symbols.size()-1));
                                 }

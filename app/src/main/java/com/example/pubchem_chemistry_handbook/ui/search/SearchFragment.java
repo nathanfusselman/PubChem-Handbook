@@ -40,7 +40,6 @@ import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
 import com.example.pubchem_chemistry_handbook.ui.RVAdapter;
 import com.example.pubchem_chemistry_handbook.ui.pSearch.pSearchFragment;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -501,14 +500,12 @@ public class SearchFragment extends Fragment {
                                                             }
                                                         }
                                                     }
-                                                    //Toast.makeText(getActivity(), ((MainActivity)getActivity()).getGlobal().getCompounds().size() + " results loaded", Toast.LENGTH_SHORT).show();
                                                     spinner.setVisibility(View.GONE);
                                                 }
 
                                                 @Override
                                                 public void onError(Error error) {
                                                     spinner.setVisibility(View.GONE);
-                                                    //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
                                                     Log.e("PRDownloader", "onError: " + error.toString());
                                                 }
                                             });
@@ -517,7 +514,6 @@ public class SearchFragment extends Fragment {
 
                             @Override
                             public void onError(Error error) {
-                                //Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
                                 Log.e("PRDownloader", "onError: " + error.toString());
                             }
                         });

@@ -1,5 +1,6 @@
 package com.example.pubchem_chemistry_handbook.ui.compound;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -189,32 +190,8 @@ public class CompoundFragment extends Fragment {
             }
         });
 
-        /*
-        final EditText notes = view.findViewById(R.id.notes);
-        final Button notescheck = view.findViewById(R.id.check);
-        final Button notesx = view.findViewById(R.id.x);
-        notescheck.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                notes.clearFocus();
-                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ((MainActivity)getActivity()).setNote(currentCompound, String.valueOf(notes.getText()));
-                }
-                notes.setText(currentCompound.getNotes());
-            }
-        });
-        notesx.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                notes.clearFocus();
-                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(compoundView.getWindowToken(), 0);
-                notes.setText(currentCompound.getNotes());
-            }
-        });
-        */
-
             downloadButton.setOnClickListener(new View.OnClickListener() {
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onClick(View v) {
         String LCSSLink = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID() + "#datasheet=LCSS";
@@ -295,7 +272,6 @@ public class CompoundFragment extends Fragment {
                 PhysicalProperties.removeAllViews();
                 ((MainActivity)getActivity()).getGlobal().setSafetyItems(0);
                 favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
-                //currentCompound = ((MainActivity)getActivity()).getGlobal().getCompounds().get(current_pos);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ((MainActivity)getActivity()).addRecent(currentCompound);
         }
@@ -335,6 +311,7 @@ public class CompoundFragment extends Fragment {
                         .start(new OnDownloadListener() {
                             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
+                            @SuppressWarnings("ConstantConditions")
                             public void onDownloadComplete() {
                                 JSONParser jsonParser = new JSONParser();
 
@@ -481,7 +458,9 @@ public class CompoundFragment extends Fragment {
                                             }
                                         }
                                     } catch (NullPointerException e) {
+                                        e.printStackTrace();
                                     } catch (IndexOutOfBoundsException i) {
+                                        i.printStackTrace();
                                     }
                                     SafetyItems_Images.removeAllViews();
                                     SafetyItems_Text.removeAllViews();
@@ -521,6 +500,7 @@ public class CompoundFragment extends Fragment {
                                             }
                                         }
                                     } catch (NullPointerException e) {
+                                        e.printStackTrace();
                                     }
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();

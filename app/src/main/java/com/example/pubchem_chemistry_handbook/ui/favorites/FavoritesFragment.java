@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoritesFragment extends Fragment {
-
-    //FavoritesViewModel favoritesViewModel; //notused
     private RVAdapter rvAdapter;
     private List<Compound> currentList;
 

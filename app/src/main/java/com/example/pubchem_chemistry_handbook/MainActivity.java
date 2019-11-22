@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import com.example.pubchem_chemistry_handbook.data.Element;
 import com.example.pubchem_chemistry_handbook.data.global;
 import com.example.pubchem_chemistry_handbook.ui.compound.CompoundFragment;
 import com.example.pubchem_chemistry_handbook.ui.pTable.ElementFragment;
-import com.example.pubchem_chemistry_handbook.ui.pTable.pTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedReader;
@@ -428,8 +426,11 @@ public class MainActivity extends AppCompatActivity {
                 (InputMethodManager) getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
         try{
-        inputMethodManager.hideSoftInputFromWindow(
-                getCurrentFocus().getWindowToken(), 0);}catch(Exception e){}
+            if (inputMethodManager != null) {
+                inputMethodManager.hideSoftInputFromWindow(
+                        getCurrentFocus().getWindowToken(), 0);
+            }
+        }catch(Exception e){}
     }
 
     public boolean findCompound(List<Compound> list, Compound find) {
@@ -474,7 +475,6 @@ public class MainActivity extends AppCompatActivity {
             }
             if (input.charAt(i) == ',' && inP == false) {
                 if (hadP) {
-                    //System.out.println(input.substring(last + 2, i-1));
                     if (input.substring(last + 2, i-1).length() == 0) {
                         out.add(null);
                     } else {
@@ -482,7 +482,6 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    //System.out.println(input.substring(last + 1, i));
                     if (input.substring(last + 1, i).length() == 0) {
                         out.add(null);
                     } else {
@@ -498,7 +497,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             out.add(input.substring(last + 1, input.length()));
         }
-        //System.out.println(input.substring(last + 1, input.length() - 1));
         return out;
     }
 }
