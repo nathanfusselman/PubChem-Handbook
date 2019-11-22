@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +32,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -199,7 +201,7 @@ public class CompoundFragment extends Fragment {
         final String fileName="Compound" + currentCompound.getCID() + ".pdf";
         File fullPath= new File(directory+"/"+fileName);
         if(fullPath.exists()) {
-            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "PDF already downloaded! Do you want to open the pdf file?" + fileName, fullPath.toString());
+            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "PDF already downloaded! Do you want to open the pdf file? To delete this PDF, long click the download button\n\n" + fileName, fullPath.toString());
         }
         else {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
@@ -235,6 +237,33 @@ public class CompoundFragment extends Fragment {
         }
             }
         });
+
+        downloadButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu menu = new PopupMenu(getContext(), v);
+                menu.setGravity(v.getTop());
+                menu.getMenu().add("Delete current pdf?");
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if((item.getTitle().toString()).equals("Delete current pdf?"))
+                        {
+                            final File directory = getContext().getExternalFilesDir(null);
+                            final String fileName = "Compound" + currentCompound.getCID() + ".pdf";
+                            File fullPath = new File(directory + "/" + fileName);
+                            if (fullPath.exists()) {
+                                fullPath.delete();
+                            }
+                        } else {
+                            Toast.makeText(getContext(),"File not found!",Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    }
+                });
+                menu.show();
+                return true;
+            }});
 
         shareButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
