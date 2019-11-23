@@ -58,7 +58,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         final File directory = getContext().getExternalFilesDir(null);
         final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         assert directory != null;
-        fullPath= directory.toString() + "/" + date + ".xml";
+        fullPath= directory.toString() + "/RSSFeed_" + date + ".xml";
         File toCheck = new File(fullPath);
 
         if(!toCheck.exists())
