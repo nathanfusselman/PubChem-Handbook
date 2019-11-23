@@ -71,6 +71,7 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.Thread.sleep;
@@ -704,7 +705,9 @@ public class CompoundFragment extends Fragment {
         protected void onPostExecute(Bitmap bitmap) {
             String savedImagePath = null;
             String imageFileName = type + ".jpg";
-            final File directory = getContext().getExternalFilesDir(null);
+            if(getActivity()!=null) {
+                final File directory = getActivity().getExternalFilesDir(null);
+
             File fullPath = new File(directory + "/" + currentCompound.getCID()+"/");
             boolean success = true;
             if (!fullPath.exists()) {
@@ -720,7 +723,9 @@ public class CompoundFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } }
+            }
+            }
+        }
     }
 }
 
