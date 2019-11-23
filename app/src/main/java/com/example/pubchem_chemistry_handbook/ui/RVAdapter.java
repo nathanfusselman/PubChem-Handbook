@@ -43,7 +43,7 @@ public class RVAdapter extends RecyclerView.Adapter<CompoundListItem> implements
     @Override
     public CompoundListItem onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        return new CompoundListItem(view, mListener);
+        return new CompoundListItem(view, mListener,parent.getContext());
     }
 
     @Override
