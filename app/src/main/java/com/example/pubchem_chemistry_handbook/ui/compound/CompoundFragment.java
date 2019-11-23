@@ -13,6 +13,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -703,27 +705,35 @@ public class CompoundFragment extends Fragment {
         @SuppressLint("WrongThread")
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+
             String savedImagePath = null;
             String imageFileName = type + ".jpg";
             if(getActivity()!=null) {
+                ConnectivityManager cm =
+                        (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+                if(isConnected){
                 final File directory = getActivity().getExternalFilesDir(null);
 
-            File fullPath = new File(directory + "/" + currentCompound.getCID()+"/");
-            boolean success = true;
-            if (!fullPath.exists()) {
-                success = fullPath.mkdirs();
-            }
-            if (success) {
-                File imageFile = new File(fullPath, imageFileName);
-                savedImagePath = imageFile.getAbsolutePath();
-                try {
-                    OutputStream fOut = new FileOutputStream(imageFile);
-                    myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                    fOut.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    File fullPath = new File(directory + "/" + currentCompound.getCID()+"/");
+                    boolean success = true;
+                    if (!fullPath.exists()) {
+                        success = fullPath.mkdirs();
+                    }
+                    if (success) {
+                        File imageFile = new File(fullPath, imageFileName);
+                        savedImagePath = imageFile.getAbsolutePath();
+                        try {
+                            OutputStream fOut = new FileOutputStream(imageFile);
+                            myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                            fOut.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            }
             }
         }
     }
