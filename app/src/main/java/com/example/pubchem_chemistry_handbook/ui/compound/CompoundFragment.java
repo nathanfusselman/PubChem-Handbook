@@ -202,38 +202,26 @@ public class CompoundFragment extends Fragment {
             }
         });
 
-            downloadButton.setOnClickListener(new View.OnClickListener() {
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
-    public void onClick(View v) {
-        String LCSSLink = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID() + "#datasheet=LCSS";
-        final File directory = getContext().getExternalFilesDir(null);
-        final String fileName="Compound" + currentCompound.getCID() + ".pdf";
-        File fullPath= new File(directory+"/"+fileName);
-        if(fullPath.exists()) {
-            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "PDF already downloaded! Do you want to open the pdf file? To delete this PDF, long click the download button\n\n" + fileName, fullPath.toString());
-        }
-        else {
-            final ProgressDialog progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("Downloading LCSS PDF, pleas wait");
-            progressDialog.show();
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl(LCSSLink);
-            webView.setWebViewClient(new WebViewClient() {
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetJavaScriptEnabled")
+            @Override
+            public void onClick(View v) {
+                String LCSSLink = "https://pubchem.ncbi.nlm.nih.gov/compound/" + currentCompound.getCID() + "#datasheet=LCSS";
+                final File directory = getContext().getExternalFilesDir(null);
+                final String fileName = "Compound" + currentCompound.getCID() + ".pdf";
+                File fullPath = new File(directory + "/" + fileName);
+                if (fullPath.exists()) {
+                    PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "PDF already downloaded! Do you want to open the pdf file? If this file needs to be deleted, long press the download button.\n" + fileName, fullPath.toString());
+                } else {
+                    final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setMessage("Downloading LCSS PDF, pleas wait");
+                    progressDialog.show();
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.loadUrl(LCSSLink);
+                    webView.setWebViewClient(new WebViewClient() {
 
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return false;
-                }
-
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    Log.i("webview", "page finished loading " + url);
-                    PdfView.createWebPrintJob(getActivity(), view, directory, fileName, new PdfView.Callback() {
-
-                        @Override
-                        public void success(String path) {
-                            progressDialog.dismiss();
-                            PdfView.openPdfFile(getActivity(), getString(R.string.app_name), "Do you want to open the pdf file?" + fileName, path);
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            return false;
                         }
 
                         @Override
@@ -258,33 +246,6 @@ public class CompoundFragment extends Fragment {
                 }
             }
         });
-        downloadButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public boolean onLongClick(View v) {
-                PopupMenu menu = new PopupMenu(getContext(), v);
-                menu.setGravity(v.getTop());
-                menu.getMenu().add("Delete current pdf?");
-                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if((item.getTitle().toString()).equals("Delete current pdf?"))
-                        {
-                            final File directory = getContext().getExternalFilesDir(null);
-                            final String fileName = "Compound" + currentCompound.getCID() + ".pdf";
-                            File fullPath = new File(directory + "/" + fileName);
-                            if (fullPath.exists()) {
-                                fullPath.delete();
-                            }
-                            } else {
-                            Toast.makeText(getContext(),"File not found!",Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                        }
-                    });
-                menu.show();
-                return true;
-            }});
-
         downloadButton.setOnLongClickListener(new View.OnLongClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -369,49 +330,49 @@ public class CompoundFragment extends Fragment {
             }
         }
         else{
-        int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
-                .build()
-                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                    @Override
-                    public void onStartOrResume() {
+            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
+                    .build()
+                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                        @Override
+                        public void onStartOrResume() {
 
-                    }
-                })
-                .setOnPauseListener(new OnPauseListener() {
-                    @Override
-                    public void onPause() {
+                        }
+                    })
+                    .setOnPauseListener(new OnPauseListener() {
+                        @Override
+                        public void onPause() {
 
-                    }
-                })
-                .setOnCancelListener(new OnCancelListener() {
-                    @Override
-                    public void onCancel() {
+                        }
+                    })
+                    .setOnCancelListener(new OnCancelListener() {
+                        @Override
+                        public void onCancel() {
 
-                    }
-                })
-                .setOnProgressListener(new OnProgressListener() {
-                    @Override
-                    public void onProgress(Progress progress) {
+                        }
+                    })
+                    .setOnProgressListener(new OnProgressListener() {
+                        @Override
+                        public void onProgress(Progress progress) {
 
-                    }
-                })
-                .start(new OnDownloadListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void onDownloadComplete() {
-                        parseCompound(Summary, PhysicalProperties,  StructureImageLayout,
-                                 StructureTextLayout, StructureImages, StructureTexts,
-                                 compoundView_2dImage,  compoundView_3dImage,  compoundView_crystal,
-                                 SafetyItems_Images,  SafetyItems_Text,  SafetyItems,
-                                 nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
-                    }
+                        }
+                    })
+                    .start(new OnDownloadListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void onDownloadComplete() {
+                            parseCompound(Summary, PhysicalProperties,  StructureImageLayout,
+                                    StructureTextLayout, StructureImages, StructureTexts,
+                                    compoundView_2dImage,  compoundView_3dImage,  compoundView_crystal,
+                                    SafetyItems_Images,  SafetyItems_Text,  SafetyItems,
+                                    nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
+                        }
 
-                    @Override
-                    public void onError(Error error) {
-                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                        Log.d("PRDownloader", "onError: " + error.toString());
-                    }
-                });}
+                        @Override
+                        public void onError(Error error) {
+                            Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                            Log.d("PRDownloader", "onError: " + error.toString());
+                        }
+                    });}
         if (((MainActivity) getActivity()).checkFav(currentCompound.getCID())) {
             favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         } else {
@@ -457,7 +418,7 @@ public class CompoundFragment extends Fragment {
                 Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 1200, 1200, true));
                 img.setImageDrawable(d);
                 settingsDialog.setContentView(v2);
-            settingsDialog.show();
+                settingsDialog.show();
             }catch(NullPointerException e){e.printStackTrace();}
         }
     }
@@ -469,253 +430,253 @@ public class CompoundFragment extends Fragment {
                               ImageView compoundView_2dImage, ImageView compoundView_3dImage, ImageView compoundView_crystal,
                               LinearLayout SafetyItems_Images, LinearLayout SafetyItems_Text, HorizontalScrollView SafetyItems,
                               TextView nullSafetyItems,TextView SafetyHeader,ImageView[] HazardImages, TextView[] HazardTexts){
-    JSONParser jsonParser = new JSONParser();
+        JSONParser jsonParser = new JSONParser();
 
-                                try(
-    FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json"))
+        try(
+                FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json"))
 
-    {
+        {
 
-        JSONObject obj = (JSONObject) jsonParser.parse(reader);
-        JSONObject record = (JSONObject) obj.get("Record");
-        JSONArray section = (JSONArray) record.get("Section");
-        JSONObject section_0 = (JSONObject) section.get(0);
-        JSONArray structure_section = (JSONArray) section_0.get("Section");
-        try {
-            JSONObject section_2 = (JSONObject) section.get(2);
-            JSONArray section2 = (JSONArray) section_2.get("Section");
-            JSONObject section2_0 = (JSONObject) section2.get(0);
-            JSONArray Information = (JSONArray) section2_0.get("Information");
-            JSONObject Information0 = (JSONObject) Information.get(0);
-            JSONObject Value = (JSONObject) Information0.get("Value");
-            JSONArray ValueString = (JSONArray) Value.get("StringWithMarkup");
-            JSONObject ValueString2 = (JSONObject) ValueString.get(0);
-            String Summary_text = (String) ValueString2.get("String");
-            Summary.setText(Summary_text);
-        } catch (Exception e) {
+            JSONObject obj = (JSONObject) jsonParser.parse(reader);
+            JSONObject record = (JSONObject) obj.get("Record");
+            JSONArray section = (JSONArray) record.get("Section");
+            JSONObject section_0 = (JSONObject) section.get(0);
+            JSONArray structure_section = (JSONArray) section_0.get("Section");
             try {
-                JSONArray Section = section;
-                JSONObject Section2 = (JSONObject) Section.get(2);
-                JSONArray Section2_ = (JSONArray) Section2.get("Section");
-                JSONObject Section2_1 = (JSONObject) Section2_.get(1);
-                JSONArray Section2_1_ = (JSONArray) Section2_1.get("Section");
-                JSONObject Section2_1_0 = (JSONObject) Section2_1_.get(0);
-                JSONArray Information = (JSONArray) Section2_1_0.get("Information");
+                JSONObject section_2 = (JSONObject) section.get(2);
+                JSONArray section2 = (JSONArray) section_2.get("Section");
+                JSONObject section2_0 = (JSONObject) section2.get(0);
+                JSONArray Information = (JSONArray) section2_0.get("Information");
                 JSONObject Information0 = (JSONObject) Information.get(0);
                 JSONObject Value = (JSONObject) Information0.get("Value");
-                JSONArray SWM = (JSONArray) Value.get("StringWithMarkup");
-                JSONObject SWM0 = (JSONObject) SWM.get(0);
-                String pDescription = (String) SWM0.get("String");
-                Summary.setText(pDescription);
-            } catch (Exception e2) {
-                Summary.setText("No Description");
-                System.out.println("No Physical Description");
-            }
-        }
-
-        try {
-            currentCompound.getnProperties().clear();
-            JSONObject section_3 = (JSONObject) section.get(3);
-            JSONArray section_3_ = (JSONArray) section_3.get("Section");
-            JSONObject section_3_0 = (JSONObject) section_3_.get(0);
-            JSONArray list = (JSONArray) section_3_0.get("Section");
-            for (int i = 0; i < list.size(); i++) {
-                JSONObject item = (JSONObject) list.get(i);
-                String name = (String) item.get("TOCHeading");
-                currentCompound.getnProperties().add(name);
-                JSONArray InformationArray = (JSONArray) item.get("Information");
-                JSONObject Information = (JSONObject) InformationArray.get(0);
-                JSONObject Value = (JSONObject) Information.get("Value");
-                String num_string = "";
+                JSONArray ValueString = (JSONArray) Value.get("StringWithMarkup");
+                JSONObject ValueString2 = (JSONObject) ValueString.get(0);
+                String Summary_text = (String) ValueString2.get("String");
+                Summary.setText(Summary_text);
+            } catch (Exception e) {
                 try {
-                    JSONArray numArray = (JSONArray) Value.get("Number");
+                    JSONArray Section = section;
+                    JSONObject Section2 = (JSONObject) Section.get(2);
+                    JSONArray Section2_ = (JSONArray) Section2.get("Section");
+                    JSONObject Section2_1 = (JSONObject) Section2_.get(1);
+                    JSONArray Section2_1_ = (JSONArray) Section2_1.get("Section");
+                    JSONObject Section2_1_0 = (JSONObject) Section2_1_.get(0);
+                    JSONArray Information = (JSONArray) Section2_1_0.get("Information");
+                    JSONObject Information0 = (JSONObject) Information.get(0);
+                    JSONObject Value = (JSONObject) Information0.get("Value");
+                    JSONArray SWM = (JSONArray) Value.get("StringWithMarkup");
+                    JSONObject SWM0 = (JSONObject) SWM.get(0);
+                    String pDescription = (String) SWM0.get("String");
+                    Summary.setText(pDescription);
+                } catch (Exception e2) {
+                    Summary.setText("No Description");
+                    System.out.println("No Physical Description");
+                }
+            }
+
+            try {
+                currentCompound.getnProperties().clear();
+                JSONObject section_3 = (JSONObject) section.get(3);
+                JSONArray section_3_ = (JSONArray) section_3.get("Section");
+                JSONObject section_3_0 = (JSONObject) section_3_.get(0);
+                JSONArray list = (JSONArray) section_3_0.get("Section");
+                for (int i = 0; i < list.size(); i++) {
+                    JSONObject item = (JSONObject) list.get(i);
+                    String name = (String) item.get("TOCHeading");
+                    currentCompound.getnProperties().add(name);
+                    JSONArray InformationArray = (JSONArray) item.get("Information");
+                    JSONObject Information = (JSONObject) InformationArray.get(0);
+                    JSONObject Value = (JSONObject) Information.get("Value");
+                    String num_string = "";
                     try {
-                        Long num = (Long) numArray.get(0);
-                        num_string = num.toString();
-                    } catch (Exception ea) {
+                        JSONArray numArray = (JSONArray) Value.get("Number");
                         try {
-                            Double num = (Double) numArray.get(0);
+                            Long num = (Long) numArray.get(0);
                             num_string = num.toString();
-                        } catch (Exception eb) {
-                            System.out.println(Value);
-                            JSONArray num_stringwithmarkup = (JSONArray) Value.get("StringWithMarkup");
-                            JSONObject num_zone = (JSONObject) num_stringwithmarkup.get(0);
-                            num_string = (String) num_zone.get("String");
+                        } catch (Exception ea) {
+                            try {
+                                Double num = (Double) numArray.get(0);
+                                num_string = num.toString();
+                            } catch (Exception eb) {
+                                System.out.println(Value);
+                                JSONArray num_stringwithmarkup = (JSONArray) Value.get("StringWithMarkup");
+                                JSONObject num_zone = (JSONObject) num_stringwithmarkup.get(0);
+                                num_string = (String) num_zone.get("String");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    currentCompound.getvProperties().add(num_string);
+                    String unit = "";
+                    try {
+                        unit = (String) Value.get("Unit");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    currentCompound.getuProperties().add(unit);
+                }
+                PhysicalProperties.setStretchAllColumns(true);
+                PhysicalProperties.bringToFront();
+                PhysicalProperties.removeAllViews();
+                for (int i = 0; i < currentCompound.getnProperties().size(); i++) {
+                    TableRow tr = new TableRow(getContext());
+                    TextView c1 = new TextView(getContext());
+                    c1.setText(currentCompound.getnProperties().get(i));
+                    TextView c2 = new TextView(getContext());
+                    if (currentCompound.getuProperties().get(i) != null) {
+                        c2.setText(currentCompound.getvProperties().get(i) + " " + currentCompound.getuProperties().get(i));
+                    } else {
+                        c2.setText(currentCompound.getvProperties().get(i));
+                    }
+                    tr.addView(c1);
+                    tr.addView(c2);
+                    PhysicalProperties.addView(tr);
+                }
+            } catch (Exception e) {
+                PhysicalProperties.setVisibility(View.GONE);
+                e.printStackTrace();
+            }
+
+            StructureImageLayout.removeAllViews();
+            StructureTextLayout.removeAllViews();
+            try {
+                for (int i = 0; i < 3; i++) {
+                    if (structure_section.size() > i) {
+                        JSONObject struct_1 = (JSONObject) structure_section.get(i);
+                        String struct_name = (String) struct_1.get("TOCHeading");
+                        if (struct_name.equals("2D Structure")) {
+                            StructureImageLayout.addView(StructureImages[0]);
+                            StructureTextLayout.addView(StructureTexts[0]);
+                            final File directory = getContext().getExternalFilesDir(null);
+                            File fullPath = new File(directory + "/" + currentCompound.getCID()+"/2d.jpg");
+                            WeakReference<ImageView> weakCV2D = new WeakReference<ImageView>(compoundView_2dImage);
+                            if(!fullPath.exists()) {
+                                AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
+                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
+                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s", "2d");
+                            }
+                            else{
+                                Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                                weakCV2D.get().setImageBitmap(myBitmap);
+                            }
+                        }
+                        if (struct_name.equals("3D Conformer")) {
+                            StructureImageLayout.addView(StructureImages[1]);
+                            StructureTextLayout.addView(StructureTexts[1]);
+                            final File directory = getContext().getExternalFilesDir(null);
+                            File fullPath = new File(directory + "/" + currentCompound.getCID() + "/3d.jpg");
+                            WeakReference<ImageView> weakCV3D = new WeakReference<ImageView>(compoundView_3dImage);
+                            if(!fullPath.exists()) {
+                                AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
+                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s");
+                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s", "3d");
+                            }
+                            else
+                            {
+                                Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                                weakCV3D.get().setImageBitmap(myBitmap);
+                            }
+                        }
+                        if (struct_name.equals("Crystal Structures")) {
+                            JSONArray temp = (JSONArray) struct_1.get("Section");
+                            JSONObject temp_1 = (JSONObject) temp.get(1);
+                            JSONArray temp_2 = (JSONArray) temp_1.get("Information");
+                            JSONObject temp_3 = (JSONObject) temp_2.get(1);
+                            JSONObject value = (JSONObject) temp_3.get("Value");
+                            JSONArray contents = (JSONArray) value.get("ExternalDataURL");
+                            String ExternalURLData = (String) contents.get(0);
+                            StructureImageLayout.addView(StructureImages[2]);
+                            StructureTextLayout.addView(StructureTexts[2]);
+                            final File directory = getContext().getExternalFilesDir(null);
+                            File fullPath = new File(directory + "/" + currentCompound.getCID() + "/crystal.jpg");
+                            WeakReference<ImageView> weakCompViewCrystal;
+                            weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
+                            if(!fullPath.exists()) {
+                                AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCompViewCrystal);
+                                image_Loader.execute(ExternalURLData);
+                                new getBitmapFromURL().execute(ExternalURLData, "crystal");
+                            }
+                            else
+                            {
+                                Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
+                                weakCompViewCrystal.get().setImageBitmap(myBitmap);
+                            }
                         }
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-                currentCompound.getvProperties().add(num_string);
-                String unit = "";
-                try {
-                    unit = (String) Value.get("Unit");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                currentCompound.getuProperties().add(unit);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (IndexOutOfBoundsException i) {
+                i.printStackTrace();
             }
-            PhysicalProperties.setStretchAllColumns(true);
-            PhysicalProperties.bringToFront();
-            PhysicalProperties.removeAllViews();
-            for (int i = 0; i < currentCompound.getnProperties().size(); i++) {
-                TableRow tr = new TableRow(getContext());
-                TextView c1 = new TextView(getContext());
-                c1.setText(currentCompound.getnProperties().get(i));
-                TextView c2 = new TextView(getContext());
-                if (currentCompound.getuProperties().get(i) != null) {
-                    c2.setText(currentCompound.getvProperties().get(i) + " " + currentCompound.getuProperties().get(i));
-                } else {
-                    c2.setText(currentCompound.getvProperties().get(i));
+            SafetyItems_Images.removeAllViews();
+            SafetyItems_Text.removeAllViews();
+            SafetyItems.setVisibility(View.GONE);
+            nullSafetyItems.setVisibility(View.VISIBLE);
+            try {
+                boolean[] safety = new boolean[9];
+                JSONObject section_1 = (JSONObject) section.get(1);
+                JSONArray Information_1 = (JSONArray) section_1.get("Information");
+                JSONObject sub_Information_1 = (JSONObject) Information_1.get(0);
+                JSONObject Value_1 = (JSONObject) sub_Information_1.get("Value");
+                JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
+                JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
+                JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
+                for (int i = 0; i < 9; i++) {
+                    safety[i] = false;
                 }
-                tr.addView(c1);
-                tr.addView(c2);
-                PhysicalProperties.addView(tr);
+                for (int i = 0; i < Markup.size(); i++) {
+                    JSONObject sub_Markup = (JSONObject) Markup.get(i);
+                    String url = (String) sub_Markup.get("URL");
+                    String name = (String) sub_Markup.get("Extra");
+                    currentCompound.addSafetyItem(name, url);
+                    //System.out.println("Added Safety: " + name + ", " + url);
+                }
+                for (SafetyItem item : currentCompound.getSafetyItems()) {
+                    int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
+                    safety[n - 1] = true;
+                    ((MainActivity) getActivity()).getGlobal().setSafetyItems(1);
+                }
+                for (int i = 0; i < 9; i++) {
+                    if (safety[i]) {
+                        SafetyItems_Images.addView(HazardImages[i]);
+                        SafetyItems_Text.addView(HazardTexts[i]);
+                        SafetyHeader.setVisibility(View.VISIBLE);
+                        SafetyItems.setVisibility(View.VISIBLE);
+                        nullSafetyItems.setVisibility(View.GONE);
+                    }
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            PhysicalProperties.setVisibility(View.GONE);
+        } catch(
+                FileNotFoundException e)
+
+        {
+            e.printStackTrace();
+        } catch(
+                IOException e)
+
+        {
+            e.printStackTrace();
+        } catch(
+                ParseException e)
+
+        {
+            e.printStackTrace();
+        } catch(
+                NullPointerException e)
+
+        {
+            e.printStackTrace();
+        } catch(
+                IndexOutOfBoundsException e)
+
+        {
             e.printStackTrace();
         }
-
-        StructureImageLayout.removeAllViews();
-        StructureTextLayout.removeAllViews();
-        try {
-            for (int i = 0; i < 3; i++) {
-                if (structure_section.size() > i) {
-                    JSONObject struct_1 = (JSONObject) structure_section.get(i);
-                    String struct_name = (String) struct_1.get("TOCHeading");
-                    if (struct_name.equals("2D Structure")) {
-                        StructureImageLayout.addView(StructureImages[0]);
-                        StructureTextLayout.addView(StructureTexts[0]);
-                        final File directory = getContext().getExternalFilesDir(null);
-                        File fullPath = new File(directory + "/" + currentCompound.getCID()+"/2d.jpg");
-                        WeakReference<ImageView> weakCV2D = new WeakReference<ImageView>(compoundView_2dImage);
-                        if(!fullPath.exists()) {
-                            AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
-                            image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
-                            new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s", "2d");
-                        }
-                        else{
-                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
-                            weakCV2D.get().setImageBitmap(myBitmap);
-                        }
-                    }
-                    if (struct_name.equals("3D Conformer")) {
-                        StructureImageLayout.addView(StructureImages[1]);
-                        StructureTextLayout.addView(StructureTexts[1]);
-                        final File directory = getContext().getExternalFilesDir(null);
-                        File fullPath = new File(directory + "/" + currentCompound.getCID() + "/3d.jpg");
-                        WeakReference<ImageView> weakCV3D = new WeakReference<ImageView>(compoundView_3dImage);
-                        if(!fullPath.exists()) {
-                        AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
-                        image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s");
-                        new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s", "3d");
-                        }
-                        else
-                        {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
-                            weakCV3D.get().setImageBitmap(myBitmap);
-                        }
-                    }
-                    if (struct_name.equals("Crystal Structures")) {
-                        JSONArray temp = (JSONArray) struct_1.get("Section");
-                        JSONObject temp_1 = (JSONObject) temp.get(1);
-                        JSONArray temp_2 = (JSONArray) temp_1.get("Information");
-                        JSONObject temp_3 = (JSONObject) temp_2.get(1);
-                        JSONObject value = (JSONObject) temp_3.get("Value");
-                        JSONArray contents = (JSONArray) value.get("ExternalDataURL");
-                        String ExternalURLData = (String) contents.get(0);
-                        StructureImageLayout.addView(StructureImages[2]);
-                        StructureTextLayout.addView(StructureTexts[2]);
-                        final File directory = getContext().getExternalFilesDir(null);
-                        File fullPath = new File(directory + "/" + currentCompound.getCID() + "/crystal.jpg");
-                        WeakReference<ImageView> weakCompViewCrystal;
-                        weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
-                        if(!fullPath.exists()) {
-                        AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCompViewCrystal);
-                        image_Loader.execute(ExternalURLData);
-                        new getBitmapFromURL().execute(ExternalURLData, "crystal");
-                        }
-                        else
-                        {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
-                            weakCompViewCrystal.get().setImageBitmap(myBitmap);
-                        }
-                    }
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (IndexOutOfBoundsException i) {
-            i.printStackTrace();
-        }
-        SafetyItems_Images.removeAllViews();
-        SafetyItems_Text.removeAllViews();
-        SafetyItems.setVisibility(View.GONE);
-        nullSafetyItems.setVisibility(View.VISIBLE);
-        try {
-            boolean[] safety = new boolean[9];
-            JSONObject section_1 = (JSONObject) section.get(1);
-            JSONArray Information_1 = (JSONArray) section_1.get("Information");
-            JSONObject sub_Information_1 = (JSONObject) Information_1.get(0);
-            JSONObject Value_1 = (JSONObject) sub_Information_1.get("Value");
-            JSONArray StringWithMarkup_1 = (JSONArray) Value_1.get("StringWithMarkup");
-            JSONObject sub_StringWithMarkup_1 = (JSONObject) StringWithMarkup_1.get(0);
-            JSONArray Markup = (JSONArray) sub_StringWithMarkup_1.get("Markup");
-            for (int i = 0; i < 9; i++) {
-                safety[i] = false;
-            }
-            for (int i = 0; i < Markup.size(); i++) {
-                JSONObject sub_Markup = (JSONObject) Markup.get(i);
-                String url = (String) sub_Markup.get("URL");
-                String name = (String) sub_Markup.get("Extra");
-                currentCompound.addSafetyItem(name, url);
-                //System.out.println("Added Safety: " + name + ", " + url);
-            }
-            for (SafetyItem item : currentCompound.getSafetyItems()) {
-                int n = Integer.parseInt(String.valueOf(item.getUrl().charAt(48)));
-                safety[n - 1] = true;
-                ((MainActivity) getActivity()).getGlobal().setSafetyItems(1);
-            }
-            for (int i = 0; i < 9; i++) {
-                if (safety[i]) {
-                    SafetyItems_Images.addView(HazardImages[i]);
-                    SafetyItems_Text.addView(HazardTexts[i]);
-                    SafetyHeader.setVisibility(View.VISIBLE);
-                    SafetyItems.setVisibility(View.VISIBLE);
-                    nullSafetyItems.setVisibility(View.GONE);
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    } catch(
-    FileNotFoundException e)
-
-    {
-        e.printStackTrace();
-    } catch(
-    IOException e)
-
-    {
-        e.printStackTrace();
-    } catch(
-    ParseException e)
-
-    {
-        e.printStackTrace();
-    } catch(
-    NullPointerException e)
-
-    {
-        e.printStackTrace();
-    } catch(
-    IndexOutOfBoundsException e)
-
-    {
-        e.printStackTrace();
     }
-}
 
     private class getBitmapFromURL extends AsyncTask<String, Void, Bitmap> {
         String type;
@@ -761,5 +722,5 @@ public class CompoundFragment extends Fragment {
                 }
             } }
     }
-    }
+}
 
