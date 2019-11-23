@@ -83,6 +83,7 @@ public class FavoritesFragment extends Fragment {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
                 Fragment fragment= new CompoundFragment();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.animator.fade_in_custom, R.animator.fade_out_custom);
                 transaction.replace(R.id.favorites_frag, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();

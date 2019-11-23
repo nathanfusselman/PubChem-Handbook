@@ -66,6 +66,7 @@ public class pTableFragment extends Fragment {
                             pTablePosition = position;
                             Fragment fragment = new ElementFragment();
                             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                            transaction.setCustomAnimations(R.animator.fade_in_custom, R.animator.fade_out_custom);
                             transaction.addToBackStack(null);
                             transaction.replace(R.id.ptable_frag, fragment);
                             transaction.commit();

@@ -198,19 +198,19 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-
+                searchView.setFocusable(false);
+                searchView.setIconified(false);
+                searchView.clearFocus();
                 Fragment fragment = new CompoundFragment();
                     FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    transaction.addToBackStack(null);
+                transaction.setCustomAnimations(R.animator.fade_in_custom, R.animator.fade_out_custom);
+                transaction.addToBackStack(null);
                     transaction.replace(R.id.search_frag, fragment);
                 transaction.commit();
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isAcceptingText()){
                     ((MainActivity) getActivity()).clearKeyboard();}
-                searchView.setFocusable(false);
-                searchView.setIconified(false);
-                searchView.clearFocus();
 }
         });
 
