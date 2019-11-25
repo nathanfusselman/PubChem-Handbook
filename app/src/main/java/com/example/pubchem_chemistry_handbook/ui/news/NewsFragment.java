@@ -55,9 +55,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout mSwipeRefreshLayout;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final File directory = getContext().getExternalFilesDir(null);
+        final File directory = getContext().getExternalFilesDir(getActivity().getApplication().getFilesDir().toString());
         final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        assert directory != null;
         fullPath= directory.toString() + "/RSSFeed_" + date + ".xml";
         File toCheck = new File(fullPath);
 
@@ -243,7 +242,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     sbr.append(line).append('\n');
                 }
 
-                Log.v(sbr.toString(), "Stream");
+                //Log.v(sbr.toString(), "Stream");
                 try {
                     try (FileOutputStream stream = new FileOutputStream(file)) {
                         stream.write(sbr.toString().getBytes());

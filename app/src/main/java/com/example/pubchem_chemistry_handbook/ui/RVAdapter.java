@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pubchem_chemistry_handbook.R;
 import com.example.pubchem_chemistry_handbook.data.Compound;
 import com.example.pubchem_chemistry_handbook.data.global;
+import com.example.pubchem_chemistry_handbook.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,29 +80,39 @@ public class RVAdapter extends RecyclerView.Adapter<CompoundListItem> implements
                             }
                         } else {
                             if (global.getSearch_type_startsWith() == 1) {
-                                if (item.getName().toLowerCase().startsWith(filterPattern)) {
-                                    filteredList.add(item);
-                                }
-                                if (item.getFormula().toLowerCase().startsWith(filterPattern)) {
-                                    filteredList.add(item);
+                                if (global.getSearch_compound() == 1) {
+                                    if (item.getFormula().toLowerCase().startsWith(filterPattern)) {
+                                        filteredList.add(item);
+                                    }
+                                } else {
+                                    if (item.getName().toLowerCase().startsWith(filterPattern)) {
+                                        filteredList.add(item);
+                                    }
+                                    if (item.getFormula().toLowerCase().startsWith(filterPattern)) {
+                                        filteredList.add(item);
+                                    }
                                 }
                             } else {
                                 boolean good_name = true;
                                 boolean good_formula = true;
                                 String[] tokens = filterPattern.split(" ");
                                 for (String token : tokens) {
-                                    if (global.getSearch_type_startsWith() == 0) {
-                                        if (!item.getName().toLowerCase().contains(token)) {
-                                            good_name = false;
-                                        }
-                                        if (!item.getFormula().toLowerCase().contains(token)) {
-                                            good_formula = false;
-                                        }
+                                    if (!item.getName().toLowerCase().contains(token)) {
+                                        good_name = false;
+                                    }
+                                    if (!item.getFormula().toLowerCase().contains(token)) {
+                                        good_formula = false;
                                     }
 
                                 }
-                                if (good_formula || good_name) {
-                                    filteredList.add(item);
+                                if (global.getSearch_compound() == 1) {
+                                    if (good_formula) {
+                                        filteredList.add(item);
+                                    }
+                                } else {
+                                    if (good_formula || good_name) {
+                                        filteredList.add(item);
+                                    }
                                 }
                             }
                         }

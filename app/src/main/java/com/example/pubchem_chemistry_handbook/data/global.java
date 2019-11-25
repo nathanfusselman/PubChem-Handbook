@@ -6,6 +6,7 @@ import java.util.List;
 
 public class global {
     private int search_type_startsWith;
+    private int search_compound;
     private int results;
     private int safetyItems;
     private List<Element> elements;
@@ -14,6 +15,7 @@ public class global {
 
     public  global(int search_type_startsWith, int results) {
         this.search_type_startsWith = search_type_startsWith;
+        search_compound = 0;
         this.results = results;
         fav = new ArrayList<>();
         recents = new ArrayList<>();
@@ -22,6 +24,14 @@ public class global {
         elements = new ArrayList<>();
         safetyItems = 0;
         style = 0;
+    }
+
+    public void setSearch_compound(int search_compound) {
+        this.search_compound = search_compound;
+    }
+
+    public int getSearch_compound() {
+        return search_compound;
     }
 
     public int getStyle() {

@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addRecent(Compound CID) {
         try {
+            System.out.println(getApplication().getFilesDir().toString());
             File file = new File(getApplication().getFilesDir().toString() + "/recents.txt");
             FileWriter fr = new FileWriter(file, true);
             fr.write("\n" + Integer.toString(CID.getCID()));

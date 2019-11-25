@@ -125,7 +125,7 @@ public class SearchFragment extends Fragment {
                 ((MainActivity)getActivity()).updating = true;
                 int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
                 int count = 0;
-                while (((MainActivity)getActivity()).updating && count < 25000000) {
+                while (((MainActivity)getActivity()).updating && count < 50000000) {
                     count++;
                     if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
                         resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
@@ -141,6 +141,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 searchRun(isChecked);
+                ((MainActivity)getActivity()).getGlobal().setSearch_compound(0);
             }
         });
 
@@ -149,11 +150,13 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 searchRun(search_type_webSearch.isChecked());
+                ((MainActivity)getActivity()).getGlobal().setSearch_compound(0);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(final String s) {
+                ((MainActivity)getActivity()).getGlobal().setSearch_compound(0);
                 spinner.setVisibility(View.GONE);
                 PRDownloader.cancelAll();
                 if (webSearch) {
@@ -181,7 +184,7 @@ public class SearchFragment extends Fragment {
                         ((MainActivity)getActivity()).updating = true;}
                         int lastNum = ((MainActivity)getActivity()).getGlobal().getResults();
                         int count = 0;
-                        while (((MainActivity)getActivity()).updating && count < 25000000) {
+                        while (((MainActivity)getActivity()).updating && count < 50000000) {
                             count++;
                             if (((MainActivity)getActivity()).getGlobal().getResults() != lastNum) {
                                 resutlsNumb.setText("Results: " + ((MainActivity)getActivity()).getGlobal().getResults());
@@ -219,7 +222,9 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void run() {
                     //MenuItemCompat.expandActionView(searchMenuItem);
+                    //((MainActivity)getActivity()).getGlobal().setSearch_compound(1);
                     searchView.setQuery(((MainActivity)getActivity()).getPSearchQuery(), false);
+                    ((MainActivity)getActivity()).getGlobal().setSearch_compound(1);
                     searchView.setFocusable(false);
                     searchView.setIconified(false);
                     searchView.clearFocus();
