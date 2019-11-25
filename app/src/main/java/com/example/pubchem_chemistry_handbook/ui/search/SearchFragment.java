@@ -400,7 +400,7 @@ public class SearchFragment extends Fragment {
                                                 }
                                             });
                                 } else {
-                                    int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22input%22:{%22type%22:%22netcachekey%22,%22idtype%22:%22cid%22,%22key%22:%22" + key[0] +"%22}}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:10000000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
+                                    int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/sdq/sdqagent.cgi?infmt=json&outfmt=csv&query={%22download%22:%22*%22,%22collection%22:%22compound%22,%22where%22:{%22ands%22:[{%22input%22:{%22type%22:%22netcachekey%22,%22idtype%22:%22cid%22,%22key%22:%22" + key[0] +"%22}}]},%22order%22:[%22relevancescore,desc%22],%22start%22:1,%22limit%22:1000,%22downloadfilename%22:%22search%22}", getActivity().getFilesDir().toString(), "search.csv")
                                             .build()
                                             .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                                                 @Override
