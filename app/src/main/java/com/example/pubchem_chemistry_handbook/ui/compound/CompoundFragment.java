@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -73,7 +74,9 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.Thread.sleep;
@@ -332,50 +335,128 @@ public class CompoundFragment extends Fragment {
                         nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
             }
         }
-        else{
-            int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
-                    .build()
-                    .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-                        @Override
-                        public void onStartOrResume() {
+        int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
+                .build()
+                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                    @Override
+                    public void onStartOrResume() {
 
-                        }
-                    })
-                    .setOnPauseListener(new OnPauseListener() {
-                        @Override
-                        public void onPause() {
+                    }
+                })
+                .setOnPauseListener(new OnPauseListener() {
+                    @Override
+                    public void onPause() {
 
-                        }
-                    })
-                    .setOnCancelListener(new OnCancelListener() {
-                        @Override
-                        public void onCancel() {
+                    }
+                })
+                .setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
 
-                        }
-                    })
-                    .setOnProgressListener(new OnProgressListener() {
-                        @Override
-                        public void onProgress(Progress progress) {
+                    }
+                })
+                .setOnProgressListener(new OnProgressListener() {
+                    @Override
+                    public void onProgress(Progress progress) {
 
-                        }
-                    })
-                    .start(new OnDownloadListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                        @Override
-                        public void onDownloadComplete() {
-                            parseCompound(Summary, PhysicalProperties,  StructureImageLayout,
-                                    StructureTextLayout, StructureImages, StructureTexts,
-                                    compoundView_2dImage,  compoundView_3dImage,  compoundView_crystal,
-                                    SafetyItems_Images,  SafetyItems_Text,  SafetyItems,
-                                    nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
-                        }
+                    }
+                })
+                .start(new OnDownloadListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onDownloadComplete() {
+                        final String url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + currentCompound.getCID() + "/description/JSON";
+                        int downloadId = PRDownloader.download(url, getActivity().getFilesDir().toString(), "compound-description-" + currentCompound.getCID() + ".json")
+                                .build()
+                                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                    @Override
+                                    public void onStartOrResume() {
 
-                        @Override
-                        public void onError(Error error) {
-                            Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
-                            Log.d("PRDownloader", "onError: " + error.toString());
-                        }
-                    });}
+                                    }
+                                })
+                                .setOnPauseListener(new OnPauseListener() {
+                                    @Override
+                                    public void onPause() {
+
+                                    }
+                                })
+                                .setOnCancelListener(new OnCancelListener() {
+                                    @Override
+                                    public void onCancel() {
+
+                                    }
+                                })
+                                .setOnProgressListener(new OnProgressListener() {
+                                    @Override
+                                    public void onProgress(Progress progress) {
+
+                                    }
+                                })
+                                .start(new OnDownloadListener() {
+                                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                    @Override
+                                    public void onDownloadComplete() {
+                                        final String url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + currentCompound.getCID() + "/property/MolecularWeight,XLogP,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,ExactMass,MonoisotopicMass,TPSA,HeavyAtomCount,Charge,Complexity,IsotopeAtomCount,DefinedAtomStereoCount,UndefinedAtomStereoCount,DefinedBondStereoCount,UndefinedBondStereoCount,CovalentUnitCount/CSV";
+                                        int downloadId = PRDownloader.download(url, getActivity().getFilesDir().toString(), "compound-properties-" + currentCompound.getCID() + ".csv")
+                                                .build()
+                                                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                                                    @Override
+                                                    public void onStartOrResume() {
+
+                                                    }
+                                                })
+                                                .setOnPauseListener(new OnPauseListener() {
+                                                    @Override
+                                                    public void onPause() {
+
+                                                    }
+                                                })
+                                                .setOnCancelListener(new OnCancelListener() {
+                                                    @Override
+                                                    public void onCancel() {
+
+                                                    }
+                                                })
+                                                .setOnProgressListener(new OnProgressListener() {
+                                                    @Override
+                                                    public void onProgress(Progress progress) {
+
+                                                    }
+                                                })
+                                                .start(new OnDownloadListener() {
+                                                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                                    @Override
+                                                    public void onDownloadComplete() {
+                                                        System.out.println(url);
+                                                        parseCompound(Summary, PhysicalProperties,  StructureImageLayout,
+                                                                StructureTextLayout, StructureImages, StructureTexts,
+                                                                compoundView_2dImage,  compoundView_3dImage,  compoundView_crystal,
+                                                                SafetyItems_Images,  SafetyItems_Text,  SafetyItems,
+                                                                nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Error error) {
+                                                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                                        Log.d("PRDownloader", "onError: " + error.toString() + " " + url);
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onError(Error error) {
+                                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                        Log.d("PRDownloader", "onError: " + error.toString() + " " + url);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                        Log.d("PRDownloader", "onError: " + error.toString());
+                    }
+                });
         if (((MainActivity) getActivity()).checkFav(currentCompound.getCID())) {
             favButton.setBackground(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         } else {
@@ -433,10 +514,146 @@ public class CompoundFragment extends Fragment {
                               ImageView compoundView_2dImage, ImageView compoundView_3dImage, ImageView compoundView_crystal,
                               LinearLayout SafetyItems_Images, LinearLayout SafetyItems_Text, HorizontalScrollView SafetyItems,
                               TextView nullSafetyItems,TextView SafetyHeader,ImageView[] HazardImages, TextView[] HazardTexts){
+
+        JSONParser jsonParserDescription = new JSONParser();
+
+        try(FileReader readerDescription = new FileReader(getActivity().getFilesDir().toString() + "/compound-description-" + currentCompound.getCID() + ".json"))
+
+        {
+            JSONObject obj = (JSONObject) jsonParserDescription.parse(readerDescription);
+            JSONObject informationList = (JSONObject) obj.get("InformationList");
+            JSONArray information = (JSONArray) informationList.get("Information");
+            Summary.setText("");
+            for (int i = 1; i < information.size(); i++) {
+                JSONObject item = (JSONObject) information.get(i);
+                if (Summary.getText() == "") {
+                    //Summary.setText((String) item.get("Description"));
+                    Summary.setText((String) item.get("Description") + "\nSource: " + (String) item.get("DescriptionSourceName"));
+                    //Summary.setText((String) item.get("Description") + "\nSource: " + (String) item.get("DescriptionSourceName") + "\nSource URL: " + (String) item.get("DescriptionURL") + " ");
+                } else {
+                    //Summary.setText(Summary.getText() + "\n\n" + (String) item.get("Description"));
+                    Summary.setText(Summary.getText() + "\n\n" + (String) item.get("Description") + "\nSource: " + (String) item.get("DescriptionSourceName"));
+                    //Summary.setText(Summary.getText() + "\n\n" + (String) item.get("Description") + "\nSource: " + (String) item.get("DescriptionSourceName") + "\nSource URL: " + (String) item.get("DescriptionURL") + " ");
+
+                }
+            }
+            if (Summary.getText() == "") {
+                Summary.setText("No Description Found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        File file = new File(getActivity().getApplication().getFilesDir().toString() + "/compound-properties-" + currentCompound.getCID() + ".csv");
+        try {
+            Scanner sc = new Scanner(file);
+            currentCompound.getnProperties().clear();
+            String headerLine = sc.nextLine();
+            String dataLine = sc.nextLine();
+            String[] headertokens = headerLine.split(",");
+            String[] datatokens = dataLine.split(",");
+            for (int i = 1; i < headertokens.length; i++) {
+                currentCompound.getvProperties().add(datatokens[i]);
+                switch (i) {
+                    case 1:
+                        currentCompound.getnProperties().add("Molecular Weight");
+                        currentCompound.getuProperties().add("g/mol");
+                        break;
+                    case 2:
+                        currentCompound.getnProperties().add("XLogP3-AA");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 3:
+                        currentCompound.getnProperties().add("Hydrogen Bond Donor Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 4:
+                        currentCompound.getnProperties().add("Hydrogen Bond Acceptor Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 5:
+                        currentCompound.getnProperties().add("Rotatable Bond Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 6:
+                        currentCompound.getnProperties().add("Exact Mass");
+                        currentCompound.getuProperties().add("g/mol");
+                        break;
+                    case 7:
+                        currentCompound.getnProperties().add("Monoisotopic Mass");
+                        currentCompound.getuProperties().add("g/mol");
+                        break;
+                    case 8:
+                        currentCompound.getnProperties().add("Topological Polar Surface Area");
+                        currentCompound.getuProperties().add("Å²");
+                        break;
+                    case 9:
+                        currentCompound.getnProperties().add("Heavy Atom Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 10:
+                        currentCompound.getnProperties().add("Formal Charge");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 11:
+                        currentCompound.getnProperties().add("Complexity");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 12:
+                        currentCompound.getnProperties().add("Isotope Atom Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 13:
+                        currentCompound.getnProperties().add("Defined Atom Stereocenter Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 14:
+                        currentCompound.getnProperties().add("Undefined Atom Stereocenter Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 15:
+                        currentCompound.getnProperties().add("Defined Bond Stereocenter Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 16:
+                        currentCompound.getnProperties().add("Undefined Bond Stereocenter Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    case 17:
+                        currentCompound.getnProperties().add("Covalently-Bonded Unit Count");
+                        currentCompound.getuProperties().add("");
+                        break;
+                    default:
+                        currentCompound.getnProperties().add("");
+                        currentCompound.getuProperties().add("");
+                        break;
+                }
+            }
+            PhysicalProperties.setStretchAllColumns(true);
+            PhysicalProperties.bringToFront();
+            PhysicalProperties.removeAllViews();
+            for (int i = 0; i < currentCompound.getnProperties().size(); i++) {
+                TableRow tr = new TableRow(getContext());
+                TextView c1 = new TextView(getContext());
+                c1.setText(currentCompound.getnProperties().get(i));
+                TextView c2 = new TextView(getContext());
+                if (currentCompound.getuProperties().get(i) != null) {
+                    c2.setText(currentCompound.getvProperties().get(i) + " " + currentCompound.getuProperties().get(i));
+                } else {
+                    c2.setText(currentCompound.getvProperties().get(i));
+                }
+                tr.addView(c1);
+                tr.addView(c2);
+                PhysicalProperties.addView(tr);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         JSONParser jsonParser = new JSONParser();
 
-        try(
-                FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json"))
+        try(FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json"))
 
         {
 
@@ -445,102 +662,6 @@ public class CompoundFragment extends Fragment {
             JSONArray section = (JSONArray) record.get("Section");
             JSONObject section_0 = (JSONObject) section.get(0);
             JSONArray structure_section = (JSONArray) section_0.get("Section");
-            try {
-                JSONObject section_2 = (JSONObject) section.get(2);
-                JSONArray section2 = (JSONArray) section_2.get("Section");
-                JSONObject section2_0 = (JSONObject) section2.get(0);
-                JSONArray Information = (JSONArray) section2_0.get("Information");
-                JSONObject Information0 = (JSONObject) Information.get(0);
-                JSONObject Value = (JSONObject) Information0.get("Value");
-                JSONArray ValueString = (JSONArray) Value.get("StringWithMarkup");
-                JSONObject ValueString2 = (JSONObject) ValueString.get(0);
-                String Summary_text = (String) ValueString2.get("String");
-                Summary.setText(Summary_text);
-            } catch (Exception e) {
-                try {
-                    JSONArray Section = section;
-                    JSONObject Section2 = (JSONObject) Section.get(2);
-                    JSONArray Section2_ = (JSONArray) Section2.get("Section");
-                    JSONObject Section2_1 = (JSONObject) Section2_.get(1);
-                    JSONArray Section2_1_ = (JSONArray) Section2_1.get("Section");
-                    JSONObject Section2_1_0 = (JSONObject) Section2_1_.get(0);
-                    JSONArray Information = (JSONArray) Section2_1_0.get("Information");
-                    JSONObject Information0 = (JSONObject) Information.get(0);
-                    JSONObject Value = (JSONObject) Information0.get("Value");
-                    JSONArray SWM = (JSONArray) Value.get("StringWithMarkup");
-                    JSONObject SWM0 = (JSONObject) SWM.get(0);
-                    String pDescription = (String) SWM0.get("String");
-                    Summary.setText(pDescription);
-                } catch (Exception e2) {
-                    Summary.setText("No Description");
-                    System.out.println("No Physical Description");
-                }
-            }
-
-            try {
-                currentCompound.getnProperties().clear();
-                JSONObject section_3 = (JSONObject) section.get(3);
-                JSONArray section_3_ = (JSONArray) section_3.get("Section");
-                JSONObject section_3_0 = (JSONObject) section_3_.get(0);
-                JSONArray list = (JSONArray) section_3_0.get("Section");
-                for (int i = 0; i < list.size(); i++) {
-                    JSONObject item = (JSONObject) list.get(i);
-                    String name = (String) item.get("TOCHeading");
-                    currentCompound.getnProperties().add(name);
-                    JSONArray InformationArray = (JSONArray) item.get("Information");
-                    JSONObject Information = (JSONObject) InformationArray.get(0);
-                    JSONObject Value = (JSONObject) Information.get("Value");
-                    String num_string = "";
-                    try {
-                        JSONArray numArray = (JSONArray) Value.get("Number");
-                        try {
-                            Long num = (Long) numArray.get(0);
-                            num_string = num.toString();
-                        } catch (Exception ea) {
-                            try {
-                                Double num = (Double) numArray.get(0);
-                                num_string = num.toString();
-                            } catch (Exception eb) {
-                                System.out.println(Value);
-                                JSONArray num_stringwithmarkup = (JSONArray) Value.get("StringWithMarkup");
-                                JSONObject num_zone = (JSONObject) num_stringwithmarkup.get(0);
-                                num_string = (String) num_zone.get("String");
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    currentCompound.getvProperties().add(num_string);
-                    String unit = "";
-                    try {
-                        unit = (String) Value.get("Unit");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    currentCompound.getuProperties().add(unit);
-                }
-                PhysicalProperties.setStretchAllColumns(true);
-                PhysicalProperties.bringToFront();
-                PhysicalProperties.removeAllViews();
-                for (int i = 0; i < currentCompound.getnProperties().size(); i++) {
-                    TableRow tr = new TableRow(getContext());
-                    TextView c1 = new TextView(getContext());
-                    c1.setText(currentCompound.getnProperties().get(i));
-                    TextView c2 = new TextView(getContext());
-                    if (currentCompound.getuProperties().get(i) != null) {
-                        c2.setText(currentCompound.getvProperties().get(i) + " " + currentCompound.getuProperties().get(i));
-                    } else {
-                        c2.setText(currentCompound.getvProperties().get(i));
-                    }
-                    tr.addView(c1);
-                    tr.addView(c2);
-                    PhysicalProperties.addView(tr);
-                }
-            } catch (Exception e) {
-                PhysicalProperties.setVisibility(View.GONE);
-                e.printStackTrace();
-            }
-
             StructureImageLayout.removeAllViews();
             StructureTextLayout.removeAllViews();
             try {
@@ -736,6 +857,49 @@ public class CompoundFragment extends Fragment {
                 }
             }
         }
+    }
+    private List<String> split(String input) {
+        boolean inP = false;
+        boolean hadP = false;
+        int last = -1;
+        List<String> out = new ArrayList<>();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '\"') {
+                hadP = true;
+                if (inP == true) {
+                    inP = false;
+                } else {
+                    if (inP == false) {
+                        inP = true;
+                    }
+                }
+
+            }
+            if (input.charAt(i) == ',' && inP == false) {
+                if (hadP) {
+                    if (input.substring(last + 2, i-1).length() == 0) {
+                        out.add(null);
+                    } else {
+                        out.add(input.substring(last + 2, i-1));
+                    }
+
+                } else {
+                    if (input.substring(last + 1, i).length() == 0) {
+                        out.add(null);
+                    } else {
+                        out.add(input.substring(last + 1, i));
+                    }
+                }
+                last = i;
+                hadP = false;
+            }
+        }
+        if (hadP) {
+            out.add(input.substring(last + 2, input.length()-1));
+        } else {
+            out.add(input.substring(last + 1, input.length()));
+        }
+        return out;
     }
 }
 
