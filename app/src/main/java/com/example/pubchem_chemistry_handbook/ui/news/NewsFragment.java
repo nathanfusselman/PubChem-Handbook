@@ -1,8 +1,11 @@
 package com.example.pubchem_chemistry_handbook.ui.news;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,18 +39,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private String fullPath=null;
@@ -55,15 +54,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout mSwipeRefreshLayout;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final File directory = getContext().getExternalFilesDir(getActivity().getApplication().getFilesDir().toString());
-        final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        fullPath= directory.toString() + "/RSSFeed_" + date + ".xml";
-        File toCheck = new File(fullPath);
-
-        if(!toCheck.exists())
-        {
-            deleteFiles(directory.toString()); //cleans up old RSSFeeds
-        }
+        final File directory = getContext().getFilesDir();
+        fullPath= directory.toString() + "/RSSFeed.xml";
 
         if(getActivity()!=null){
             InputMethodManager imm = (InputMethodManager) getActivity()
@@ -133,13 +125,14 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             this.view=view;
             this.loadingViewNotif=textView;
         }
+        @SuppressLint("WrongThread")
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected List<Event> doInBackground(String... strings) {
             String rssFeed = strings[0];
             File localFeed = null;
             try {
-                localFeed = download_XML(rssFeed, strings[1]);
+                localFeed = download_XML(rssFeed, strings[1], view.get().getContext());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -221,66 +214,47 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        private File download_XML(String urlString, String pathToSave) throws IOException {
+        private File download_XML(String urlString, String pathToSave, Context c) throws IOException {
             File file = new File(pathToSave);
-            if(!file.exists()) {
                 URL url = new URL(urlString);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
+                if(isOnline(c)) {
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
 
-                Log.v("Start Query", "Stream");
-                conn.connect();
-                Log.v("End Query", "Stream");
-                //read the result from the server
-                BufferedReader rdr = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder sbr = new StringBuilder();
-                String line;
-                while ((line = rdr.readLine()) != null) {
-                    sbr.append(line).append('\n');
-                }
-
-                //Log.v(sbr.toString(), "Stream");
-                try {
-                    try (FileOutputStream stream = new FileOutputStream(file)) {
-                        stream.write(sbr.toString().getBytes());
+                    Log.v("Start Query", "Stream");
+                    conn.connect();
+                    Log.v("End Query", "Stream");
+                    //read the result from the server
+                    BufferedReader rdr = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder sbr = new StringBuilder();
+                    String line;
+                    while ((line = rdr.readLine()) != null) {
+                        sbr.append(line).append('\n');
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    //Log.v(sbr.toString(), "Stream");
+                    try {
+                        try (FileOutputStream stream = new FileOutputStream(file)) {
+                            stream.write(sbr.toString().getBytes());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
             return file;
         }
     }
-    private void deleteFiles(String folder)
-    {
-        File dir = new File(folder);
-        if (!dir.exists())
-            return;
-        File[] files = dir.listFiles(new GenericExtFilter(".xml"));
-        assert files != null;
-        for (File file : files)
-        {
-            if (!file.isDirectory())
-            {
-                boolean result = file.delete();
-                Log.d("TAG", "Deleted:" + result);
-            }
-        }
+
+
+
+    private static boolean isOnline(Context c) {
+        ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    class GenericExtFilter implements FilenameFilter {
 
-        private String ext;
-
-        private GenericExtFilter(String ext) {
-            this.ext = ext;
-        }
-
-        public boolean accept(File dir, String name) {
-            return (name.endsWith(ext));
-        }
-    }
 }

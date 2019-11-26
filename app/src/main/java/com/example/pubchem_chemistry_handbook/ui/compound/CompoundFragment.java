@@ -84,10 +84,11 @@ import static java.lang.Thread.sleep;
 public class CompoundFragment extends Fragment {
     private Compound currentCompound = new Compound(0, "", "");
     public static Boolean fragExists;
-
+    private static String internalFilesDir=null;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        internalFilesDir = getContext().getFilesDir().toString();
         fragExists = true;
         final ScrollView compoundView;
         currentCompound = (((MainActivity) getActivity()).getGlobalCompound());
@@ -324,7 +325,7 @@ public class CompoundFragment extends Fragment {
         SafetyItems_Text.removeAllViews();
         StructureImageLayout.removeAllViews();
         StructureTextLayout.removeAllViews();
-        File fileCheck = new File(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json");
+        File fileCheck = new File(getContext().getFilesDir().toString() + "/Compounds/" + currentCompound.getCID() + "/compound-" + currentCompound.getCID() + ".json");
         if(fileCheck.exists())
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -335,7 +336,7 @@ public class CompoundFragment extends Fragment {
                         nullSafetyItems, SafetyHeader, HazardImages, HazardTexts);
             }
         }
-        int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), getActivity().getFilesDir().toString(), "compound-" + currentCompound.getCID() + ".json")
+        int downloadId = PRDownloader.download("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + currentCompound.getCID() + "/JSON/?response_type=save&response_basename=compound_CID_" + currentCompound.getCID(), internalFilesDir + "/Compounds/" + currentCompound.getCID(), "compound-" + currentCompound.getCID() + ".json")
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                     @Override
@@ -366,7 +367,7 @@ public class CompoundFragment extends Fragment {
                     @Override
                     public void onDownloadComplete() {
                         final String url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + currentCompound.getCID() + "/description/JSON";
-                        int downloadId = PRDownloader.download(url, getActivity().getFilesDir().toString(), "compound-description-" + currentCompound.getCID() + ".json")
+                        int downloadId = PRDownloader.download(url, internalFilesDir, "/Compounds/" + currentCompound.getCID() + "/compound-description-" + currentCompound.getCID() + ".json")
                                 .build()
                                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                                     @Override
@@ -397,7 +398,7 @@ public class CompoundFragment extends Fragment {
                                     @Override
                                     public void onDownloadComplete() {
                                         final String url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + currentCompound.getCID() + "/property/MolecularWeight,XLogP,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,ExactMass,MonoisotopicMass,TPSA,HeavyAtomCount,Charge,Complexity,IsotopeAtomCount,DefinedAtomStereoCount,UndefinedAtomStereoCount,DefinedBondStereoCount,UndefinedBondStereoCount,CovalentUnitCount/CSV";
-                                        int downloadId = PRDownloader.download(url, getActivity().getFilesDir().toString(), "compound-properties-" + currentCompound.getCID() + ".csv")
+                                        int downloadId = PRDownloader.download(url, internalFilesDir, "/Compounds/" + currentCompound.getCID() + "/compound-properties-" + currentCompound.getCID() + ".csv")
                                                 .build()
                                                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                                                     @Override
@@ -445,7 +446,7 @@ public class CompoundFragment extends Fragment {
 
                                     @Override
                                     public void onError(Error error) {
-                                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
                                         Log.d("PRDownloader", "onError: " + error.toString() + " " + url);
                                     }
                                 });
@@ -453,7 +454,7 @@ public class CompoundFragment extends Fragment {
 
                     @Override
                     public void onError(Error error) {
-                        Toast.makeText(getActivity(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "ERROR: " + error.toString(), Toast.LENGTH_LONG).show();
                         Log.d("PRDownloader", "onError: " + error.toString());
                     }
                 });
@@ -517,7 +518,7 @@ public class CompoundFragment extends Fragment {
 
         JSONParser jsonParserDescription = new JSONParser();
 
-        try(FileReader readerDescription = new FileReader(getActivity().getFilesDir().toString() + "/compound-description-" + currentCompound.getCID() + ".json"))
+        try(FileReader readerDescription = new FileReader(internalFilesDir + "/Compounds/" +currentCompound.getCID() + "/compound-description-" + currentCompound.getCID() + ".json"))
 
         {
             JSONObject obj = (JSONObject) jsonParserDescription.parse(readerDescription);
@@ -544,7 +545,7 @@ public class CompoundFragment extends Fragment {
             e.printStackTrace();
         }
 
-        File file = new File(getActivity().getApplication().getFilesDir().toString() + "/compound-properties-" + currentCompound.getCID() + ".csv");
+        File file = new File(internalFilesDir + "/Compounds/" +currentCompound.getCID() + "/compound-properties-" + currentCompound.getCID() + ".csv");
         try {
             Scanner sc = new Scanner(file);
             currentCompound.getnProperties().clear();
@@ -653,7 +654,7 @@ public class CompoundFragment extends Fragment {
 
         JSONParser jsonParser = new JSONParser();
 
-        try(FileReader reader = new FileReader(getActivity().getFilesDir().toString() + "/compound-" + currentCompound.getCID() + ".json"))
+        try(FileReader reader = new FileReader(getContext().getFilesDir().toString() + "/Compounds/" + currentCompound.getCID() + "/compound-" + currentCompound.getCID() + ".json"))
 
         {
 
@@ -672,8 +673,8 @@ public class CompoundFragment extends Fragment {
                         if (struct_name.equals("2D Structure")) {
                             StructureImageLayout.addView(StructureImages[0]);
                             StructureTextLayout.addView(StructureTexts[0]);
-                            final File directory = getContext().getExternalFilesDir(null);
-                            File fullPath = new File(directory + "/" + currentCompound.getCID()+"/2d.jpg");
+                            final File directory = getContext().getFilesDir();
+                            File fullPath = new File(directory + "/Compounds/" + currentCompound.getCID() + "/" + "images/2d.jpg");
                             WeakReference<ImageView> weakCV2D = new WeakReference<ImageView>(compoundView_2dImage);
                             if(!fullPath.exists()) {
                                 AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
@@ -688,8 +689,8 @@ public class CompoundFragment extends Fragment {
                         if (struct_name.equals("3D Conformer")) {
                             StructureImageLayout.addView(StructureImages[1]);
                             StructureTextLayout.addView(StructureTexts[1]);
-                            final File directory = getContext().getExternalFilesDir(null);
-                            File fullPath = new File(directory + "/" + currentCompound.getCID() + "/3d.jpg");
+                            final File directory = getContext().getFilesDir();
+                            File fullPath = new File(directory + "/Compounds/" + currentCompound.getCID() + "/" + "images/3d.jpg");
                             WeakReference<ImageView> weakCV3D = new WeakReference<ImageView>(compoundView_3dImage);
                             if(!fullPath.exists()) {
                                 AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
@@ -712,8 +713,8 @@ public class CompoundFragment extends Fragment {
                             String ExternalURLData = (String) contents.get(0);
                             StructureImageLayout.addView(StructureImages[2]);
                             StructureTextLayout.addView(StructureTexts[2]);
-                            final File directory = getContext().getExternalFilesDir(null);
-                            File fullPath = new File(directory + "/" + currentCompound.getCID() + "/crystal.jpg");
+                            final File directory = getContext().getFilesDir();
+                            File fullPath = new File(directory + "/Compounds/" + currentCompound.getCID() + "/" + "images/crystal.jpg");
                             WeakReference<ImageView> weakCompViewCrystal;
                             weakCompViewCrystal = new WeakReference<>(compoundView_crystal);
                             if(!fullPath.exists()) {
@@ -836,9 +837,9 @@ public class CompoundFragment extends Fragment {
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
                 if(isConnected){
-                final File directory = getActivity().getExternalFilesDir(null);
+                final File directory = getContext().getFilesDir();
 
-                    File fullPath = new File(directory + "/" + currentCompound.getCID()+"/");
+                    File fullPath = new File(directory + "/Compounds/" + currentCompound.getCID() + "/" + "images/");
                     boolean success = true;
                     if (!fullPath.exists()) {
                         success = fullPath.mkdirs();

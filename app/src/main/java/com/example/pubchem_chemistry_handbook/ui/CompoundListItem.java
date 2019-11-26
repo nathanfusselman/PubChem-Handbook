@@ -45,8 +45,8 @@ public class CompoundListItem extends RecyclerView.ViewHolder {
     }
 
     void bind(Compound compound) {
-        final File directory = context.getExternalFilesDir(null);
-        File fullPath = new File(directory + "/" + compound.getCID() + "/2d.jpg");
+        final File directory = context.getFilesDir();
+        File fullPath = new File(directory + "/Compounds/" + compound.getCID() + "/images/2d.jpg");
         if(!fullPath.exists()) {
             Glide.with(image_ImageView)
                     .load("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + compound.getCID() + "&t=s")
