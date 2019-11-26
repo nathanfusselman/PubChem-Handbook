@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -73,6 +74,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -679,7 +681,7 @@ public class CompoundFragment extends Fragment {
                             if(!fullPath.exists()) {
                                 AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
                                 //image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
-                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + currentCompound.getCID() + "&width=300&height=300");
+                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + currentCompound.getCID() + "&width=500&height=500");
                                 //https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=2244&width=500&height=500
                                 new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + currentCompound.getCID() + "&width=500&height=500", "2d");
                             }
@@ -813,13 +815,16 @@ public class CompoundFragment extends Fragment {
             type = strings[1];
             String src = strings[0];
             try {
-                java.net.URL url = new java.net.URL(src);
+                URL url = new URL(src);
                 HttpURLConnection connection = (HttpURLConnection) url
                         .openConnection();
                 connection.setDoInput(true);
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 myBitmap = BitmapFactory.decodeStream(input);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    myBitmap = TrimBitmap(myBitmap, "#F5F5F5");
+                }
                 return myBitmap;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -860,6 +865,49 @@ public class CompoundFragment extends Fragment {
                 }
             }
         }
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        public Bitmap TrimBitmap(Bitmap bitmap, String trimColor) {
+            if((bitmap.getPixel(0, 0))== Color.parseColor(trimColor)){
+                int minX = Integer.MAX_VALUE;
+                int maxX = 0;
+                int minY = Integer.MAX_VALUE;
+                int maxY = 0;
+
+                for (int x = 0; x < bitmap.getWidth(); x++) {
+                    for (int y = 0; y < bitmap.getHeight(); y++) {
+                        if (bitmap.getPixel(x, y) != Color.parseColor(trimColor)) {
+                            if (x < minX) {
+                                minX = x;
+                            }
+                            if (x > maxX) {
+                                maxX = x;
+                            }
+                            if (y < minY) {
+                                minY = y;
+                            }
+                            if (y > maxY) {
+                                maxY = y;
+                            }
+                        }
+                    }
+                }
+                Bitmap bmp = Bitmap.createBitmap(bitmap, minX, minY, maxX - minX + 1, maxY - minY + 1);
+                Bitmap background;
+                if (maxX - minX + 1 < maxY - minY + 1) {
+                    background = Bitmap.createBitmap(maxY - minY + 10, maxY - minY + 10, Bitmap.Config.ARGB_8888);
+                } else {
+                    background = Bitmap.createBitmap(maxX - minX + 10, maxX - minX + 10, Bitmap.Config.ARGB_8888);
+                }
+                background.eraseColor(android.graphics.Color.parseColor(trimColor));
+                Canvas canvas = new Canvas(background);
+                int centreX = (canvas.getWidth() - bmp.getWidth()) / 2;
+                int centreY = (canvas.getHeight() - bmp.getHeight()) / 2;
+                canvas.drawBitmap(bmp, centreX, centreY, null);
+                return background;
+            }
+            else{
+                return bitmap;
+            }}
     }
     private List<String> split(String input) {
         boolean inP = false;

@@ -2,10 +2,15 @@ package com.example.pubchem_chemistry_handbook.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
+import android.util.Size;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,12 +36,56 @@ public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
         }
         return bitmap;
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        imageView.get().setImageBitmap(bitmap);
+        imageView.get().setImageBitmap(TrimBitmap(bitmap, "#F5F5F5"));
     }
 
-    public static Bitmap TrimBitmap(Bitmap bmp) {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static Bitmap TrimBitmap(Bitmap bitmap, String trimColor) {
+        if((bitmap.getPixel(0, 0))== Color.parseColor(trimColor)){
+            int minX = Integer.MAX_VALUE;
+            int maxX = 0;
+            int minY = Integer.MAX_VALUE;
+            int maxY = 0;
+
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                for (int y = 0; y < bitmap.getHeight(); y++) {
+                    if (bitmap.getPixel(x, y) != Color.parseColor(trimColor)) {
+                        if (x < minX) {
+                            minX = x;
+                        }
+                        if (x > maxX) {
+                            maxX = x;
+                        }
+                        if (y < minY) {
+                            minY = y;
+                        }
+                        if (y > maxY) {
+                            maxY = y;
+                        }
+                    }
+                }
+            }
+            Bitmap bmp = Bitmap.createBitmap(bitmap, minX, minY, maxX - minX + 1, maxY - minY + 1);
+            Bitmap background;
+            if (maxX - minX + 1 < maxY - minY + 1) {
+                background = Bitmap.createBitmap(maxY - minY + 10, maxY - minY + 10, Bitmap.Config.ARGB_8888);
+            } else {
+                background = Bitmap.createBitmap(maxX - minX + 10, maxX - minX + 10, Bitmap.Config.ARGB_8888);
+            }
+            background.eraseColor(android.graphics.Color.parseColor(trimColor));
+            Canvas canvas = new Canvas(background);
+            int centreX = (canvas.getWidth() - bmp.getWidth()) / 2;
+            int centreY = (canvas.getHeight() - bmp.getHeight()) / 2;
+            canvas.drawBitmap(bmp, centreX, centreY, null);
+            return background;
+        }
+        else{
+            return bitmap;
+        }
+        /*
         int imgHeight = bmp.getHeight();
         int imgWidth  = bmp.getWidth();
 
@@ -106,6 +155,6 @@ public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
                 endWidth - startWidth,
                 endHeight - startHeight
         );
-
+*/
     }
 }
