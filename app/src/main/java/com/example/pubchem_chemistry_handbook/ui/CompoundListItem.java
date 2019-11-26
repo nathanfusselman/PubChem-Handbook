@@ -49,7 +49,7 @@ public class CompoundListItem extends RecyclerView.ViewHolder {
         File fullPath = new File(directory + "/Compounds/" + compound.getCID() + "/images/2d.jpg");
         if(!fullPath.exists()) {
             Glide.with(image_ImageView)
-                    .load("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + compound.getCID() + "&t=s")
+                    .load("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + compound.getCID() + "&width=300&height=300")
                     .placeholder(R.drawable.ic_cloud_queue_black_24dp)
                     .error(R.drawable.ic_error_black_24dp)
                     .skipMemoryCache(false)

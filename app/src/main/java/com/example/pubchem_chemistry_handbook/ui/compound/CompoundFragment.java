@@ -678,8 +678,10 @@ public class CompoundFragment extends Fragment {
                             WeakReference<ImageView> weakCV2D = new WeakReference<ImageView>(compoundView_2dImage);
                             if(!fullPath.exists()) {
                                 AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV2D);
-                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
-                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s", "2d");
+                                //image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=" + currentCompound.getCID() + "&t=s");
+                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + currentCompound.getCID() + "&width=300&height=300");
+                                //https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=2244&width=500&height=500
+                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/imagefly.cgi?cid=" + currentCompound.getCID() + "&width=500&height=500", "2d");
                             }
                             else{
                                 Bitmap myBitmap = BitmapFactory.decodeFile(fullPath.toString());
@@ -694,8 +696,8 @@ public class CompoundFragment extends Fragment {
                             WeakReference<ImageView> weakCV3D = new WeakReference<ImageView>(compoundView_3dImage);
                             if(!fullPath.exists()) {
                                 AsyncTaskLoadImage image_Loader = new AsyncTaskLoadImage(weakCV3D);
-                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s");
-                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&t=s", "3d");
+                                image_Loader.execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&width=300&height=300");
+                                new getBitmapFromURL().execute("https://pubchem.ncbi.nlm.nih.gov/image/img3d.cgi?cid=" + currentCompound.getCID() + "&width=300&height=300", "3d");
                             }
                             else
                             {
