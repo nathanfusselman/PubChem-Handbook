@@ -180,8 +180,6 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 ((MainActivity)getActivity()).setCompViewInfo(rvAdapter.CompoundList.get(position),position);
-                searchView.setFocusable(false);
-                searchView.setIconified(false);
                 searchView.clearFocus();
                 Fragment fragment = new CompoundFragment();
                     FragmentTransaction transaction = getChildFragmentManager().beginTransaction();

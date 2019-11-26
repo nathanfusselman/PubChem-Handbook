@@ -52,6 +52,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private String fullPath=null;
     private TextView loadingText;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static RecyclerView RSS_Feed;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final File directory = getContext().getFilesDir();
@@ -69,6 +70,13 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         newsViewModel =
                 ViewModelProviders.of(this).get(NewsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_news, container, false);
+
+        RSS_Feed = root.findViewById(R.id.RSS_recycler_view);
+        RSS_Feed.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        RSS_Adapter nullAdapter = new RSS_Adapter(null);
+        RSS_Feed.setAdapter(nullAdapter);
+        RSS_Feed.setItemAnimator(new DefaultItemAnimator());
+
         loadingText = root.findViewById(R.id.loadingText);
         if(getActivity() != null) {getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);}
 
@@ -198,11 +206,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         protected void onPostExecute(List<Event> res) {
             loadingViewNotif.get().setVisibility(View.INVISIBLE);
-            RecyclerView RSS_Feed = view.get().findViewById(R.id.RSS_recycler_view);
-            RSS_Feed.setLayoutManager(new LinearLayoutManager(view.get().getContext()));
             RSS_Adapter rssAdapter = new RSS_Adapter(res);
-            RSS_Feed.setAdapter(rssAdapter);
-            RSS_Feed.setItemAnimator(new DefaultItemAnimator());
+            RSS_Feed.swapAdapter(rssAdapter, false);
 
             String eventsLoaded = (rssAdapter.getItemCount())+" events loaded.";
             if(rssAdapter.getItemCount()==0)

@@ -32,6 +32,9 @@ public class RSS_Adapter extends RecyclerView.Adapter<RSS_Adapter.RSSViewHolder>
      RSS_Adapter(List<Event> events) {
         eventSet = events;
     }
+    void setEventSet(List<Event> e){
+        this.eventSet=e;
+    }
 
     @NonNull
     @Override
@@ -61,7 +64,10 @@ public class RSS_Adapter extends RecyclerView.Adapter<RSS_Adapter.RSSViewHolder>
 
     @Override
     public int getItemCount() {
-        return eventSet.size();
+        if(eventSet!=null) {
+            return eventSet.size();
+        }
+        return 0;
     }
 
     @SuppressWarnings("ConstantConditions")
