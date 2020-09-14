@@ -13,6 +13,9 @@ This app allows for you to search and save data from the PubChem database on you
 #### Key Features:
 * Search [PubChems](https://pubchem.ncbi.nlm.nih.gov/) database by keyword or chemical makeup for compounds
 * Search [PubChems](https://pubchem.ncbi.nlm.nih.gov/) database using the periodic table for input
+* View specific information such as safety information and structural diagrams of compounds
+* Download and share compound information
+* Add notes to compounds for future reference
 * Save compounds to list for quicker reference
   * Recent history is saved by default in a list for the user to reference
 * View specific elements and their attributes on the periodic table graphically
