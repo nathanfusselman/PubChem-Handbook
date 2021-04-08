@@ -23,4 +23,6 @@ This app allows for you to search and save data from the PubChem database on you
 * View recent news from a Science Daily RSS Feed
 
 #### Demo:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xi6R8rE1GJU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![PubChem Chemical Handbook Demo](https://img.youtube.com/vi/xi6R8rE1GJU/0.jpg)](https://www.youtube.com/watch?v=xi6R8rE1GJU)
+
+ > *https://www.youtube.com/watch?v=xi6R8rE1GJU*
